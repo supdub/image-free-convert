@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Image Convert Lite</title>
+    <title>ImgConvertCrop.com | Convert, Crop, Compress Images Free</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4240863320156963"
      crossorigin="anonymous"></script>
     <style>
@@ -56,6 +56,20 @@
         border-bottom: 1px solid var(--line);
       }
 
+      .brand-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #1f4f9f;
+        border: 1px solid #cfe0f6;
+        background: #f4f8ff;
+        margin-bottom: 10px;
+      }
+
       h1 {
         margin: 0 0 8px;
         font-size: clamp(1.65rem, 2.1vw, 2rem);
@@ -66,6 +80,23 @@
         margin: 0;
         color: var(--muted);
         font-size: 0.96rem;
+      }
+
+      .quick-flow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .flow-pill {
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid #d5e2f4;
+        background: #f8fbff;
+        color: #345987;
+        font-size: 12px;
+        font-weight: 600;
       }
 
       .tabs {
@@ -257,6 +288,27 @@
         margin-top: 18px;
       }
 
+      .tool-card {
+        margin-top: 12px;
+        padding: 14px;
+        border: 1px solid #d8e3f3;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #fbfdff 0%, #f5f9ff 100%);
+      }
+
+      .tool-title {
+        margin: 0 0 4px;
+        font-size: 15px;
+        font-weight: 700;
+        color: #223f67;
+      }
+
+      .tool-subtitle {
+        margin: 0 0 10px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
       @media (max-width: 760px) {
         .page {
           margin-top: 20px;
@@ -285,8 +337,15 @@
     <main class="page">
       <section class="card">
         <div class="head">
-          <h1>Image Convert Lite</h1>
-          <p class="subtitle">Three tools, one app: convert, crop, and compress.</p>
+          <div class="brand-chip">imgconvertcrop.com</div>
+          <h1>ImgConvertCrop</h1>
+          <p class="subtitle">Fast, free image tools in one place: convert formats, crop precisely, and compress in seconds.</p>
+          <div class="quick-flow">
+            <span class="flow-pill">1. Upload</span>
+            <span class="flow-pill">2. Adjust</span>
+            <span class="flow-pill">3. Download</span>
+            <span class="flow-pill">No server upload processing</span>
+          </div>
         </div>
 
         <div class="tabs" role="tablist">
@@ -296,6 +355,9 @@
         </div>
 
         <section class="panel active" id="panel-convert">
+          <div class="tool-card">
+            <p class="tool-title">Convert Images</p>
+            <p class="tool-subtitle">Change image format while keeping quality under your control.</p>
           <div class="ad-wrap">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -327,9 +389,13 @@
             </div>
           </div>
           <div class="status" id="convertStatus" aria-live="polite"></div>
+          </div>
         </section>
 
         <section class="panel" id="panel-crop">
+          <div class="tool-card">
+            <p class="tool-title">Crop Images</p>
+            <p class="tool-subtitle">Use the crop frame to focus only on the area you want, then optionally resize.</p>
           <div class="ad-wrap">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -388,10 +454,14 @@
               <button type="button" id="confirmCropBtn">Confirm Crop and Download</button>
             </div>
           </div>
-          <div class="status" id="cropStatus" aria-live="polite"></div>
+            <div class="status" id="cropStatus" aria-live="polite"></div>
+          </div>
         </section>
 
         <section class="panel" id="panel-compress">
+          <div class="tool-card">
+            <p class="tool-title">Compress Images</p>
+            <p class="tool-subtitle">Reduce file size while preserving the same pixel dimensions.</p>
           <div class="ad-wrap">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -426,6 +496,7 @@
             </div>
           </div>
           <div class="status" id="compressStatus" aria-live="polite"></div>
+          </div>
         </section>
       </section>
     </main>
