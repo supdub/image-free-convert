@@ -102,7 +102,7 @@
       .tabs {
         display: flex;
         gap: 8px;
-        padding: 12px 14px;
+        padding: 12px 14px 10px;
         border-bottom: 1px solid var(--line);
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -350,7 +350,7 @@
         }
 
         .tabs {
-          padding: 12px 12px 0;
+          padding: 12px 12px 10px;
         }
 
         .panel {
@@ -398,12 +398,12 @@
         <div class="head">
           <div class="brand-chip">imgconvertcrop.com</div>
           <h1>ImgConvertCrop</h1>
-          <p class="subtitle">Fast, free image tools in one place: convert formats, crop precisely, and compress in seconds.</p>
+          <p class="subtitle">Fast, free image tools in one place: convert formats, crop precisely, and compress in seconds. We never save your images.</p>
           <div class="quick-flow">
             <span class="flow-pill">1. Upload</span>
             <span class="flow-pill">2. Adjust</span>
             <span class="flow-pill">3. Download</span>
-            <span class="flow-pill">No server upload processing</span>
+            <span class="flow-pill">We never save your images</span>
           </div>
         </div>
 
@@ -611,8 +611,22 @@
         return format === 'jpeg' ? 'jpg' : format;
       }
 
-      function downloadBlob(blob, filename) {
+      function isIOSLike() {
+        const ua = navigator.userAgent || '';
+        return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      }
+
+      async function downloadBlob(blob, filename) {
         const url = URL.createObjectURL(blob);
+        if (isIOSLike()) {
+          const opened = window.open(url, '_blank');
+          if (!opened) {
+            window.location.href = url;
+          }
+          setTimeout(() => URL.revokeObjectURL(url), 60000);
+          return 'ios-preview';
+        }
+
         const link = document.createElement('a');
         link.href = url;
         link.download = filename;
@@ -620,6 +634,7 @@
         link.click();
         link.remove();
         URL.revokeObjectURL(url);
+        return 'downloaded';
       }
 
       function canEncode(mimeType) {
@@ -687,8 +702,12 @@
           const blob = await renderToBlob(img, mimeType, quality, 0, 0, img.width, img.height, img.width, img.height);
           if (!blob) throw new Error('Failed to convert image.');
           const base = file.name.replace(/\.[^.]+$/, '') || 'image';
-          downloadBlob(blob, `${base}-converted.${extForFormat(format)}`);
-          setStatus(statusEl, 'Done. Download started.', 'ok');
+          const mode = await downloadBlob(blob, `${base}-converted.${extForFormat(format)}`);
+          setStatus(
+            statusEl,
+            mode === 'ios-preview' ? 'Preview opened. On iPhone tap Share, then Save Image.' : 'Done. Download started.',
+            'ok'
+          );
         } catch (err) {
           setStatus(statusEl, err.message || 'Convert failed.', 'error');
         }
@@ -977,8 +996,12 @@
           if (!blob) throw new Error('Crop failed.');
           const file = cropImageInput.files[0];
           const base = file.name.replace(/\.[^.]+$/, '') || 'image';
-          downloadBlob(blob, `${base}-crop.${extForFormat(format)}`);
-          setStatus(cropStatus, 'Crop confirmed. Download started.', 'ok');
+          const mode = await downloadBlob(blob, `${base}-crop.${extForFormat(format)}`);
+          setStatus(
+            cropStatus,
+            mode === 'ios-preview' ? 'Preview opened. On iPhone tap Share, then Save Image.' : 'Crop confirmed. Download started.',
+            'ok'
+          );
         } catch (err) {
           setStatus(cropStatus, err.message || 'Crop failed.', 'error');
         }
@@ -1010,8 +1033,12 @@
           const blob = await renderToBlob(img, mimeType, quality, 0, 0, img.width, img.height, img.width, img.height);
           if (!blob) throw new Error('Compress failed.');
           const base = file.name.replace(/\.[^.]+$/, '') || 'image';
-          downloadBlob(blob, `${base}-compressed.${extForFormat(format)}`);
-          setStatus(statusEl, 'Compression done. Download started.', 'ok');
+          const mode = await downloadBlob(blob, `${base}-compressed.${extForFormat(format)}`);
+          setStatus(
+            statusEl,
+            mode === 'ios-preview' ? 'Preview opened. On iPhone tap Share, then Save Image.' : 'Compression done. Download started.',
+            'ok'
+          );
         } catch (err) {
           setStatus(statusEl, err.message || 'Compress failed.', 'error');
         }
