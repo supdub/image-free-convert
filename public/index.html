@@ -1,22 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="__HTML_LANG__" dir="__HTML_DIR__">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ImgConvertCrop is a fast, free online image tool to convert formats, crop images, and compress files directly in your browser. We never save your images." />
+    <meta name="description" content="__META_DESCRIPTION__" />
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-    <link rel="canonical" href="https://imgconvertcrop.com/" />
+    <link rel="canonical" href="__CANONICAL_URL__" />
+    __ALT_HREFLANG_LINKS__
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ImgConvertCrop" />
-    <meta property="og:url" content="https://imgconvertcrop.com/" />
-    <meta property="og:title" content="ImgConvertCrop.com | Convert, Crop, Compress Images Free" />
-    <meta property="og:description" content="Convert image formats, crop precisely, and compress online for free. Fast in-browser processing, and we never save your images." />
+    <meta property="og:url" content="__CANONICAL_URL__" />
+    <meta property="og:title" content="__OG_TITLE__" />
+    <meta property="og:description" content="__OG_DESCRIPTION__" />
     <meta property="og:image" content="https://imgconvertcrop.com/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ImgConvertCrop.com | Convert, Crop, Compress Images Free" />
-    <meta name="twitter:description" content="Free online image converter, cropper, and compressor. Runs in browser with privacy-first processing." />
+    <meta name="twitter:title" content="__TWITTER_TITLE__" />
+    <meta name="twitter:description" content="__TWITTER_DESCRIPTION__" />
     <meta name="twitter:image" content="https://imgconvertcrop.com/og-image.png" />
-    <title>ImgConvertCrop.com | Convert, Crop, Compress Images Free</title>
+    <title>__PAGE_TITLE__</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4240863320156963"
      crossorigin="anonymous"></script>
     <script type="application/ld+json">
@@ -24,8 +25,8 @@
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "ImgConvertCrop",
-        "url": "https://imgconvertcrop.com/",
-        "description": "Free online image converter, cropper, and compressor. In-browser processing with privacy-first workflow."
+        "url": "__CANONICAL_URL__",
+        "description": "__META_DESCRIPTION__"
       }
     </script>
     <script type="application/ld+json">
@@ -35,13 +36,13 @@
         "name": "ImgConvertCrop",
         "applicationCategory": "MultimediaApplication",
         "operatingSystem": "Any",
-        "url": "https://imgconvertcrop.com/",
+        "url": "__CANONICAL_URL__",
         "offers": {
           "@type": "Offer",
           "price": "0",
           "priceCurrency": "USD"
         },
-        "description": "Convert image formats, crop images, and compress images online for free. We never save your images."
+        "description": "__META_DESCRIPTION__"
       }
     </script>
     <style>
@@ -94,6 +95,13 @@
         border-bottom: 1px solid var(--line);
       }
 
+      .head-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
       .brand-chip {
         display: inline-flex;
         align-items: center;
@@ -106,6 +114,23 @@
         border: 1px solid #cfe0f6;
         background: #f4f8ff;
         margin-bottom: 10px;
+      }
+
+      .locale-picker {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 180px;
+      }
+
+      .locale-picker label {
+        margin: 0;
+        font-size: 12px;
+      }
+
+      .locale-picker select {
+        min-width: 120px;
+        padding: 8px 10px;
       }
 
       h1 {
@@ -405,6 +430,49 @@
         font-size: 14px;
       }
 
+      .keyword-copy {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #d5e2f4;
+      }
+
+      .keyword-copy h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+        color: #244a7f;
+      }
+
+      .keyword-copy p {
+        margin: 0;
+        color: #3d5f8c;
+      }
+
+      .related-links {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #d5e2f4;
+      }
+
+      .related-links h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+        color: #244a7f;
+      }
+
+      .related-links ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+
+      .related-links a {
+        color: #1c59b8;
+        text-decoration: none;
+      }
+
+      .related-links a:hover {
+        text-decoration: underline;
+      }
+
       @media (max-width: 760px) {
         .page {
           margin-top: 20px;
@@ -462,27 +530,33 @@
     <main class="page">
       <section class="card">
         <div class="head">
-          <div class="brand-chip">imgconvertcrop.com</div>
-          <h1>ImgConvertCrop</h1>
-          <p class="subtitle">Fast, free image tools in one place: convert formats, crop precisely, and compress in seconds. We never save your images.</p>
+          <div class="head-top">
+            <div class="brand-chip">imgconvertcrop.com</div>
+            <div class="locale-picker">
+              <label for="languageSelect" data-i18n="lang.label">Language</label>
+              <select id="languageSelect">__LANG_OPTIONS_HTML__</select>
+            </div>
+          </div>
+          <h1>__HERO_TITLE__</h1>
+          <p class="subtitle">__HERO_SUBTITLE__</p>
           <div class="quick-flow">
-            <span class="flow-pill">1. Upload</span>
-            <span class="flow-pill">2. Adjust</span>
-            <span class="flow-pill">3. Download</span>
-            <span class="flow-pill">We never save your images</span>
+            <span class="flow-pill" data-i18n="flow.upload">1. Upload</span>
+            <span class="flow-pill" data-i18n="flow.adjust">2. Adjust</span>
+            <span class="flow-pill" data-i18n="flow.download">3. Download</span>
+            <span class="flow-pill" data-i18n="flow.privacy">We never save your images</span>
           </div>
         </div>
 
         <div class="tabs" role="tablist">
-          <button type="button" class="tab-btn active" data-tab="convert" role="tab">Convert</button>
-          <button type="button" class="tab-btn" data-tab="crop" role="tab">Crop</button>
-          <button type="button" class="tab-btn" data-tab="compress" role="tab">Compress</button>
+          <button type="button" class="tab-btn __CONVERT_TAB_ACTIVE__" data-tab="convert" role="tab" data-i18n="tab.convert">Convert</button>
+          <button type="button" class="tab-btn __CROP_TAB_ACTIVE__" data-tab="crop" role="tab" data-i18n="tab.crop">Crop</button>
+          <button type="button" class="tab-btn __COMPRESS_TAB_ACTIVE__" data-tab="compress" role="tab" data-i18n="tab.compress">Compress</button>
         </div>
 
-        <section class="panel active" id="panel-convert">
+        <section class="panel __CONVERT_PANEL_ACTIVE__" id="panel-convert">
           <div class="tool-card">
-            <p class="tool-title">Convert Images</p>
-            <p class="tool-subtitle">Change image format while keeping quality under your control.</p>
+            <p class="tool-title" data-i18n="convert.title">Convert Images</p>
+            <p class="tool-subtitle" data-i18n="convert.subtitle">Change image format while keeping quality under your control.</p>
           <div class="ad-wrap">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -493,11 +567,11 @@
           </div>
           <div class="grid">
             <div class="full">
-              <label for="convertImage">Image File</label>
+              <label for="convertImage" data-i18n="field.imageFile">Image File</label>
               <input id="convertImage" type="file" accept="image/*" />
             </div>
             <div>
-              <label for="convertFormat">Output Format</label>
+              <label for="convertFormat" data-i18n="field.outputFormat">Output Format</label>
               <select id="convertFormat">
                 <option value="jpeg">JPEG</option>
                 <option value="png">PNG</option>
@@ -506,11 +580,11 @@
               </select>
             </div>
             <div>
-              <label for="convertQuality">Quality (1-100)</label>
+              <label for="convertQuality" data-i18n="field.quality">Quality (1-100)</label>
               <input id="convertQuality" type="number" min="1" max="100" value="90" />
             </div>
             <div class="full">
-              <button type="button" id="convertBtn">Convert and Download</button>
+              <button type="button" id="convertBtn" data-i18n="btn.convertDownload">Convert and Download</button>
             </div>
           </div>
           <div class="status" id="convertStatus" aria-live="polite"></div>
@@ -523,22 +597,32 @@
                  data-full-width-responsive="true"></ins>
           </div>
           <section class="seo-copy" aria-label="What this tool does">
-            <h2>Free Online Image Converter, Cropper, and Compressor</h2>
-            <p>ImgConvertCrop helps you convert image formats, crop with precision, and reduce file size in seconds.</p>
-            <p>Everything runs in your browser for speed and privacy. We never save your images.</p>
+            <h2>__SEO_H2__</h2>
+            <p>__SEO_P1__</p>
+            <p>__SEO_P2__</p>
             <ul>
-              <li>Convert to JPEG, PNG, WEBP, and AVIF</li>
-              <li>Modern interactive crop with optional resize</li>
-              <li>Compress image files while keeping dimensions</li>
+              <li>__SEO_LI_1__</li>
+              <li>__SEO_LI_2__</li>
+              <li>__SEO_LI_3__</li>
             </ul>
+            <div class="keyword-copy" aria-label="Keyword search intent">
+              <h3>__KEYWORD_TITLE__</h3>
+              <p>__KEYWORD_TEXT__</p>
+            </div>
+            <nav class="related-links" aria-label="Related tool pages">
+              <h3 data-i18n="seo.relatedPages">Related pages</h3>
+              <ul>
+                __RELATED_LINKS_HTML__
+              </ul>
+            </nav>
           </section>
           </div>
         </section>
 
-        <section class="panel" id="panel-crop">
+        <section class="panel __CROP_PANEL_ACTIVE__" id="panel-crop">
           <div class="tool-card">
-            <p class="tool-title">Crop Images</p>
-            <p class="tool-subtitle">Use the crop frame to focus only on the area you want, then optionally resize.</p>
+            <p class="tool-title" data-i18n="crop.title">Crop Images</p>
+            <p class="tool-subtitle" data-i18n="crop.subtitle">Use the crop frame to focus only on the area you want, then optionally resize.</p>
           <div class="ad-wrap">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -549,18 +633,18 @@
           </div>
           <div class="grid">
             <div class="full">
-              <label for="cropImage">Image File</label>
+              <label for="cropImage" data-i18n="field.imageFile">Image File</label>
               <input id="cropImage" type="file" accept="image/*" />
             </div>
             <div class="full crop-shell">
               <div class="crop-canvas-wrap">
                 <canvas id="cropCanvas" width="860" height="480"></canvas>
               </div>
-              <p class="note">Drag inside the box to move. Drag corners to resize. Use Confirm Crop when ready.</p>
+              <p class="note" data-i18n="crop.instructions">Drag inside the box to move. Drag corners to resize. Use Confirm Crop when ready.</p>
             </div>
 
             <div>
-              <label for="cropFormat">Output Format</label>
+              <label for="cropFormat" data-i18n="field.outputFormat">Output Format</label>
               <select id="cropFormat">
                 <option value="png">PNG</option>
                 <option value="jpeg">JPEG</option>
@@ -569,32 +653,32 @@
               </select>
             </div>
             <div>
-              <label for="cropQuality">Quality (1-100)</label>
+              <label for="cropQuality" data-i18n="field.quality">Quality (1-100)</label>
               <input id="cropQuality" type="number" min="1" max="100" value="90" />
             </div>
 
             <div class="full inline-toggle">
               <input id="enableCropResize" type="checkbox" />
-              <label for="enableCropResize" style="margin: 0">Resize after crop</label>
+              <label for="enableCropResize" style="margin: 0" data-i18n="crop.resizeAfter">Resize after crop</label>
             </div>
-            <div class="full note" id="cropResizeExplain">
+            <div class="full note" id="cropResizeExplain" data-i18n="crop.resizeExplain">
               If enabled, the cropped image is scaled down to fit within the width/height you provide. It keeps aspect ratio and will not stretch.
             </div>
 
             <div id="cropResizeWidthWrap" class="hidden">
-              <label for="cropResizeWidth">Resize Width</label>
+              <label for="cropResizeWidth" data-i18n="crop.resizeWidth">Resize Width</label>
               <input id="cropResizeWidth" type="number" min="1" placeholder="e.g. 800" />
             </div>
             <div id="cropResizeHeightWrap" class="hidden">
-              <label for="cropResizeHeight">Resize Height</label>
+              <label for="cropResizeHeight" data-i18n="crop.resizeHeight">Resize Height</label>
               <input id="cropResizeHeight" type="number" min="1" placeholder="e.g. 600" />
             </div>
 
             <div>
-              <button type="button" class="alt" id="resetCropBtn">Reset Box</button>
+              <button type="button" class="alt" id="resetCropBtn" data-i18n="btn.resetBox">Reset Box</button>
             </div>
             <div>
-              <button type="button" id="confirmCropBtn">Confirm Crop and Download</button>
+              <button type="button" id="confirmCropBtn" data-i18n="btn.confirmCropDownload">Confirm Crop and Download</button>
             </div>
           </div>
             <div class="status" id="cropStatus" aria-live="polite"></div>
@@ -609,10 +693,10 @@
           </div>
         </section>
 
-        <section class="panel" id="panel-compress">
+        <section class="panel __COMPRESS_PANEL_ACTIVE__" id="panel-compress">
           <div class="tool-card">
-            <p class="tool-title">Compress Images</p>
-            <p class="tool-subtitle">Reduce file size while preserving the same pixel dimensions.</p>
+            <p class="tool-title" data-i18n="compress.title">Compress Images</p>
+            <p class="tool-subtitle" data-i18n="compress.subtitle">Reduce file size while preserving the same pixel dimensions.</p>
           <div class="ad-wrap">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -623,11 +707,11 @@
           </div>
           <div class="grid">
             <div class="full">
-              <label for="compressImage">Image File</label>
+              <label for="compressImage" data-i18n="field.imageFile">Image File</label>
               <input id="compressImage" type="file" accept="image/*" />
             </div>
             <div>
-              <label for="compressFormat">Output Format</label>
+              <label for="compressFormat" data-i18n="field.outputFormat">Output Format</label>
               <select id="compressFormat">
                 <option value="jpeg">JPEG</option>
                 <option value="webp">WEBP</option>
@@ -636,14 +720,14 @@
               </select>
             </div>
             <div>
-              <label for="compressQuality">Compression Quality (1-100)</label>
+              <label for="compressQuality" data-i18n="compress.quality">Compression Quality (1-100)</label>
               <input id="compressQuality" type="number" min="1" max="100" value="70" />
             </div>
             <div class="full">
-              <p class="note">Compress keeps the same pixel dimensions. It only reduces encoded quality/size.</p>
+              <p class="note" data-i18n="compress.note">Compress keeps the same pixel dimensions. It only reduces encoded quality/size.</p>
             </div>
             <div class="full">
-              <button type="button" id="compressBtn">Compress and Download</button>
+              <button type="button" id="compressBtn" data-i18n="btn.compressDownload">Compress and Download</button>
             </div>
           </div>
           <div class="status" id="compressStatus" aria-live="polite"></div>
@@ -661,8 +745,306 @@
     </main>
 
     <script>
+      window.__PAGE_CONFIG__ = __PAGE_CONFIG_JSON__;
+
       document.querySelectorAll('.adsbygoogle').forEach(() => {
         try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (_e) {}
+      });
+
+      const pageConfig = window.__PAGE_CONFIG__ || {};
+      const locale = pageConfig.locale || 'en';
+      const i18n = {
+        en: {
+          'lang.label': 'Language',
+          'flow.upload': '1. Upload',
+          'flow.adjust': '2. Adjust',
+          'flow.download': '3. Download',
+          'flow.privacy': 'We never save your images',
+          'tab.convert': 'Convert',
+          'tab.crop': 'Crop',
+          'tab.compress': 'Compress',
+          'convert.title': 'Convert Images',
+          'convert.subtitle': 'Change image format while keeping quality under your control.',
+          'crop.title': 'Crop Images',
+          'crop.subtitle': 'Use the crop frame to focus only on the area you want, then optionally resize.',
+          'compress.title': 'Compress Images',
+          'compress.subtitle': 'Reduce file size while preserving the same pixel dimensions.',
+          'field.imageFile': 'Image File',
+          'field.outputFormat': 'Output Format',
+          'field.quality': 'Quality (1-100)',
+          'compress.quality': 'Compression Quality (1-100)',
+          'btn.convertDownload': 'Convert and Download',
+          'btn.resetBox': 'Reset Box',
+          'btn.confirmCropDownload': 'Confirm Crop and Download',
+          'btn.compressDownload': 'Compress and Download',
+          'crop.instructions': 'Drag inside the box to move. Drag corners to resize. Use Confirm Crop when ready.',
+          'crop.resizeAfter': 'Resize after crop',
+          'crop.resizeExplain':
+            'If enabled, the cropped image is scaled down to fit within the width/height you provide. It keeps aspect ratio and will not stretch.',
+          'crop.resizeWidth': 'Resize Width',
+          'crop.resizeHeight': 'Resize Height',
+          'compress.note': 'Compress keeps the same pixel dimensions. It only reduces encoded quality/size.',
+          'seo.relatedPages': 'Related pages',
+          'status.chooseImage': 'Choose an image first.',
+          'status.uploadFirst': 'Upload an image first.',
+          'status.converting': 'Converting...',
+          'status.compressing': 'Compressing (same dimensions)...',
+          'status.cropProcessing': 'Processing crop...',
+          'status.doneDownload': 'Done. Download started.',
+          'status.cropDone': 'Crop confirmed. Download started.',
+          'status.compressDone': 'Compression done. Download started.',
+          'status.previewIos': 'Preview opened. On iPhone tap Share, then Save Image.',
+          'status.imageLoaded': 'Image loaded. Adjust crop and confirm.',
+          'status.loadFailed': 'Failed to load image.',
+          'status.cropReset': 'Crop box reset.',
+          'status.cropCanvasPrompt': 'Upload an image to crop',
+          'error.notSupported': '{format} export is not supported in this browser.',
+          'error.resizeParams': 'Provide resize width and/or height.',
+          'error.convertFailed': 'Convert failed.',
+          'error.cropFailed': 'Crop failed.',
+          'error.compressFailed': 'Compress failed.',
+          'ph.resizeWidth': 'e.g. 800',
+          'ph.resizeHeight': 'e.g. 600'
+        },
+        es: {
+          'lang.label': 'Idioma',
+          'flow.upload': '1. Subir',
+          'flow.adjust': '2. Ajustar',
+          'flow.download': '3. Descargar',
+          'flow.privacy': 'Nunca guardamos tus imagenes',
+          'tab.convert': 'Convertir',
+          'tab.crop': 'Recortar',
+          'tab.compress': 'Comprimir',
+          'convert.title': 'Convertir imagenes',
+          'convert.subtitle': 'Cambia el formato de imagen con control de calidad.',
+          'crop.title': 'Recortar imagenes',
+          'crop.subtitle': 'Usa el marco de recorte y, si quieres, cambia el tamano.',
+          'compress.title': 'Comprimir imagenes',
+          'compress.subtitle': 'Reduce el tamano del archivo manteniendo las dimensiones.',
+          'field.imageFile': 'Archivo de imagen',
+          'field.outputFormat': 'Formato de salida',
+          'field.quality': 'Calidad (1-100)',
+          'compress.quality': 'Calidad de compresion (1-100)',
+          'btn.convertDownload': 'Convertir y descargar',
+          'btn.resetBox': 'Restablecer caja',
+          'btn.confirmCropDownload': 'Confirmar recorte y descargar',
+          'btn.compressDownload': 'Comprimir y descargar',
+          'crop.instructions': 'Arrastra dentro para mover. Arrastra esquinas para cambiar tamano.',
+          'crop.resizeAfter': 'Redimensionar despues de recortar',
+          'crop.resizeExplain': 'Si lo activas, la imagen recortada se ajusta al ancho/alto indicado sin deformar.',
+          'crop.resizeWidth': 'Ancho',
+          'crop.resizeHeight': 'Alto',
+          'compress.note': 'Comprimir mantiene las mismas dimensiones de pixeles.',
+          'seo.relatedPages': 'Paginas relacionadas',
+          'status.chooseImage': 'Elige una imagen primero.',
+          'status.uploadFirst': 'Sube una imagen primero.',
+          'status.converting': 'Convirtiendo...',
+          'status.compressing': 'Comprimiendo (mismas dimensiones)...',
+          'status.cropProcessing': 'Procesando recorte...',
+          'status.doneDownload': 'Listo. Descarga iniciada.',
+          'status.cropDone': 'Recorte confirmado. Descarga iniciada.',
+          'status.compressDone': 'Compresion lista. Descarga iniciada.',
+          'status.previewIos': 'Vista previa abierta. En iPhone, toca Share y luego Save Image.',
+          'status.imageLoaded': 'Imagen cargada. Ajusta y confirma el recorte.',
+          'status.loadFailed': 'No se pudo cargar la imagen.',
+          'status.cropReset': 'Caja de recorte reiniciada.',
+          'status.cropCanvasPrompt': 'Sube una imagen para recortar',
+          'error.notSupported': 'La exportacion {format} no es compatible con este navegador.',
+          'error.resizeParams': 'Indica ancho y/o alto para redimensionar.',
+          'error.convertFailed': 'Fallo al convertir.',
+          'error.cropFailed': 'Fallo al recortar.',
+          'error.compressFailed': 'Fallo al comprimir.',
+          'ph.resizeWidth': 'p. ej. 800',
+          'ph.resizeHeight': 'p. ej. 600'
+        },
+        zh: {
+          'lang.label': '语言',
+          'flow.upload': '1. 上传',
+          'flow.adjust': '2. 调整',
+          'flow.download': '3. 下载',
+          'flow.privacy': '我们不会保存你的图片',
+          'tab.convert': '转换',
+          'tab.crop': '裁剪',
+          'tab.compress': '压缩',
+          'convert.title': '转换图片',
+          'convert.subtitle': '在保证质量可控的情况下转换图片格式。',
+          'crop.title': '裁剪图片',
+          'crop.subtitle': '使用裁剪框选择区域，并可在裁剪后调整尺寸。',
+          'compress.title': '压缩图片',
+          'compress.subtitle': '在保持像素尺寸不变的前提下减小文件体积。',
+          'field.imageFile': '图片文件',
+          'field.outputFormat': '输出格式',
+          'field.quality': '质量 (1-100)',
+          'compress.quality': '压缩质量 (1-100)',
+          'btn.convertDownload': '转换并下载',
+          'btn.resetBox': '重置裁剪框',
+          'btn.confirmCropDownload': '确认裁剪并下载',
+          'btn.compressDownload': '压缩并下载',
+          'crop.instructions': '在框内拖动可移动，拖动角点可调整大小。',
+          'crop.resizeAfter': '裁剪后调整尺寸',
+          'crop.resizeExplain': '启用后，裁剪结果会按你填写的宽高等比缩小，不会拉伸。',
+          'crop.resizeWidth': '宽度',
+          'crop.resizeHeight': '高度',
+          'compress.note': '压缩仅降低编码体积，不改变像素尺寸。',
+          'seo.relatedPages': '相关页面',
+          'status.chooseImage': '请先选择图片。',
+          'status.uploadFirst': '请先上传图片。',
+          'status.converting': '正在转换...',
+          'status.compressing': '正在压缩（保持尺寸）...',
+          'status.cropProcessing': '正在处理裁剪...',
+          'status.doneDownload': '完成，开始下载。',
+          'status.cropDone': '裁剪完成，开始下载。',
+          'status.compressDone': '压缩完成，开始下载。',
+          'status.previewIos': '已打开预览。iPhone 上请点 Share 再点 Save Image。',
+          'status.imageLoaded': '图片已加载，请调整后确认裁剪。',
+          'status.loadFailed': '图片加载失败。',
+          'status.cropReset': '裁剪框已重置。',
+          'status.cropCanvasPrompt': '上传一张图片开始裁剪',
+          'error.notSupported': '当前浏览器不支持导出 {format}。',
+          'error.resizeParams': '请填写缩放宽度和/或高度。',
+          'error.convertFailed': '转换失败。',
+          'error.cropFailed': '裁剪失败。',
+          'error.compressFailed': '压缩失败。',
+          'ph.resizeWidth': '例如 800',
+          'ph.resizeHeight': '例如 600'
+        },
+        hi: {
+          'lang.label': 'भाषा',
+          'flow.upload': '1. अपलोड',
+          'flow.adjust': '2. एडजस्ट',
+          'flow.download': '3. डाउनलोड',
+          'flow.privacy': 'हम आपकी इमेज सेव नहीं करते',
+          'tab.convert': 'कन्वर्ट',
+          'tab.crop': 'क्रॉप',
+          'tab.compress': 'कंप्रेस',
+          'convert.title': 'इमेज कन्वर्ट करें',
+          'convert.subtitle': 'क्वालिटी नियंत्रण के साथ फॉर्मेट बदलें।',
+          'crop.title': 'इमेज क्रॉप करें',
+          'crop.subtitle': 'क्रॉप बॉक्स से हिस्सा चुनें, फिर जरूरत हो तो रिसाइज़ करें।',
+          'compress.title': 'इमेज कंप्रेस करें',
+          'compress.subtitle': 'पिक्सेल साइज़ वही रखते हुए फाइल साइज़ कम करें।',
+          'field.imageFile': 'इमेज फाइल',
+          'field.outputFormat': 'आउटपुट फॉर्मेट',
+          'field.quality': 'क्वालिटी (1-100)',
+          'compress.quality': 'कंप्रेशन क्वालिटी (1-100)',
+          'btn.convertDownload': 'कन्वर्ट और डाउनलोड',
+          'btn.resetBox': 'बॉक्स रीसेट करें',
+          'btn.confirmCropDownload': 'क्रॉप कन्फर्म और डाउनलोड',
+          'btn.compressDownload': 'कंप्रेस और डाउनलोड',
+          'crop.instructions': 'बॉक्स के अंदर ड्रैग करके मूव करें। कोनों से साइज़ बदलें।',
+          'crop.resizeAfter': 'क्रॉप के बाद रिसाइज़',
+          'crop.resizeExplain': 'चालू करने पर, क्रॉप की गई इमेज दी गई चौड़ाई/ऊंचाई में बिना खिंचे फिट होगी।',
+          'crop.resizeWidth': 'चौड़ाई',
+          'crop.resizeHeight': 'ऊंचाई',
+          'compress.note': 'कंप्रेस करने पर पिक्सेल डायमेंशन वही रहते हैं।',
+          'seo.relatedPages': 'संबंधित पेज',
+          'status.chooseImage': 'पहले एक इमेज चुनें।',
+          'status.uploadFirst': 'पहले एक इमेज अपलोड करें।',
+          'status.converting': 'कन्वर्ट हो रहा है...',
+          'status.compressing': 'कंप्रेस हो रहा है (वही डायमेंशन)...',
+          'status.cropProcessing': 'क्रॉप प्रोसेस हो रहा है...',
+          'status.doneDownload': 'हो गया। डाउनलोड शुरू हुआ।',
+          'status.cropDone': 'क्रॉप पूरा। डाउनलोड शुरू हुआ।',
+          'status.compressDone': 'कंप्रेशन पूरा। डाउनलोड शुरू हुआ।',
+          'status.previewIos': 'प्रिव्यू खुल गया। iPhone पर Share दबाएं, फिर Save Image करें।',
+          'status.imageLoaded': 'इमेज लोड हो गई। क्रॉप एडजस्ट करके कन्फर्म करें।',
+          'status.loadFailed': 'इमेज लोड नहीं हुई।',
+          'status.cropReset': 'क्रॉप बॉक्स रीसेट हो गया।',
+          'status.cropCanvasPrompt': 'क्रॉप करने के लिए इमेज अपलोड करें',
+          'error.notSupported': 'इस ब्राउज़र में {format} एक्सपोर्ट सपोर्ट नहीं है।',
+          'error.resizeParams': 'रिसाइज़ के लिए चौड़ाई और/या ऊंचाई दें।',
+          'error.convertFailed': 'कन्वर्ट विफल।',
+          'error.cropFailed': 'क्रॉप विफल।',
+          'error.compressFailed': 'कंप्रेस विफल।',
+          'ph.resizeWidth': 'जैसे 800',
+          'ph.resizeHeight': 'जैसे 600'
+        },
+        ar: {
+          'lang.label': 'اللغة',
+          'flow.upload': '1. رفع',
+          'flow.adjust': '2. تعديل',
+          'flow.download': '3. تنزيل',
+          'flow.privacy': 'نحن لا نحفظ صورك',
+          'tab.convert': 'تحويل',
+          'tab.crop': 'قص',
+          'tab.compress': 'ضغط',
+          'convert.title': 'تحويل الصور',
+          'convert.subtitle': 'غيّر صيغة الصورة مع التحكم في الجودة.',
+          'crop.title': 'قص الصور',
+          'crop.subtitle': 'استخدم إطار القص لتحديد الجزء المطلوب ثم غيّر الحجم اختياريًا.',
+          'compress.title': 'ضغط الصور',
+          'compress.subtitle': 'قلّل حجم الملف مع الحفاظ على نفس الأبعاد.',
+          'field.imageFile': 'ملف الصورة',
+          'field.outputFormat': 'صيغة الإخراج',
+          'field.quality': 'الجودة (1-100)',
+          'compress.quality': 'جودة الضغط (1-100)',
+          'btn.convertDownload': 'تحويل وتنزيل',
+          'btn.resetBox': 'إعادة ضبط الإطار',
+          'btn.confirmCropDownload': 'تأكيد القص والتنزيل',
+          'btn.compressDownload': 'ضغط وتنزيل',
+          'crop.instructions': 'اسحب داخل الإطار للتحريك واسحب الزوايا لتغيير الحجم.',
+          'crop.resizeAfter': 'تغيير الحجم بعد القص',
+          'crop.resizeExplain': 'عند التفعيل، يتم تصغير الصورة المقصوصة لتناسب العرض/الارتفاع بدون تمدد.',
+          'crop.resizeWidth': 'العرض',
+          'crop.resizeHeight': 'الارتفاع',
+          'compress.note': 'الضغط يحافظ على نفس أبعاد البكسل.',
+          'seo.relatedPages': 'صفحات ذات صلة',
+          'status.chooseImage': 'اختر صورة أولاً.',
+          'status.uploadFirst': 'ارفع صورة أولاً.',
+          'status.converting': 'جارٍ التحويل...',
+          'status.compressing': 'جارٍ الضغط (نفس الأبعاد)...',
+          'status.cropProcessing': 'جارٍ معالجة القص...',
+          'status.doneDownload': 'تم. بدأ التنزيل.',
+          'status.cropDone': 'تم القص. بدأ التنزيل.',
+          'status.compressDone': 'تم الضغط. بدأ التنزيل.',
+          'status.previewIos': 'تم فتح المعاينة. في iPhone اضغط Share ثم Save Image.',
+          'status.imageLoaded': 'تم تحميل الصورة. عدّل القص ثم أكّد.',
+          'status.loadFailed': 'فشل تحميل الصورة.',
+          'status.cropReset': 'تمت إعادة ضبط إطار القص.',
+          'status.cropCanvasPrompt': 'ارفع صورة للقص',
+          'error.notSupported': 'تصدير {format} غير مدعوم في هذا المتصفح.',
+          'error.resizeParams': 'أدخل عرضًا و/أو ارتفاعًا لتغيير الحجم.',
+          'error.convertFailed': 'فشل التحويل.',
+          'error.cropFailed': 'فشل القص.',
+          'error.compressFailed': 'فشل الضغط.',
+          'ph.resizeWidth': 'مثال 800',
+          'ph.resizeHeight': 'مثال 600'
+        }
+      };
+
+      function t(key, vars) {
+        const dict = i18n[locale] || i18n.en;
+        let text = dict[key] || i18n.en[key] || key;
+        if (vars) {
+          Object.entries(vars).forEach(([name, value]) => {
+            text = text.replace(`{${name}}`, value);
+          });
+        }
+        return text;
+      }
+
+      function applyTranslations() {
+        document.querySelectorAll('[data-i18n]').forEach((el) => {
+          const key = el.getAttribute('data-i18n');
+          el.textContent = t(key);
+        });
+        document.getElementById('cropResizeWidth').placeholder = t('ph.resizeWidth');
+        document.getElementById('cropResizeHeight').placeholder = t('ph.resizeHeight');
+      }
+
+      function localePathFor(basePath, targetLocale) {
+        const cleanBase = !basePath || basePath === '/' ? '' : basePath;
+        return `/${targetLocale}${cleanBase}`;
+      }
+
+      applyTranslations();
+
+      const languageSelect = document.getElementById('languageSelect');
+      languageSelect.addEventListener('change', () => {
+        const targetLocale = languageSelect.value;
+        const basePath = pageConfig.basePath || '/';
+        document.cookie = `lang=${targetLocale}; Path=/; Max-Age=31536000; SameSite=Lax`;
+        window.location.href = localePathFor(basePath, targetLocale);
       });
 
       const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
@@ -670,6 +1052,11 @@
         convert: document.getElementById('panel-convert'),
         crop: document.getElementById('panel-crop'),
         compress: document.getElementById('panel-compress')
+      };
+      const tabToPath = {
+        convert: localePathFor('/convert', locale),
+        crop: localePathFor('/crop', locale),
+        compress: localePathFor('/compress', locale)
       };
 
       function setStatus(el, message, type) {
@@ -743,22 +1130,44 @@
         return new Promise((resolve) => canvas.toBlob(resolve, mimeType, quality));
       }
 
+      function setActiveTab(tab, shouldUpdateUrl = false) {
+        tabButtons.forEach((b) => b.classList.toggle('active', b.dataset.tab === tab));
+        Object.entries(panels).forEach(([name, panel]) => {
+          panel.classList.toggle('active', name === tab);
+        });
+
+        if (shouldUpdateUrl && tabToPath[tab]) {
+          history.replaceState(null, '', tabToPath[tab]);
+        }
+      }
+
       tabButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-          const tab = btn.dataset.tab;
-          tabButtons.forEach((b) => b.classList.toggle('active', b === btn));
-          Object.entries(panels).forEach(([name, panel]) => {
-            panel.classList.toggle('active', name === tab);
-          });
+          setActiveTab(btn.dataset.tab, true);
         });
       });
+
+      setActiveTab(pageConfig.activeTab || 'convert', false);
+
+      if (pageConfig.convertFormat) {
+        document.getElementById('convertFormat').value = pageConfig.convertFormat;
+      }
+      if (typeof pageConfig.convertQuality === 'number') {
+        document.getElementById('convertQuality').value = String(pageConfig.convertQuality);
+      }
+      if (pageConfig.compressFormat) {
+        document.getElementById('compressFormat').value = pageConfig.compressFormat;
+      }
+      if (typeof pageConfig.compressQuality === 'number') {
+        document.getElementById('compressQuality').value = String(pageConfig.compressQuality);
+      }
 
       // Convert tab
       document.getElementById('convertBtn').addEventListener('click', async () => {
         const fileInput = document.getElementById('convertImage');
         const statusEl = document.getElementById('convertStatus');
         if (!fileInput.files || fileInput.files.length === 0) {
-          setStatus(statusEl, 'Choose an image first.', 'error');
+          setStatus(statusEl, t('status.chooseImage'), 'error');
           return;
         }
 
@@ -767,11 +1176,11 @@
         const mimeType = `image/${format}`;
 
         if (!canEncode(mimeType)) {
-          setStatus(statusEl, `${format.toUpperCase()} export is not supported in this browser.`, 'error');
+          setStatus(statusEl, t('error.notSupported', { format: format.toUpperCase() }), 'error');
           return;
         }
 
-        setStatus(statusEl, 'Converting...');
+        setStatus(statusEl, t('status.converting'));
         try {
           const quality = toQuality(document.getElementById('convertQuality').value, 0.9);
           const img = await fileToImage(file);
@@ -781,11 +1190,11 @@
           const mode = await downloadBlob(blob, `${base}-converted.${extForFormat(format)}`);
           setStatus(
             statusEl,
-            mode === 'ios-preview' ? 'Preview opened. On iPhone tap Share, then Save Image.' : 'Done. Download started.',
+            mode === 'ios-preview' ? t('status.previewIos') : t('status.doneDownload'),
             'ok'
           );
         } catch (err) {
-          setStatus(statusEl, err.message || 'Convert failed.', 'error');
+          setStatus(statusEl, err.message || t('error.convertFailed'), 'error');
         }
       });
 
@@ -808,6 +1217,27 @@
         startBox: null
       };
 
+      function applyCropPreset(preset) {
+        if (!cropState.img || !preset) return;
+        if (preset !== 'square' && preset !== '16:9') return;
+
+        const img = cropState.img;
+        const ratio = preset === 'square' ? 1 : 16 / 9;
+        let w = img.width * 0.8;
+        let h = w / ratio;
+        if (h > img.height * 0.8) {
+          h = img.height * 0.8;
+          w = h * ratio;
+        }
+
+        cropState.box = {
+          x: (img.width - w) / 2,
+          y: (img.height - h) / 2,
+          w,
+          h
+        };
+      }
+
       function drawCropCanvas() {
         cropCtx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
         cropCtx.fillStyle = '#dfe9f8';
@@ -816,7 +1246,7 @@
         if (!cropState.img) {
           cropCtx.fillStyle = '#4f678a';
           cropCtx.font = '16px Segoe UI';
-          cropCtx.fillText('Upload an image to crop', 24, 34);
+          cropCtx.fillText(t('status.cropCanvasPrompt'), 24, 34);
           return;
         }
 
@@ -993,11 +1423,12 @@
             w: img.width * 0.8,
             h: img.height * 0.8
           };
+          applyCropPreset(pageConfig.cropPreset);
           clampBoxToImage();
           drawCropCanvas();
-          setStatus(cropStatus, 'Image loaded. Adjust crop and confirm.', 'ok');
+          setStatus(cropStatus, t('status.imageLoaded'), 'ok');
         } catch {
-          setStatus(cropStatus, 'Failed to load image.', 'error');
+          setStatus(cropStatus, t('status.loadFailed'), 'error');
         }
       });
 
@@ -1011,7 +1442,7 @@
           h: img.height * 0.8
         };
         drawCropCanvas();
-        setStatus(cropStatus, 'Crop box reset.', 'ok');
+        setStatus(cropStatus, t('status.cropReset'), 'ok');
       });
 
       const enableCropResize = document.getElementById('enableCropResize');
@@ -1022,22 +1453,27 @@
         cropResizeWidthWrap.classList.toggle('hidden', !show);
         cropResizeHeightWrap.classList.toggle('hidden', !show);
       });
+      if (pageConfig.enableCropResize) {
+        enableCropResize.checked = true;
+        cropResizeWidthWrap.classList.remove('hidden');
+        cropResizeHeightWrap.classList.remove('hidden');
+      }
 
       document.getElementById('confirmCropBtn').addEventListener('click', async () => {
         if (!cropState.img || !cropImageInput.files || cropImageInput.files.length === 0) {
-          setStatus(cropStatus, 'Upload an image first.', 'error');
+          setStatus(cropStatus, t('status.uploadFirst'), 'error');
           return;
         }
 
         const format = document.getElementById('cropFormat').value;
         const mimeType = `image/${format}`;
         if (!canEncode(mimeType)) {
-          setStatus(cropStatus, `${format.toUpperCase()} export is not supported in this browser.`, 'error');
+          setStatus(cropStatus, t('error.notSupported', { format: format.toUpperCase() }), 'error');
           return;
         }
 
         try {
-          setStatus(cropStatus, 'Processing crop...');
+          setStatus(cropStatus, t('status.cropProcessing'));
           const img = cropState.img;
           const b = cropState.box;
           let outW = Math.max(1, Math.round(b.w));
@@ -1049,7 +1485,7 @@
             const hasW = Number.isFinite(rw) && rw > 0;
             const hasH = Number.isFinite(rh) && rh > 0;
             if (!hasW && !hasH) {
-              throw new Error('Provide resize width and/or height.');
+              throw new Error(t('error.resizeParams'));
             }
             const ratio = Math.min(hasW ? rw / outW : Infinity, hasH ? rh / outH : Infinity, 1);
             outW = Math.max(1, Math.round(outW * ratio));
@@ -1075,11 +1511,11 @@
           const mode = await downloadBlob(blob, `${base}-crop.${extForFormat(format)}`);
           setStatus(
             cropStatus,
-            mode === 'ios-preview' ? 'Preview opened. On iPhone tap Share, then Save Image.' : 'Crop confirmed. Download started.',
+            mode === 'ios-preview' ? t('status.previewIos') : t('status.cropDone'),
             'ok'
           );
         } catch (err) {
-          setStatus(cropStatus, err.message || 'Crop failed.', 'error');
+          setStatus(cropStatus, err.message || t('error.cropFailed'), 'error');
         }
       });
 
@@ -1090,7 +1526,7 @@
         const fileInput = document.getElementById('compressImage');
         const statusEl = document.getElementById('compressStatus');
         if (!fileInput.files || fileInput.files.length === 0) {
-          setStatus(statusEl, 'Choose an image first.', 'error');
+          setStatus(statusEl, t('status.chooseImage'), 'error');
           return;
         }
 
@@ -1098,11 +1534,11 @@
         const format = document.getElementById('compressFormat').value;
         const mimeType = `image/${format}`;
         if (!canEncode(mimeType)) {
-          setStatus(statusEl, `${format.toUpperCase()} export is not supported in this browser.`, 'error');
+          setStatus(statusEl, t('error.notSupported', { format: format.toUpperCase() }), 'error');
           return;
         }
 
-        setStatus(statusEl, 'Compressing (same dimensions)...');
+        setStatus(statusEl, t('status.compressing'));
         try {
           const img = await fileToImage(file);
           const quality = toQuality(document.getElementById('compressQuality').value, 0.7);
@@ -1112,11 +1548,11 @@
           const mode = await downloadBlob(blob, `${base}-compressed.${extForFormat(format)}`);
           setStatus(
             statusEl,
-            mode === 'ios-preview' ? 'Preview opened. On iPhone tap Share, then Save Image.' : 'Compression done. Download started.',
+            mode === 'ios-preview' ? t('status.previewIos') : t('status.compressDone'),
             'ok'
           );
         } catch (err) {
-          setStatus(statusEl, err.message || 'Compress failed.', 'error');
+          setStatus(statusEl, err.message || t('error.compressFailed'), 'error');
         }
       });
     </script>

@@ -38,6 +38,23 @@ PORT=3555 npm start
 ## API
 - `GET /health` -> `{ "ok": true }`
 
+## SEO Tool Routes
+- Core tool pages: `/convert`, `/crop`, `/compress`
+- Convert intent pages: `/convert/png-to-jpg`, `/convert/jpg-to-webp`, `/convert/jpg-to-avif`
+- Crop intent pages: `/crop/resize-image`, `/crop/crop-to-square`, `/crop/crop-to-16-9`
+- Compress intent pages: `/compress/jpeg`, `/compress/webp`, `/compress/avif`
+
+## Multilingual Routing
+- Supported languages: `en`, `es`, `zh`, `hi`, `ar`
+- Localized URLs use locale prefix, for example:
+  - `/en/convert`
+  - `/es/convert`
+  - `/zh/crop`
+- Requests to unprefixed pages (like `/`, `/convert`) are automatically redirected to a locale based on:
+  1. `lang` cookie (if present)
+  2. Browser `Accept-Language` header
+- Users can switch language from the selector in the page header.
+
 ## Preflight Verification
 
 ```bash
