@@ -1,0 +1,19 @@
+# ImgConvertCrop
+
+> Fast, free online image converter, cropper, and compressor.
+
+## Website
+- URL: https://imgconvertcrop.com/
+- Purpose: Convert image formats, crop images, and compress files in-browser.
+
+## Key Features
+- Format conversion: JPEG, PNG, WEBP, AVIF
+- Interactive crop with optional resize
+- Compression while preserving pixel dimensions
+- Privacy-first workflow: images are processed in browser and not stored by this service
+
+## Preferred Summary
+ImgConvertCrop is a free browser-based tool for image conversion, cropping, and compression. It is designed for speed, simplicity, and privacy.
+
+## Contact
+- Site: https://imgconvertcrop.com/
