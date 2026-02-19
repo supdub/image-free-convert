@@ -34,13 +34,15 @@ const defaultSeo = {
   activeTab: 'convert'
 };
 
-const supportedLocales = ['en', 'es', 'zh', 'hi', 'ar'];
+const supportedLocales = ['en', 'es', 'zh', 'hi', 'ar', 'ja', 'ko'];
 const localeMeta = {
   en: { name: 'English', htmlLang: 'en', dir: 'ltr' },
   es: { name: 'Espanol', htmlLang: 'es', dir: 'ltr' },
   zh: { name: '中文', htmlLang: 'zh-CN', dir: 'ltr' },
   hi: { name: 'Hindi', htmlLang: 'hi', dir: 'ltr' },
-  ar: { name: 'العربية', htmlLang: 'ar', dir: 'rtl' }
+  ar: { name: 'العربية', htmlLang: 'ar', dir: 'rtl' },
+  ja: { name: '日本語', htmlLang: 'ja', dir: 'ltr' },
+  ko: { name: '한국어', htmlLang: 'ko', dir: 'ltr' }
 };
 
 const copyTranslations = {
@@ -276,6 +278,9 @@ const toolInternalLinks = {
     { href: '/compress/jpeg', label: 'JPEG Compressor' },
     { href: '/compress/webp', label: 'WEBP Compressor' },
     { href: '/compress/avif', label: 'AVIF Compressor' }
+  ],
+  upscale: [
+    { href: '/upscale', label: 'Image Upscaler Online' }
   ]
 };
 
@@ -285,7 +290,9 @@ const toolKeywordCopy = {
   crop:
     'US-focused intent terms: "crop image online free", "crop image no watermark", "crop to square", "crop image to 16:9".',
   compress:
-    'US-focused intent terms: "compress image online free", "jpeg compressor online", "compress webp", "compress avif image".'
+    'US-focused intent terms: "compress image online free", "jpeg compressor online", "compress webp", "compress avif image".',
+  upscale:
+    'US-focused intent terms: "ai image upscaler online free", "increase image resolution ai", "photo enhancer ai", "2x ai upscaler".'
 };
 
 const pages = {
@@ -478,6 +485,25 @@ const pages = {
     activeTab: 'compress',
     compressFormat: 'avif',
     compressQuality: 60
+  },
+  '/upscale': {
+    title: 'Upscale Image Online Free | AI 2x 4x Resolution',
+    description: 'AI-enhanced image upscaler in your browser. Improve perceived detail at 2x or 4x with on-device processing.',
+    canonicalPath: '/upscale',
+    ogTitle: 'Upscale Image Online Free | ImgConvertCrop',
+    twitterTitle: 'Upscale Image Online Free | ImgConvertCrop',
+    heroTitle: 'Free Image Upscaler',
+    heroSubtitle: 'AI Enhance runs on your device to upscale at 2x or 4x with practical quality limits.',
+    seoH2: 'AI-Enhanced Image Upscaling in Browser',
+    seoP1: 'This mode uses a lightweight neural model to improve perceived sharpness and texture while enlarging your image.',
+    seoP2: 'Everything stays in your browser, and progress is shown step-by-step from model load to export.',
+    seoLi1: 'AI-enhanced 2x and 4x upscale',
+    seoLi2: 'Progress and step status during inference',
+    seoLi3: 'No image upload to server',
+    activeTab: 'upscale',
+    upscaleFormat: 'png',
+    upscaleQuality: 100,
+    upscaleScale: 2
   }
 };
 
@@ -625,9 +651,11 @@ function renderPage(pathname, locale) {
     convertBtn: config.activeTab === 'convert' ? 'active' : '',
     cropBtn: config.activeTab === 'crop' ? 'active' : '',
     compressBtn: config.activeTab === 'compress' ? 'active' : '',
+    upscaleBtn: config.activeTab === 'upscale' ? 'active' : '',
     convertPanel: config.activeTab === 'convert' ? 'active' : '',
     cropPanel: config.activeTab === 'crop' ? 'active' : '',
-    compressPanel: config.activeTab === 'compress' ? 'active' : ''
+    compressPanel: config.activeTab === 'compress' ? 'active' : '',
+    upscalePanel: config.activeTab === 'upscale' ? 'active' : ''
   };
 
   const pageConfigJson = JSON.stringify({
@@ -638,6 +666,9 @@ function renderPage(pathname, locale) {
     convertQuality: config.convertQuality,
     compressFormat: config.compressFormat,
     compressQuality: config.compressQuality,
+    upscaleFormat: config.upscaleFormat,
+    upscaleQuality: config.upscaleQuality,
+    upscaleScale: config.upscaleScale,
     cropPreset: config.cropPreset,
     enableCropResize: config.enableCropResize
   });
@@ -668,9 +699,11 @@ function renderPage(pathname, locale) {
     __CONVERT_TAB_ACTIVE__: tabClasses.convertBtn,
     __CROP_TAB_ACTIVE__: tabClasses.cropBtn,
     __COMPRESS_TAB_ACTIVE__: tabClasses.compressBtn,
+    __UPSCALE_TAB_ACTIVE__: tabClasses.upscaleBtn,
     __CONVERT_PANEL_ACTIVE__: tabClasses.convertPanel,
     __CROP_PANEL_ACTIVE__: tabClasses.cropPanel,
     __COMPRESS_PANEL_ACTIVE__: tabClasses.compressPanel,
+    __UPSCALE_PANEL_ACTIVE__: tabClasses.upscalePanel,
     __PAGE_CONFIG_JSON__: pageConfigJson
   };
 

@@ -20,6 +20,9 @@
     <title>__PAGE_TITLE__</title>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4240863320156963"
      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/esrgan-thick@1.0.0-beta.16/dist/umd/models/esrgan-thick/src/x2/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/upscaler@1.0.0-beta.19/dist/browser/umd/upscaler.min.js"></script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -121,11 +124,15 @@
         align-items: center;
         gap: 8px;
         min-width: 180px;
+        flex-wrap: nowrap;
       }
 
       .locale-picker label {
         margin: 0;
         font-size: 12px;
+        white-space: nowrap;
+        flex: 0 0 auto;
+        writing-mode: horizontal-tb;
       }
 
       .locale-picker select {
@@ -312,6 +319,21 @@
         border-color: #bde8cf;
       }
 
+      .progress-wrap {
+        margin-top: 10px;
+      }
+
+      .progress-wrap progress {
+        width: 100%;
+        height: 12px;
+      }
+
+      .progress-label {
+        margin-top: 6px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
       .crop-shell {
         border: 1px solid var(--line);
         border-radius: 14px;
@@ -340,6 +362,72 @@
         color: var(--muted);
         font-size: 12px;
         margin-bottom: 0;
+      }
+
+      .note-highlight {
+        color: #0b43b5;
+        font-weight: 700;
+        background: #e8f0ff;
+        border: 1px solid #c7d9ff;
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin-top: 6px;
+      }
+
+      .restore-help {
+        border: 1px solid #d6e3f7;
+        background: #f7faff;
+        border-radius: 10px;
+        padding: 10px 12px;
+        margin-top: -2px;
+      }
+
+      .restore-help-title {
+        margin: 0 0 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #2b4875;
+      }
+
+      .restore-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--muted);
+        padding: 8px 0;
+        border-top: 1px dashed #d9e5f8;
+      }
+
+      .restore-item:first-of-type {
+        border-top: none;
+      }
+
+      .restore-chip {
+        flex: 0 0 auto;
+        font-weight: 700;
+        color: #1c4ea0;
+        background: #e5efff;
+        border: 1px solid #c8dafd;
+        border-radius: 999px;
+        padding: 2px 8px;
+        line-height: 1.35;
+      }
+
+      .restore-text {
+        line-height: 1.4;
+        padding-top: 2px;
+      }
+
+      .confirm-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .confirm-actions button {
+        width: auto;
+        min-width: 110px;
       }
 
       .inline-toggle {
@@ -578,8 +666,8 @@
               <select id="languageSelect">__LANG_OPTIONS_HTML__</select>
             </div>
           </div>
-          <h1>__HERO_TITLE__</h1>
-          <p class="subtitle">__HERO_SUBTITLE__</p>
+          <h1 id="heroTitle">__HERO_TITLE__</h1>
+          <p class="subtitle" id="heroSubtitle">__HERO_SUBTITLE__</p>
           <p class="oss-callout">
             <span data-i18n="oss.prefix">Open source:</span>
             <a href="https://github.com/supdub/image-free-convert" target="_blank" rel="noopener noreferrer" data-i18n="oss.link">GitHub repo</a>
@@ -597,6 +685,7 @@
           <button type="button" class="tab-btn __CONVERT_TAB_ACTIVE__" data-tab="convert" role="tab" data-i18n="tab.convert">Convert</button>
           <button type="button" class="tab-btn __CROP_TAB_ACTIVE__" data-tab="crop" role="tab" data-i18n="tab.crop">Crop</button>
           <button type="button" class="tab-btn __COMPRESS_TAB_ACTIVE__" data-tab="compress" role="tab" data-i18n="tab.compress">Compress</button>
+          <button type="button" class="tab-btn __UPSCALE_TAB_ACTIVE__" data-tab="upscale" role="tab" data-i18n="tab.upscale">Upscale</button>
         </div>
 
         <section class="panel __CONVERT_PANEL_ACTIVE__" id="panel-convert">
@@ -800,6 +889,99 @@
           </div>
           </div>
         </section>
+
+        <section class="panel __UPSCALE_PANEL_ACTIVE__" id="panel-upscale">
+          <div class="tool-card">
+            <p class="tool-title" data-i18n="upscale.title">Upscale Images</p>
+            <p class="tool-subtitle" data-i18n="upscale.subtitle">AI Enhance upscale that can recover perceived detail, not just stretch pixels.</p>
+          <div class="ad-wrap">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4240863320156963"
+                 data-ad-slot="3548309138"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
+          <div class="grid">
+            <div class="full">
+              <label for="upscaleImage" data-i18n="field.imageFile">Image File</label>
+              <input id="upscaleImage" type="file" accept="image/*" />
+            </div>
+            <div>
+              <label for="upscaleScale" data-i18n="upscale.scale">Scale</label>
+              <select id="upscaleScale">
+                <option value="2">2x</option>
+                <option value="4">4x</option>
+              </select>
+            </div>
+            <div>
+              <label for="upscaleFormat" data-i18n="field.outputFormat">Output Format</label>
+              <select id="upscaleFormat">
+                <option value="png">PNG</option>
+                <option value="jpeg">JPEG</option>
+                <option value="webp">WEBP</option>
+                <option value="avif">AVIF</option>
+              </select>
+            </div>
+            <div>
+              <label for="upscaleQuality" data-i18n="upscale.quality">Output Quality (1-100)</label>
+              <input id="upscaleQuality" type="number" min="1" max="100" value="100" />
+            </div>
+            <div>
+              <label for="upscaleRestoreMode" data-i18n="upscale.restoreMode">Restore Mode</label>
+              <select id="upscaleRestoreMode">
+                <option value="balanced" data-i18n="upscale.restore.balanced">Balanced</option>
+                <option value="aggressive" data-i18n="upscale.restore.aggressive">Aggressive</option>
+                <option value="logo" data-i18n="upscale.restore.logo">Text/Logo</option>
+              </select>
+            </div>
+            <div class="full restore-help">
+              <p class="restore-help-title" data-i18n="upscale.restore.helpTitle">Which restore mode should I use?</p>
+              <div class="restore-item">
+                <span class="restore-chip" data-i18n="upscale.restore.balanced">Balanced</span>
+                <span class="restore-text" data-i18n="upscale.restore.help.balanced">Safer default for most photos and mixed content.</span>
+              </div>
+              <div class="restore-item">
+                <span class="restore-chip" data-i18n="upscale.restore.aggressive">Aggressive</span>
+                <span class="restore-text" data-i18n="upscale.restore.help.aggressive">Stronger deblock and sharpening, may add halos/noise.</span>
+              </div>
+              <div class="restore-item">
+                <span class="restore-chip" data-i18n="upscale.restore.logo">Text/Logo</span>
+                <span class="restore-text" data-i18n="upscale.restore.help.logo">Prioritizes hard edges for logos, icons, and text-like shapes.</span>
+              </div>
+            </div>
+            <div class="full">
+              <p class="note" data-i18n="upscale.note">AI Enhance can improve sharpness and texture, but it cannot perfectly recreate missing detail.</p>
+              <p class="note" data-i18n="upscale.note2">Very blurry or tiny sources may still look soft. First run downloads a larger ESRGAN model in your browser.</p>
+              <p class="note note-highlight" data-i18n="upscale.note3">Expected first-run data: about 31 MB total (model + AI runtime), then cached by browser.</p>
+              <p class="note" data-i18n="upscale.note4">4x runs two AI passes, so it is much slower than 2x.</p>
+            </div>
+            <div class="full progress-wrap" id="upscaleProgressWrap">
+              <progress id="upscaleProgress" value="0" max="100"></progress>
+              <div class="progress-label" id="upscaleProgressLabel" data-i18n="upscale.progressIdle">Waiting to start AI enhance.</div>
+            </div>
+            <div class="full hidden note note-highlight" id="upscaleConfirmBox">
+              <span id="upscaleConfirmText" data-i18n="upscale.confirmUse">AI Enhance may download about 31 MB on first run and can take time. Continue?</span>
+              <div class="confirm-actions">
+                <button type="button" id="upscaleConfirmYes" data-i18n="btn.continue">Continue</button>
+                <button type="button" class="alt" id="upscaleConfirmNo" data-i18n="btn.cancel">Cancel</button>
+              </div>
+            </div>
+            <div class="full" id="upscaleActionRow">
+              <button type="button" id="upscaleBtn" data-i18n="btn.upscaleDownload">Upscale and Download</button>
+            </div>
+          </div>
+          <div class="status" id="upscaleStatus" aria-live="polite"></div>
+          <div class="ad-wrap bottom">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4240863320156963"
+                 data-ad-slot="3548309138"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
+          </div>
+        </section>
       </section>
     </main>
 
@@ -822,6 +1004,7 @@
           'tab.convert': 'Convert',
           'tab.crop': 'Crop',
           'tab.compress': 'Compress',
+          'tab.upscale': 'Upscale',
           'oss.prefix': 'Open source:',
           'oss.link': 'GitHub repo',
           'oss.suffix': 'Deploy your own version.',
@@ -831,14 +1014,29 @@
           'crop.subtitle': 'Use the crop frame to focus only on the area you want, then optionally resize.',
           'compress.title': 'Compress Images',
           'compress.subtitle': 'Reduce file size while preserving the same pixel dimensions.',
+          'upscale.title': 'Upscale Images',
+          'upscale.subtitle': 'AI Enhance upscale that can recover perceived detail, not just stretch pixels.',
           'field.imageFile': 'Image File',
           'field.outputFormat': 'Output Format',
           'field.quality': 'Quality (1-100)',
           'compress.quality': 'Compression Quality (1-100)',
+          'upscale.scale': 'Scale',
+          'upscale.quality': 'Output Quality (1-100)',
+          'upscale.restoreMode': 'Restore Mode',
+          'upscale.restore.balanced': 'Balanced',
+          'upscale.restore.aggressive': 'Aggressive',
+          'upscale.restore.logo': 'Text/Logo',
+          'upscale.restore.helpTitle': 'Which restore mode should I use?',
+          'upscale.restore.help.balanced': 'Safer default for most photos and mixed content.',
+          'upscale.restore.help.aggressive': 'Stronger deblock and sharpening, may add halos/noise.',
+          'upscale.restore.help.logo': 'Prioritizes hard edges for logos, icons, and text-like shapes.',
           'btn.convertDownload': 'Convert and Download',
           'btn.resetBox': 'Reset Box',
           'btn.confirmCropDownload': 'Confirm Crop and Download',
           'btn.compressDownload': 'Compress and Download',
+          'btn.upscaleDownload': 'Upscale and Download',
+          'btn.continue': 'Continue',
+          'btn.cancel': 'Cancel',
           'crop.instructions': 'Drag inside the box to move. Drag corners to resize. Use Confirm Crop when ready.',
           'crop.aspectRatio': 'Aspect Ratio',
           'crop.ratio.free': 'Free',
@@ -848,15 +1046,38 @@
           'crop.resizeWidth': 'Resize Width',
           'crop.resizeHeight': 'Resize Height',
           'compress.note': 'Compress keeps the same pixel dimensions. It only reduces encoded quality/size.',
+          'upscale.note': 'AI Enhance can improve sharpness and texture, but it cannot perfectly recreate missing detail.',
+          'upscale.note2': 'Very blurry or tiny sources may still look soft. First run downloads a larger ESRGAN model in your browser.',
+          'upscale.note3': 'Expected first-run data: about 31 MB total (model + AI runtime), then cached by browser.',
+          'upscale.note4': '4x runs two AI passes, so it is much slower than 2x.',
+          'upscale.progressIdle': 'Waiting to start AI enhance.',
+          'upscale.confirmUse': 'AI Enhance may download about 31 MB on first run and can take time. Continue?',
+          'hero.convert.title': 'Free Image Converter',
+          'hero.convert.subtitle': 'Convert JPG, PNG, WEBP, and AVIF directly in your browser.',
+          'hero.crop.title': 'Free Image Cropper',
+          'hero.crop.subtitle': 'Drag, resize, and export exact crop areas with optional resize after crop.',
+          'hero.compress.title': 'Free Image Compressor',
+          'hero.compress.subtitle': 'Reduce image file size while keeping dimensions.',
+          'hero.upscale.title': 'Free Image Upscaler',
+          'hero.upscale.subtitle': 'AI Enhance runs on your device to upscale at 2x or 4x with practical quality limits.',
           'seo.relatedPages': 'Related pages',
           'status.chooseImage': 'Choose an image first.',
           'status.uploadFirst': 'Upload an image first.',
           'status.converting': 'Converting...',
           'status.compressing': 'Compressing (same dimensions)...',
+          'status.upscaling': 'Upscaling image...',
+          'status.aiInit': 'Preparing AI engine...',
+          'status.aiModelLoad': 'Loading AI model (~31 MB on first run)...',
+          'status.aiEnhancingPass': 'AI enhancing pass {pass}/{total}...',
+          'status.aiPreprocess': 'Restoring before AI upscale...',
+          'status.aiPostprocess': 'Enhancing edges after AI upscale...',
+          'status.aiFinalizing': 'Finalizing output and downloading...',
           'status.cropProcessing': 'Processing crop...',
           'status.doneDownload': 'Done. Download started.',
+          'status.cancelled': 'Cancelled.',
           'status.cropDone': 'Crop confirmed. Download started.',
           'status.compressDone': 'Compression done. Download started.',
+          'status.upscaleDone': 'Upscale done. Download started.',
           'status.previewIos': 'Preview opened. On iPhone tap Share, then Save Image.',
           'status.imageLoaded': 'Image loaded. Adjust crop and confirm.',
           'status.loadFailed': 'Failed to load image.',
@@ -867,6 +1088,8 @@
           'error.convertFailed': 'Convert failed.',
           'error.cropFailed': 'Crop failed.',
           'error.compressFailed': 'Compress failed.',
+          'error.upscaleFailed': 'Upscale failed.',
+          'error.upscaleTooLarge': 'Image is too large for AI Enhance in browser. Keep it under about {maxMp} MP for this scale.',
           'ph.resizeWidth': 'e.g. 800',
           'ph.resizeHeight': 'e.g. 600'
         },
@@ -879,6 +1102,7 @@
           'tab.convert': 'Convertir',
           'tab.crop': 'Recortar',
           'tab.compress': 'Comprimir',
+          'tab.upscale': 'Mejorar',
           'oss.prefix': 'Codigo abierto:',
           'oss.link': 'Repositorio en GitHub',
           'oss.suffix': 'Despliega tu propia version.',
@@ -888,14 +1112,29 @@
           'crop.subtitle': 'Usa el marco de recorte y, si quieres, cambia el tamano.',
           'compress.title': 'Comprimir imagenes',
           'compress.subtitle': 'Reduce el tamano del archivo manteniendo las dimensiones.',
+          'upscale.title': 'Mejorar resolucion',
+          'upscale.subtitle': 'Aumenta la resolucion de la imagen en tu dispositivo con un escalado practico.',
           'field.imageFile': 'Archivo de imagen',
           'field.outputFormat': 'Formato de salida',
           'field.quality': 'Calidad (1-100)',
           'compress.quality': 'Calidad de compresion (1-100)',
+          'upscale.scale': 'Escala',
+          'upscale.quality': 'Calidad de salida (1-100)',
+          'upscale.restoreMode': 'Modo de restauracion',
+          'upscale.restore.balanced': 'Equilibrado',
+          'upscale.restore.aggressive': 'Agresivo',
+          'upscale.restore.logo': 'Texto/Logo',
+          'upscale.restore.helpTitle': 'Que modo de restauracion debo usar?',
+          'upscale.restore.help.balanced': 'Opcion mas segura para fotos y contenido mixto.',
+          'upscale.restore.help.aggressive': 'Deblock y enfoque mas fuertes; puede generar halos/ruido.',
+          'upscale.restore.help.logo': 'Prioriza bordes duros para logos, iconos y formas de texto.',
           'btn.convertDownload': 'Convertir y descargar',
           'btn.resetBox': 'Restablecer caja',
           'btn.confirmCropDownload': 'Confirmar recorte y descargar',
           'btn.compressDownload': 'Comprimir y descargar',
+          'btn.upscaleDownload': 'Mejorar y descargar',
+          'btn.continue': 'Continuar',
+          'btn.cancel': 'Cancelar',
           'crop.instructions': 'Arrastra dentro para mover. Arrastra esquinas para cambiar tamano.',
           'crop.aspectRatio': 'Relacion de aspecto',
           'crop.ratio.free': 'Libre',
@@ -904,15 +1143,29 @@
           'crop.resizeWidth': 'Ancho',
           'crop.resizeHeight': 'Alto',
           'compress.note': 'Comprimir mantiene las mismas dimensiones de pixeles.',
+          'upscale.note': 'Para mantener velocidad y estabilidad, salidas muy grandes pueden limitarse automaticamente.',
+          'upscale.note2': 'Las imagenes muy borrosas o pequenas pueden seguir viendose suaves. En la primera ejecucion se descarga un modelo ESRGAN mas grande en tu navegador.',
+          'upscale.note3': 'Datos esperados en la primera ejecucion: alrededor de 31 MB en total (modelo + runtime de IA), luego queda en cache del navegador.',
+          'upscale.note4': '4x ejecuta dos pasadas de IA, por lo que es mucho mas lento que 2x.',
+          'hero.convert.title': 'Convertidor de imagenes gratis',
+          'hero.convert.subtitle': 'Convierte JPG, PNG, WEBP y AVIF directamente en tu navegador.',
+          'hero.crop.title': 'Recortador de imagenes gratis',
+          'hero.crop.subtitle': 'Arrastra, redimensiona y exporta recortes exactos con cambio de tamano opcional.',
+          'hero.compress.title': 'Compresor de imagenes gratis',
+          'hero.compress.subtitle': 'Reduce el tamano del archivo manteniendo las dimensiones.',
+          'hero.upscale.title': 'Mejorador de imagenes gratis',
+          'hero.upscale.subtitle': 'AI Enhance se ejecuta en tu dispositivo para ampliar a 2x o 4x con limites practicos.',
           'seo.relatedPages': 'Paginas relacionadas',
           'status.chooseImage': 'Elige una imagen primero.',
           'status.uploadFirst': 'Sube una imagen primero.',
           'status.converting': 'Convirtiendo...',
           'status.compressing': 'Comprimiendo (mismas dimensiones)...',
+          'status.upscaling': 'Mejorando resolucion...',
           'status.cropProcessing': 'Procesando recorte...',
           'status.doneDownload': 'Listo. Descarga iniciada.',
           'status.cropDone': 'Recorte confirmado. Descarga iniciada.',
           'status.compressDone': 'Compresion lista. Descarga iniciada.',
+          'status.upscaleDone': 'Mejora lista. Descarga iniciada.',
           'status.previewIos': 'Vista previa abierta. En iPhone, toca Share y luego Save Image.',
           'status.imageLoaded': 'Imagen cargada. Ajusta y confirma el recorte.',
           'status.loadFailed': 'No se pudo cargar la imagen.',
@@ -923,6 +1176,7 @@
           'error.convertFailed': 'Fallo al convertir.',
           'error.cropFailed': 'Fallo al recortar.',
           'error.compressFailed': 'Fallo al comprimir.',
+          'error.upscaleFailed': 'Fallo al mejorar resolucion.',
           'ph.resizeWidth': 'p. ej. 800',
           'ph.resizeHeight': 'p. ej. 600'
         },
@@ -935,6 +1189,7 @@
           'tab.convert': '转换',
           'tab.crop': '裁剪',
           'tab.compress': '压缩',
+          'tab.upscale': '放大',
           'oss.prefix': '开源项目：',
           'oss.link': 'GitHub 仓库',
           'oss.suffix': '可部署你自己的版本。',
@@ -944,14 +1199,29 @@
           'crop.subtitle': '使用裁剪框选择区域，并可在裁剪后调整尺寸。',
           'compress.title': '压缩图片',
           'compress.subtitle': '在保持像素尺寸不变的前提下减小文件体积。',
+          'upscale.title': '放大图片',
+          'upscale.subtitle': '在你的设备上提高图片分辨率，采用实用且稳定的放大方式。',
           'field.imageFile': '图片文件',
           'field.outputFormat': '输出格式',
           'field.quality': '质量 (1-100)',
           'compress.quality': '压缩质量 (1-100)',
+          'upscale.scale': '放大倍数',
+          'upscale.quality': '输出质量 (1-100)',
+          'upscale.restoreMode': '修复模式',
+          'upscale.restore.balanced': '均衡',
+          'upscale.restore.aggressive': '强力',
+          'upscale.restore.logo': '文字/Logo',
+          'upscale.restore.helpTitle': '该选哪种修复模式？',
+          'upscale.restore.help.balanced': '适合大多数照片和混合内容，更稳妥。',
+          'upscale.restore.help.aggressive': '更强去块和锐化，可能出现光晕或噪点。',
+          'upscale.restore.help.logo': '优先强化硬边，适合 Logo、图标和文字形状。',
           'btn.convertDownload': '转换并下载',
           'btn.resetBox': '重置裁剪框',
           'btn.confirmCropDownload': '确认裁剪并下载',
           'btn.compressDownload': '压缩并下载',
+          'btn.upscaleDownload': '放大并下载',
+          'btn.continue': '继续',
+          'btn.cancel': '取消',
           'crop.instructions': '在框内拖动可移动，拖动角点可调整大小。',
           'crop.aspectRatio': '宽高比',
           'crop.ratio.free': '自由',
@@ -960,15 +1230,29 @@
           'crop.resizeWidth': '宽度',
           'crop.resizeHeight': '高度',
           'compress.note': '压缩仅降低编码体积，不改变像素尺寸。',
+          'upscale.note': '为保证速度与稳定性，超大输出会自动限制到安全尺寸。',
+          'upscale.note2': '源图过小或过模糊时，结果仍可能偏软。首次运行会在浏览器下载更大的 ESRGAN 模型。',
+          'upscale.note3': '首次运行预计下载数据：总计约 31 MB（模型 + AI 运行时），之后会被浏览器缓存。',
+          'upscale.note4': '4x 会执行两次 AI 处理，因此会比 2x 慢很多。',
+          'hero.convert.title': '免费图片转换器',
+          'hero.convert.subtitle': '在浏览器中直接转换 JPG、PNG、WEBP、AVIF。',
+          'hero.crop.title': '免费图片裁剪器',
+          'hero.crop.subtitle': '拖拽并导出精确裁剪区域，支持可选缩放。',
+          'hero.compress.title': '免费图片压缩器',
+          'hero.compress.subtitle': '在保持尺寸的前提下减小文件体积。',
+          'hero.upscale.title': '免费图片放大器',
+          'hero.upscale.subtitle': 'AI Enhance 在你的设备上运行，支持 2x/4x 实用放大。',
           'seo.relatedPages': '相关页面',
           'status.chooseImage': '请先选择图片。',
           'status.uploadFirst': '请先上传图片。',
           'status.converting': '正在转换...',
           'status.compressing': '正在压缩（保持尺寸）...',
+          'status.upscaling': '正在放大图片...',
           'status.cropProcessing': '正在处理裁剪...',
           'status.doneDownload': '完成，开始下载。',
           'status.cropDone': '裁剪完成，开始下载。',
           'status.compressDone': '压缩完成，开始下载。',
+          'status.upscaleDone': '放大完成，开始下载。',
           'status.previewIos': '已打开预览。iPhone 上请点 Share 再点 Save Image。',
           'status.imageLoaded': '图片已加载，请调整后确认裁剪。',
           'status.loadFailed': '图片加载失败。',
@@ -979,6 +1263,7 @@
           'error.convertFailed': '转换失败。',
           'error.cropFailed': '裁剪失败。',
           'error.compressFailed': '压缩失败。',
+          'error.upscaleFailed': '放大失败。',
           'ph.resizeWidth': '例如 800',
           'ph.resizeHeight': '例如 600'
         },
@@ -991,6 +1276,7 @@
           'tab.convert': 'कन्वर्ट',
           'tab.crop': 'क्रॉप',
           'tab.compress': 'कंप्रेस',
+          'tab.upscale': 'अपस्केल',
           'oss.prefix': 'ओपन सोर्स:',
           'oss.link': 'GitHub रिपॉजिटरी',
           'oss.suffix': 'अपना वर्जन खुद डिप्लॉय करें।',
@@ -1000,14 +1286,29 @@
           'crop.subtitle': 'क्रॉप बॉक्स से हिस्सा चुनें, फिर जरूरत हो तो रिसाइज़ करें।',
           'compress.title': 'इमेज कंप्रेस करें',
           'compress.subtitle': 'पिक्सेल साइज़ वही रखते हुए फाइल साइज़ कम करें।',
+          'upscale.title': 'इमेज अपस्केल करें',
+          'upscale.subtitle': 'व्यावहारिक स्केलिंग के साथ अपने डिवाइस पर इमेज रिजॉल्यूशन बढ़ाएं।',
           'field.imageFile': 'इमेज फाइल',
           'field.outputFormat': 'आउटपुट फॉर्मेट',
           'field.quality': 'क्वालिटी (1-100)',
           'compress.quality': 'कंप्रेशन क्वालिटी (1-100)',
+          'upscale.scale': 'स्केल',
+          'upscale.quality': 'आउटपुट क्वालिटी (1-100)',
+          'upscale.restoreMode': 'रिस्टोर मोड',
+          'upscale.restore.balanced': 'बैलेंस्ड',
+          'upscale.restore.aggressive': 'एग्रेसिव',
+          'upscale.restore.logo': 'टेक्स्ट/लोगो',
+          'upscale.restore.helpTitle': 'कौन सा रिस्टोर मोड चुनें?',
+          'upscale.restore.help.balanced': 'ज्यादातर फोटो और मिश्रित कंटेंट के लिए सुरक्षित डिफ़ॉल्ट।',
+          'upscale.restore.help.aggressive': 'ज्यादा डीब्लॉक और शार्पन; हैलो/नॉइज़ आ सकते हैं।',
+          'upscale.restore.help.logo': 'लोगो, आइकन और टेक्स्ट जैसी कठोर किनारों को प्राथमिकता देता है।',
           'btn.convertDownload': 'कन्वर्ट और डाउनलोड',
           'btn.resetBox': 'बॉक्स रीसेट करें',
           'btn.confirmCropDownload': 'क्रॉप कन्फर्म और डाउनलोड',
           'btn.compressDownload': 'कंप्रेस और डाउनलोड',
+          'btn.upscaleDownload': 'अपस्केल और डाउनलोड',
+          'btn.continue': 'जारी रखें',
+          'btn.cancel': 'रद्द करें',
           'crop.instructions': 'बॉक्स के अंदर ड्रैग करके मूव करें। कोनों से साइज़ बदलें।',
           'crop.aspectRatio': 'आस्पेक्ट रेशियो',
           'crop.ratio.free': 'फ्री',
@@ -1016,15 +1317,29 @@
           'crop.resizeWidth': 'चौड़ाई',
           'crop.resizeHeight': 'ऊंचाई',
           'compress.note': 'कंप्रेस करने पर पिक्सेल डायमेंशन वही रहते हैं।',
+          'upscale.note': 'स्पीड और स्थिरता के लिए बहुत बड़े आउटपुट अपने आप सुरक्षित सीमा तक सीमित हो सकते हैं।',
+          'upscale.note2': 'बहुत धुंधली या बहुत छोटी इमेज में परिणाम फिर भी सॉफ्ट रह सकते हैं। पहली बार चलाने पर ब्राउज़र में बड़ा ESRGAN मॉडल डाउनलोड होता है।',
+          'upscale.note3': 'पहली बार अनुमानित डेटा उपयोग: कुल लगभग 31 MB (मॉडल + AI रनटाइम), बाद में यह ब्राउज़र में कैश हो जाता है।',
+          'upscale.note4': '4x में AI के दो पास चलते हैं, इसलिए यह 2x से काफी धीमा है।',
+          'hero.convert.title': 'फ्री इमेज कन्वर्टर',
+          'hero.convert.subtitle': 'JPG, PNG, WEBP और AVIF सीधे ब्राउज़र में कन्वर्ट करें।',
+          'hero.crop.title': 'फ्री इमेज क्रॉपर',
+          'hero.crop.subtitle': 'ड्रैग करें, आकार बदलें और सटीक क्रॉप एरिया एक्सपोर्ट करें।',
+          'hero.compress.title': 'फ्री इमेज कंप्रेसर',
+          'hero.compress.subtitle': 'डायमेंशन वही रखते हुए फाइल साइज़ घटाएं।',
+          'hero.upscale.title': 'फ्री इमेज अपस्केलर',
+          'hero.upscale.subtitle': 'AI Enhance आपके डिवाइस पर 2x/4x अपस्केल चलाता है।',
           'seo.relatedPages': 'संबंधित पेज',
           'status.chooseImage': 'पहले एक इमेज चुनें।',
           'status.uploadFirst': 'पहले एक इमेज अपलोड करें।',
           'status.converting': 'कन्वर्ट हो रहा है...',
           'status.compressing': 'कंप्रेस हो रहा है (वही डायमेंशन)...',
+          'status.upscaling': 'इमेज अपस्केल हो रही है...',
           'status.cropProcessing': 'क्रॉप प्रोसेस हो रहा है...',
           'status.doneDownload': 'हो गया। डाउनलोड शुरू हुआ।',
           'status.cropDone': 'क्रॉप पूरा। डाउनलोड शुरू हुआ।',
           'status.compressDone': 'कंप्रेशन पूरा। डाउनलोड शुरू हुआ।',
+          'status.upscaleDone': 'अपस्केल पूरा। डाउनलोड शुरू हुआ।',
           'status.previewIos': 'प्रिव्यू खुल गया। iPhone पर Share दबाएं, फिर Save Image करें।',
           'status.imageLoaded': 'इमेज लोड हो गई। क्रॉप एडजस्ट करके कन्फर्म करें।',
           'status.loadFailed': 'इमेज लोड नहीं हुई।',
@@ -1035,8 +1350,161 @@
           'error.convertFailed': 'कन्वर्ट विफल।',
           'error.cropFailed': 'क्रॉप विफल।',
           'error.compressFailed': 'कंप्रेस विफल।',
+          'error.upscaleFailed': 'अपस्केल विफल।',
           'ph.resizeWidth': 'जैसे 800',
           'ph.resizeHeight': 'जैसे 600'
+        },
+        ja: {
+          'lang.label': '言語',
+          'flow.upload': '1. アップロード',
+          'flow.adjust': '2. 調整',
+          'flow.download': '3. ダウンロード',
+          'flow.privacy': '画像は保存しません',
+          'tab.convert': '変換',
+          'tab.crop': '切り抜き',
+          'tab.compress': '圧縮',
+          'tab.upscale': '拡大',
+          'oss.prefix': 'オープンソース:',
+          'oss.link': 'GitHub リポジトリ',
+          'oss.suffix': '自分の版をデプロイできます。',
+          'convert.title': '画像変換',
+          'convert.subtitle': '画質を調整しながら画像形式を変換します。',
+          'crop.title': '画像切り抜き',
+          'crop.subtitle': '切り抜き範囲を選び、必要に応じてリサイズできます。',
+          'compress.title': '画像圧縮',
+          'compress.subtitle': 'ピクセル寸法を維持したまま容量を削減します。',
+          'upscale.title': '画像拡大',
+          'upscale.subtitle': 'AI Enhance で拡大時の見た目ディテールを改善します。',
+          'field.imageFile': '画像ファイル',
+          'field.outputFormat': '出力形式',
+          'field.quality': '品質 (1-100)',
+          'compress.quality': '圧縮品質 (1-100)',
+          'upscale.scale': '倍率',
+          'upscale.quality': '出力品質 (1-100)',
+          'upscale.restoreMode': '復元モード',
+          'upscale.restore.balanced': 'バランス',
+          'upscale.restore.aggressive': '強め',
+          'upscale.restore.logo': '文字/ロゴ',
+          'upscale.restore.helpTitle': 'どの復元モードを使うべきですか？',
+          'upscale.restore.help.balanced': '写真や混在コンテンツ向けの安全な標準設定。',
+          'upscale.restore.help.aggressive': 'ブロック除去とシャープ化を強めます。ハロー/ノイズが出る場合があります。',
+          'upscale.restore.help.logo': 'ロゴ・アイコン・文字の硬い輪郭を優先します。',
+          'btn.convertDownload': '変換してダウンロード',
+          'btn.resetBox': '枠をリセット',
+          'btn.confirmCropDownload': '切り抜いてダウンロード',
+          'btn.compressDownload': '圧縮してダウンロード',
+          'btn.upscaleDownload': '拡大してダウンロード',
+          'btn.continue': '続行',
+          'btn.cancel': 'キャンセル',
+          'compress.note': '圧縮はピクセル寸法を変えず、容量のみを減らします。',
+          'upscale.note': 'AI Enhance は見た目を改善しますが、失われた情報を完全復元することはできません。',
+          'upscale.note2': '元画像が非常に小さい/ぼやけている場合、結果も柔らかいままになることがあります。',
+          'upscale.note3': '初回ダウンロード目安: 約31MB（モデル + AIランタイム）。以後はブラウザにキャッシュされます。',
+          'upscale.note4': '4x は AI を2パス実行するため、2x よりかなり遅くなります。',
+          'hero.convert.title': '無料画像コンバーター',
+          'hero.convert.subtitle': 'JPG/PNG/WEBP/AVIF をブラウザで変換。',
+          'hero.crop.title': '無料画像クロッパー',
+          'hero.crop.subtitle': 'ドラッグで正確に切り抜き、必要ならリサイズ。',
+          'hero.compress.title': '無料画像圧縮',
+          'hero.compress.subtitle': '寸法を維持したまま容量を小さくします。',
+          'hero.upscale.title': '無料画像アップスケーラー',
+          'hero.upscale.subtitle': 'AI Enhance が端末上で 2x/4x 拡大を実行します。',
+          'seo.relatedPages': '関連ページ',
+          'status.chooseImage': '先に画像を選択してください。',
+          'status.uploadFirst': '先に画像をアップロードしてください。',
+          'status.converting': '変換中...',
+          'status.compressing': '圧縮中（同じ寸法）...',
+          'status.upscaling': '拡大中...',
+          'status.cropProcessing': '切り抜き処理中...',
+          'status.doneDownload': '完了。ダウンロードを開始しました。',
+          'status.cropDone': '切り抜き完了。ダウンロードを開始しました。',
+          'status.compressDone': '圧縮完了。ダウンロードを開始しました。',
+          'status.upscaleDone': '拡大完了。ダウンロードを開始しました。',
+          'status.cancelled': 'キャンセルしました。',
+          'status.previewIos': 'プレビューを開きました。iPhone では Share から Save Image を選んでください。',
+          'error.notSupported': 'このブラウザでは {format} の出力に対応していません。',
+          'error.convertFailed': '変換に失敗しました。',
+          'error.cropFailed': '切り抜きに失敗しました。',
+          'error.compressFailed': '圧縮に失敗しました。',
+          'error.upscaleFailed': '拡大に失敗しました。',
+          'ph.resizeWidth': '例 800',
+          'ph.resizeHeight': '例 600'
+        },
+        ko: {
+          'lang.label': '언어',
+          'flow.upload': '1. 업로드',
+          'flow.adjust': '2. 조정',
+          'flow.download': '3. 다운로드',
+          'flow.privacy': '이미지는 저장하지 않습니다',
+          'tab.convert': '변환',
+          'tab.crop': '자르기',
+          'tab.compress': '압축',
+          'tab.upscale': '업스케일',
+          'oss.prefix': '오픈소스:',
+          'oss.link': 'GitHub 저장소',
+          'oss.suffix': '직접 배포할 수 있습니다.',
+          'convert.title': '이미지 변환',
+          'convert.subtitle': '품질을 조절하며 이미지 형식을 변환합니다.',
+          'crop.title': '이미지 자르기',
+          'crop.subtitle': '자르기 영역을 선택하고 필요하면 크기를 조정하세요.',
+          'compress.title': '이미지 압축',
+          'compress.subtitle': '픽셀 크기를 유지한 채 용량을 줄입니다.',
+          'upscale.title': '이미지 업스케일',
+          'upscale.subtitle': 'AI Enhance로 확대 시 디테일 표현을 개선합니다.',
+          'field.imageFile': '이미지 파일',
+          'field.outputFormat': '출력 형식',
+          'field.quality': '품질 (1-100)',
+          'compress.quality': '압축 품질 (1-100)',
+          'upscale.scale': '배율',
+          'upscale.quality': '출력 품질 (1-100)',
+          'upscale.restoreMode': '복원 모드',
+          'upscale.restore.balanced': '균형',
+          'upscale.restore.aggressive': '강하게',
+          'upscale.restore.logo': '텍스트/로고',
+          'upscale.restore.helpTitle': '어떤 복원 모드를 써야 하나요?',
+          'upscale.restore.help.balanced': '대부분의 사진/혼합 콘텐츠에 안전한 기본값입니다.',
+          'upscale.restore.help.aggressive': '블록 제거와 선명화를 강하게 적용합니다. 할로/노이즈가 생길 수 있습니다.',
+          'upscale.restore.help.logo': '로고, 아이콘, 텍스트의 또렷한 경계를 우선합니다.',
+          'btn.convertDownload': '변환 후 다운로드',
+          'btn.resetBox': '박스 초기화',
+          'btn.confirmCropDownload': '자르고 다운로드',
+          'btn.compressDownload': '압축 후 다운로드',
+          'btn.upscaleDownload': '업스케일 후 다운로드',
+          'btn.continue': '계속',
+          'btn.cancel': '취소',
+          'compress.note': '압축은 픽셀 크기를 유지하고 용량만 줄입니다.',
+          'upscale.note': 'AI Enhance는 시각적 품질을 개선하지만, 손실된 정보를 완전히 복원하진 못합니다.',
+          'upscale.note2': '원본이 매우 작거나 흐리면 결과도 부드럽게 보일 수 있습니다.',
+          'upscale.note3': '첫 실행 예상 다운로드: 약 31MB(모델 + AI 런타임), 이후 브라우저에 캐시됩니다.',
+          'upscale.note4': '4x는 AI를 2회 실행하므로 2x보다 훨씬 느립니다.',
+          'hero.convert.title': '무료 이미지 변환기',
+          'hero.convert.subtitle': 'JPG/PNG/WEBP/AVIF를 브라우저에서 바로 변환.',
+          'hero.crop.title': '무료 이미지 크롭',
+          'hero.crop.subtitle': '드래그로 정확히 자르고 필요 시 리사이즈.',
+          'hero.compress.title': '무료 이미지 압축',
+          'hero.compress.subtitle': '크기는 유지하고 파일 용량을 줄입니다.',
+          'hero.upscale.title': '무료 이미지 업스케일러',
+          'hero.upscale.subtitle': 'AI Enhance가 기기에서 2x/4x 업스케일을 실행합니다.',
+          'seo.relatedPages': '관련 페이지',
+          'status.chooseImage': '먼저 이미지를 선택하세요.',
+          'status.uploadFirst': '먼저 이미지를 업로드하세요.',
+          'status.converting': '변환 중...',
+          'status.compressing': '압축 중(동일 크기)...',
+          'status.upscaling': '업스케일 중...',
+          'status.cropProcessing': '크롭 처리 중...',
+          'status.doneDownload': '완료되었습니다. 다운로드를 시작했습니다.',
+          'status.cropDone': '크롭 완료. 다운로드를 시작했습니다.',
+          'status.compressDone': '압축 완료. 다운로드를 시작했습니다.',
+          'status.upscaleDone': '업스케일 완료. 다운로드를 시작했습니다.',
+          'status.cancelled': '취소되었습니다.',
+          'status.previewIos': '미리보기가 열렸습니다. iPhone에서는 Share 후 Save Image를 선택하세요.',
+          'error.notSupported': '이 브라우저는 {format} 내보내기를 지원하지 않습니다.',
+          'error.convertFailed': '변환 실패.',
+          'error.cropFailed': '크롭 실패.',
+          'error.compressFailed': '압축 실패.',
+          'error.upscaleFailed': '업스케일 실패.',
+          'ph.resizeWidth': '예: 800',
+          'ph.resizeHeight': '예: 600'
         },
         ar: {
           'lang.label': 'اللغة',
@@ -1047,6 +1515,7 @@
           'tab.convert': 'تحويل',
           'tab.crop': 'قص',
           'tab.compress': 'ضغط',
+          'tab.upscale': 'تكبير',
           'oss.prefix': 'مفتوح المصدر:',
           'oss.link': 'مستودع GitHub',
           'oss.suffix': 'انشر نسختك الخاصة.',
@@ -1056,14 +1525,29 @@
           'crop.subtitle': 'استخدم إطار القص لتحديد الجزء المطلوب ثم غيّر الحجم اختياريًا.',
           'compress.title': 'ضغط الصور',
           'compress.subtitle': 'قلّل حجم الملف مع الحفاظ على نفس الأبعاد.',
+          'upscale.title': 'تكبير الصور',
+          'upscale.subtitle': 'زِد دقة الصورة على جهازك باستخدام تكبير عملي ومستقر.',
           'field.imageFile': 'ملف الصورة',
           'field.outputFormat': 'صيغة الإخراج',
           'field.quality': 'الجودة (1-100)',
           'compress.quality': 'جودة الضغط (1-100)',
+          'upscale.scale': 'مقدار التكبير',
+          'upscale.quality': 'جودة الإخراج (1-100)',
+          'upscale.restoreMode': 'وضع الاستعادة',
+          'upscale.restore.balanced': 'متوازن',
+          'upscale.restore.aggressive': 'قوي',
+          'upscale.restore.logo': 'نص/شعار',
+          'upscale.restore.helpTitle': 'ما وضع الاستعادة المناسب؟',
+          'upscale.restore.help.balanced': 'الخيار الأكثر أمانًا لمعظم الصور والمحتوى المختلط.',
+          'upscale.restore.help.aggressive': 'إزالة ضغط وحدّة أقوى، وقد تظهر هالات/ضجيج.',
+          'upscale.restore.help.logo': 'يركّز على الحواف الصلبة للشعارات والأيقونات وأشكال النص.',
           'btn.convertDownload': 'تحويل وتنزيل',
           'btn.resetBox': 'إعادة ضبط الإطار',
           'btn.confirmCropDownload': 'تأكيد القص والتنزيل',
           'btn.compressDownload': 'ضغط وتنزيل',
+          'btn.upscaleDownload': 'تكبير وتنزيل',
+          'btn.continue': 'متابعة',
+          'btn.cancel': 'إلغاء',
           'crop.instructions': 'اسحب داخل الإطار للتحريك واسحب الزوايا لتغيير الحجم.',
           'crop.aspectRatio': 'نسبة الأبعاد',
           'crop.ratio.free': 'حر',
@@ -1072,15 +1556,29 @@
           'crop.resizeWidth': 'العرض',
           'crop.resizeHeight': 'الارتفاع',
           'compress.note': 'الضغط يحافظ على نفس أبعاد البكسل.',
+          'upscale.note': 'للحفاظ على السرعة والاستقرار، قد يتم تقليل المخرجات الكبيرة جدًا تلقائيًا إلى أبعاد آمنة.',
+          'upscale.note2': 'قد تبقى الصور الصغيرة جدًا أو الضبابية ناعمة حتى بعد المعالجة. في أول تشغيل يتم تنزيل نموذج ESRGAN أكبر داخل المتصفح.',
+          'upscale.note3': 'استهلاك البيانات المتوقع لأول تشغيل: حوالي 31 ميجابايت إجمالًا (النموذج + وقت تشغيل الذكاء الاصطناعي)، ثم يتم حفظه في ذاكرة المتصفح المؤقتة.',
+          'upscale.note4': 'وضع 4x يشغّل مرحلتين من الذكاء الاصطناعي، لذلك يكون أبطأ بكثير من 2x.',
+          'hero.convert.title': 'محول صور مجاني',
+          'hero.convert.subtitle': 'حوّل JPG وPNG وWEBP وAVIF مباشرة داخل المتصفح.',
+          'hero.crop.title': 'أداة قص صور مجانية',
+          'hero.crop.subtitle': 'اسحب وغيّر الحجم وصدّر منطقة قص دقيقة مع تغيير حجم اختياري.',
+          'hero.compress.title': 'ضاغط صور مجاني',
+          'hero.compress.subtitle': 'قلّل حجم الملف مع الحفاظ على الأبعاد.',
+          'hero.upscale.title': 'مكبر صور مجاني',
+          'hero.upscale.subtitle': 'يعمل AI Enhance على جهازك للتكبير 2x أو 4x بحدود عملية.',
           'seo.relatedPages': 'صفحات ذات صلة',
           'status.chooseImage': 'اختر صورة أولاً.',
           'status.uploadFirst': 'ارفع صورة أولاً.',
           'status.converting': 'جارٍ التحويل...',
           'status.compressing': 'جارٍ الضغط (نفس الأبعاد)...',
+          'status.upscaling': 'جارٍ تكبير الصورة...',
           'status.cropProcessing': 'جارٍ معالجة القص...',
           'status.doneDownload': 'تم. بدأ التنزيل.',
           'status.cropDone': 'تم القص. بدأ التنزيل.',
           'status.compressDone': 'تم الضغط. بدأ التنزيل.',
+          'status.upscaleDone': 'تم التكبير. بدأ التنزيل.',
           'status.previewIos': 'تم فتح المعاينة. في iPhone اضغط Share ثم Save Image.',
           'status.imageLoaded': 'تم تحميل الصورة. عدّل القص ثم أكّد.',
           'status.loadFailed': 'فشل تحميل الصورة.',
@@ -1091,6 +1589,7 @@
           'error.convertFailed': 'فشل التحويل.',
           'error.cropFailed': 'فشل القص.',
           'error.compressFailed': 'فشل الضغط.',
+          'error.upscaleFailed': 'فشل التكبير.',
           'ph.resizeWidth': 'مثال 800',
           'ph.resizeHeight': 'مثال 600'
         }
@@ -1121,6 +1620,14 @@
         return `/${targetLocale}${cleanBase}`;
       }
 
+      function updateHeroForTab(tab) {
+        const titleEl = document.getElementById('heroTitle');
+        const subtitleEl = document.getElementById('heroSubtitle');
+        if (!titleEl || !subtitleEl) return;
+        titleEl.textContent = t(`hero.${tab}.title`);
+        subtitleEl.textContent = t(`hero.${tab}.subtitle`);
+      }
+
       applyTranslations();
 
       const languageSelect = document.getElementById('languageSelect');
@@ -1136,12 +1643,14 @@
       const panels = {
         convert: document.getElementById('panel-convert'),
         crop: document.getElementById('panel-crop'),
-        compress: document.getElementById('panel-compress')
+        compress: document.getElementById('panel-compress'),
+        upscale: document.getElementById('panel-upscale')
       };
       const tabToPath = {
         convert: localePathFor('/convert', locale),
         crop: localePathFor('/crop', locale),
-        compress: localePathFor('/compress', locale)
+        compress: localePathFor('/compress', locale),
+        upscale: localePathFor('/upscale', locale)
       };
 
       function setStatus(el, message, type) {
@@ -1157,6 +1666,126 @@
 
       function extForFormat(format) {
         return format === 'jpeg' ? 'jpg' : format;
+      }
+
+      async function base64ToImage(src) {
+        const img = new Image();
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+          img.src = src;
+        });
+        return img;
+      }
+
+      function canvasToImage(canvas) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = canvas.toDataURL('image/png');
+        });
+      }
+
+      function drawImageToCanvas(img, width, height) {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+        return canvas;
+      }
+
+      function drawResampled(canvas, ratio) {
+        const srcW = canvas.width;
+        const srcH = canvas.height;
+        const downW = Math.max(1, Math.round(srcW * ratio));
+        const downH = Math.max(1, Math.round(srcH * ratio));
+        const down = document.createElement('canvas');
+        down.width = downW;
+        down.height = downH;
+        const dctx = down.getContext('2d');
+        dctx.imageSmoothingEnabled = true;
+        dctx.imageSmoothingQuality = 'high';
+        dctx.drawImage(canvas, 0, 0, downW, downH);
+
+        const out = document.createElement('canvas');
+        out.width = srcW;
+        out.height = srcH;
+        const octx = out.getContext('2d');
+        octx.imageSmoothingEnabled = true;
+        octx.imageSmoothingQuality = 'high';
+        octx.drawImage(down, 0, 0, srcW, srcH);
+        return out;
+      }
+
+      function applySharpenKernel(canvas, amount) {
+        const w = canvas.width;
+        const h = canvas.height;
+        const ctx = canvas.getContext('2d');
+        const src = ctx.getImageData(0, 0, w, h);
+        const dst = ctx.createImageData(w, h);
+        const s = src.data;
+        const d = dst.data;
+        const a = amount;
+        const center = 1 + 4 * a;
+        const side = -a;
+
+        for (let y = 0; y < h; y += 1) {
+          for (let x = 0; x < w; x += 1) {
+            const idx = (y * w + x) * 4;
+            for (let c = 0; c < 3; c += 1) {
+              const upY = Math.max(0, y - 1);
+              const dnY = Math.min(h - 1, y + 1);
+              const lfX = Math.max(0, x - 1);
+              const rtX = Math.min(w - 1, x + 1);
+              const centerV = s[idx + c] * center;
+              const up = s[(upY * w + x) * 4 + c] * side;
+              const down = s[(dnY * w + x) * 4 + c] * side;
+              const left = s[(y * w + lfX) * 4 + c] * side;
+              const right = s[(y * w + rtX) * 4 + c] * side;
+              const out = Math.max(0, Math.min(255, centerV + up + down + left + right));
+              d[idx + c] = out;
+            }
+            d[idx + 3] = s[idx + 3];
+          }
+        }
+        ctx.putImageData(dst, 0, 0);
+      }
+
+      function preprocessForRestore(img, mode) {
+        const base = drawImageToCanvas(img, img.width, img.height);
+        const ctx = base.getContext('2d');
+
+        // Deblock: slight down/up sampling smooths JPEG block boundaries.
+        const ratio = mode === 'aggressive' ? 0.88 : mode === 'logo' ? 0.93 : 0.9;
+        const deblocked = drawResampled(base, ratio);
+
+        // Denoise lightly using blur on top of deblocked image.
+        ctx.clearRect(0, 0, base.width, base.height);
+        ctx.filter = mode === 'aggressive' ? 'blur(0.8px) contrast(1.04)' : mode === 'logo' ? 'blur(0.3px) contrast(1.06)' : 'blur(0.5px) contrast(1.03)';
+        ctx.drawImage(deblocked, 0, 0);
+        ctx.filter = 'none';
+
+        // Edge recovery before AI.
+        const preSharpen = mode === 'aggressive' ? 0.35 : mode === 'logo' ? 0.5 : 0.22;
+        applySharpenKernel(base, preSharpen);
+        return base;
+      }
+
+      function postprocessAfterRestore(img, mode) {
+        const canvas = drawImageToCanvas(img, img.width, img.height);
+        const ctx = canvas.getContext('2d');
+        const source = drawImageToCanvas(canvas, canvas.width, canvas.height);
+        ctx.filter = mode === 'aggressive' ? 'contrast(1.05) saturate(1.03)' : mode === 'logo' ? 'contrast(1.12) saturate(1.02)' : 'contrast(1.03) saturate(1.02)';
+        ctx.drawImage(source, 0, 0);
+        ctx.filter = 'none';
+
+        const postSharpen = mode === 'aggressive' ? 0.5 : mode === 'logo' ? 0.75 : 0.32;
+        applySharpenKernel(canvas, postSharpen);
+        return canvas;
       }
 
       function isIOSLike() {
@@ -1211,6 +1840,8 @@
         canvas.width = dw;
         canvas.height = dh;
         const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
         ctx.drawImage(img, sx, sy, sw, sh, 0, 0, dw, dh);
         return new Promise((resolve) => canvas.toBlob(resolve, mimeType, quality));
       }
@@ -1220,6 +1851,7 @@
         Object.entries(panels).forEach(([name, panel]) => {
           panel.classList.toggle('active', name === tab);
         });
+        updateHeroForTab(tab);
 
         if (shouldUpdateUrl && tabToPath[tab]) {
           history.replaceState(null, '', tabToPath[tab]);
@@ -1245,6 +1877,18 @@
       }
       if (typeof pageConfig.compressQuality === 'number') {
         document.getElementById('compressQuality').value = String(pageConfig.compressQuality);
+      }
+      if (pageConfig.upscaleFormat) {
+        document.getElementById('upscaleFormat').value = pageConfig.upscaleFormat;
+      }
+      if (typeof pageConfig.upscaleQuality === 'number') {
+        document.getElementById('upscaleQuality').value = String(pageConfig.upscaleQuality);
+      }
+      if (typeof pageConfig.upscaleScale === 'number') {
+        document.getElementById('upscaleScale').value = String(pageConfig.upscaleScale);
+      }
+      if (!['2', '4'].includes(document.getElementById('upscaleScale').value)) {
+        document.getElementById('upscaleScale').value = '2';
       }
 
       // Convert tab
@@ -1771,6 +2415,146 @@
           );
         } catch (err) {
           setStatus(statusEl, err.message || t('error.compressFailed'), 'error');
+        }
+      });
+
+      function setProgress(value, labelKey, vars) {
+        const progressEl = document.getElementById('upscaleProgress');
+        const labelEl = document.getElementById('upscaleProgressLabel');
+        progressEl.value = Math.max(0, Math.min(100, Math.round(value)));
+        labelEl.textContent = t(labelKey, vars);
+      }
+
+      let aiUpscaler = null;
+      async function getAiUpscaler() {
+        if (aiUpscaler) return aiUpscaler;
+        if (!window.Upscaler || !window.ESRGANThick2x || !window.tf) {
+          throw new Error('AI runtime failed to load.');
+        }
+        setProgress(8, 'status.aiInit');
+        aiUpscaler = new window.Upscaler({
+          model: window.ESRGANThick2x
+        });
+        setProgress(20, 'status.aiModelLoad');
+        await aiUpscaler.ready;
+        return aiUpscaler;
+      }
+
+      let upscaleConfirmResolver = null;
+      function askUpscaleConfirm() {
+        const box = document.getElementById('upscaleConfirmBox');
+        const actionRow = document.getElementById('upscaleActionRow');
+        const yesBtn = document.getElementById('upscaleConfirmYes');
+        const noBtn = document.getElementById('upscaleConfirmNo');
+        actionRow.classList.add('hidden');
+        box.classList.remove('hidden');
+        return new Promise((resolve) => {
+          upscaleConfirmResolver = resolve;
+          const resolveOnce = (value) => {
+            if (!upscaleConfirmResolver) return;
+            upscaleConfirmResolver = null;
+            box.classList.add('hidden');
+            actionRow.classList.remove('hidden');
+            resolve(value);
+          };
+          yesBtn.onclick = () => resolveOnce(true);
+          noBtn.onclick = () => resolveOnce(false);
+        });
+      }
+
+      // Upscale tab
+      document.getElementById('upscaleBtn').addEventListener('click', async () => {
+        const fileInput = document.getElementById('upscaleImage');
+        const statusEl = document.getElementById('upscaleStatus');
+        const btn = document.getElementById('upscaleBtn');
+        const confirmed = await askUpscaleConfirm();
+        if (!confirmed) {
+          setStatus(statusEl, t('status.cancelled'), 'error');
+          return;
+        }
+        if (!fileInput.files || fileInput.files.length === 0) {
+          setStatus(statusEl, t('status.chooseImage'), 'error');
+          return;
+        }
+
+        const file = fileInput.files[0];
+        const format = document.getElementById('upscaleFormat').value;
+        const mimeType = `image/${format}`;
+        if (!canEncode(mimeType)) {
+          setStatus(statusEl, t('error.notSupported', { format: format.toUpperCase() }), 'error');
+          return;
+        }
+
+        const scale = Number(document.getElementById('upscaleScale').value) || 2;
+        const restoreMode = document.getElementById('upscaleRestoreMode').value || 'balanced';
+        const targetOutputPixels = 24000000;
+        const maxInputPixels = Math.floor(targetOutputPixels / (scale * scale));
+        btn.disabled = true;
+        setStatus(statusEl, t('status.aiInit'));
+        setProgress(2, 'status.aiInit');
+        try {
+          const imgProbe = await fileToImage(file);
+          if (imgProbe.width * imgProbe.height > maxInputPixels) {
+            const maxMp = (maxInputPixels / 1000000).toFixed(1);
+            throw new Error(t('error.upscaleTooLarge', { maxMp }));
+          }
+
+          const upscaler = await getAiUpscaler();
+          const quality = toQuality(document.getElementById('upscaleQuality').value, 1);
+          const passes = scale >= 4 ? 2 : 1;
+
+          setStatus(statusEl, t('status.aiPreprocess'));
+          setProgress(15, 'status.aiPreprocess');
+          const prepared = preprocessForRestore(imgProbe, restoreMode);
+          let currentImage = await canvasToImage(prepared);
+          for (let i = 0; i < passes; i += 1) {
+            const passNo = i + 1;
+            setStatus(statusEl, t('status.aiEnhancingPass', { pass: String(passNo), total: String(passes) }));
+            const start = passes === 1 ? 25 : i === 0 ? 20 : 58;
+            const end = passes === 1 ? 88 : i === 0 ? 54 : 90;
+            const upscaledBase64 = await upscaler.upscale(currentImage, {
+              output: 'base64',
+              patchSize: 128,
+              padding: 2,
+              progress: (percent) => {
+                const mapped = start + (end - start) * Math.max(0, Math.min(1, percent));
+                setProgress(mapped, 'status.aiEnhancingPass', { pass: String(passNo), total: String(passes) });
+              }
+            });
+            currentImage = await base64ToImage(upscaledBase64);
+          }
+
+          setStatus(statusEl, t('status.aiPostprocess'));
+          setProgress(92, 'status.aiPostprocess');
+          const finalCanvas = postprocessAfterRestore(currentImage, restoreMode);
+
+          setStatus(statusEl, t('status.aiFinalizing'));
+          setProgress(95, 'status.aiFinalizing');
+          const blob = await renderToBlob(
+            finalCanvas,
+            mimeType,
+            quality,
+            0,
+            0,
+            finalCanvas.width,
+            finalCanvas.height,
+            finalCanvas.width,
+            finalCanvas.height
+          );
+          if (!blob) throw new Error('Upscale failed.');
+          const base = file.name.replace(/\.[^.]+$/, '') || 'image';
+          const mode = await downloadBlob(blob, `${base}-${finalCanvas.width}x${finalCanvas.height}.${extForFormat(format)}`);
+          setProgress(100, 'status.upscaleDone');
+          setStatus(
+            statusEl,
+            mode === 'ios-preview' ? t('status.previewIos') : t('status.upscaleDone'),
+            'ok'
+          );
+        } catch (err) {
+          setStatus(statusEl, err.message || t('error.upscaleFailed'), 'error');
+          setProgress(0, 'upscale.progressIdle');
+        } finally {
+          btn.disabled = false;
         }
       });
     </script>
