@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Image Convert Lite</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4240863320156963"
+     crossorigin="anonymous"></script>
     <style>
       :root {
         --bg-1: #eef4ff;
@@ -243,6 +245,18 @@
         display: none;
       }
 
+      .ad-wrap {
+        margin: 14px 0 6px;
+        border: 1px solid #d9e3f2;
+        border-radius: 12px;
+        background: #f8fbff;
+        padding: 8px;
+      }
+
+      .ad-wrap.bottom {
+        margin-top: 18px;
+      }
+
       @media (max-width: 760px) {
         .page {
           margin-top: 20px;
@@ -282,6 +296,14 @@
         </div>
 
         <section class="panel active" id="panel-convert">
+          <div class="ad-wrap">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4240863320156963"
+                 data-ad-slot="1000000001"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
           <div class="grid">
             <div class="full">
               <label for="convertImage">Image File</label>
@@ -308,6 +330,14 @@
         </section>
 
         <section class="panel" id="panel-crop">
+          <div class="ad-wrap">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4240863320156963"
+                 data-ad-slot="1000000002"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
           <div class="grid">
             <div class="full">
               <label for="cropImage">Image File</label>
@@ -362,6 +392,14 @@
         </section>
 
         <section class="panel" id="panel-compress">
+          <div class="ad-wrap">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4240863320156963"
+                 data-ad-slot="1000000003"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
           <div class="grid">
             <div class="full">
               <label for="compressImage">Image File</label>
@@ -393,6 +431,10 @@
     </main>
 
     <script>
+      document.querySelectorAll('.adsbygoogle').forEach(() => {
+        try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (_e) {}
+      });
+
       const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
       const panels = {
         convert: document.getElementById('panel-convert'),
