@@ -1,14 +1,14 @@
 (function (global) {
   const CanvasRenderer = {};
 
-  function drawChecker(ctx, width, height) {
-    ctx.fillStyle = '#ffffff';
+  function drawSubtleChecker(ctx, width, height) {
+    ctx.fillStyle = '#f5f5f7';
     ctx.fillRect(0, 0, width, height);
-    const size = 24;
+    const size = 16;
     for (let y = 0; y < height; y += size) {
       for (let x = 0; x < width; x += size) {
         const even = ((x / size) + (y / size)) % 2 === 0;
-        ctx.fillStyle = even ? '#ffffff' : '#f8fafc';
+        ctx.fillStyle = even ? '#f4f4f6' : '#f1f1f3';
         ctx.fillRect(x, y, size, size);
       }
     }
@@ -18,7 +18,11 @@
     const width = ctx.canvas.width;
     const height = ctx.canvas.height;
     ctx.clearRect(0, 0, width, height);
-    drawChecker(ctx, width, height);
+    ctx.fillStyle = '#f5f5f7';
+    ctx.fillRect(0, 0, width, height);
+    if (opts.showTransparencyGrid) {
+      drawSubtleChecker(ctx, width, height);
+    }
 
     if (!opts.imageCanvas) return;
 
@@ -70,20 +74,6 @@
       });
     }
 
-    ctx.restore();
-
-    // Soft glow + thin border to emphasize the actual image canvas region.
-    ctx.save();
-    ctx.shadowColor = 'rgba(10, 132, 255, 0.18)';
-    ctx.shadowBlur = 18;
-    ctx.strokeStyle = 'rgba(10, 132, 255, 0.20)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(
-      Math.round(drawX) + 0.5,
-      Math.round(drawY) + 0.5,
-      Math.max(0, Math.round(drawW) - 1),
-      Math.max(0, Math.round(drawH) - 1)
-    );
     ctx.restore();
 
     ctx.strokeStyle = 'rgba(17, 19, 24, 0.16)';

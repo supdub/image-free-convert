@@ -36,10 +36,10 @@
 
   TransformCore.createDefaultCropRect = function createDefaultCropRect(width, height) {
     return {
-      x: width * 0.1,
-      y: height * 0.1,
-      w: width * 0.8,
-      h: height * 0.8
+      x: 0,
+      y: 0,
+      w: width,
+      h: height
     };
   };
 
@@ -65,8 +65,8 @@
     if (!ratio || ratio <= 0) {
       return TransformCore.createDefaultCropRect(imageW, imageH);
     }
-    const maxW = imageW * 0.9;
-    const maxH = imageH * 0.9;
+    const maxW = imageW;
+    const maxH = imageH;
     let w = maxW;
     let h = w / ratio;
     if (h > maxH) {

@@ -6,6 +6,7 @@
   const removeBusyGlow = document.getElementById('removeBusyGlow');
   const toolControls = document.getElementById('toolControls');
   const statusText = document.getElementById('statusText');
+  const editorToast = document.getElementById('editorToast');
   const uploadGate = document.getElementById('uploadGate');
   const uploadInput = document.getElementById('uploadInput');
   const topLabel = document.getElementById('topLabel');
@@ -43,7 +44,9 @@
     },
     undoRedo: {
       cropUndo: [],
-      cropRedo: []
+      cropRedo: [],
+      removeUndo: [],
+      removeRedo: []
     },
     crop: {
       aspect: 'free',
@@ -59,6 +62,9 @@
       maskCanvas: document.createElement('canvas'),
       processing: false,
       currentStroke: null
+    },
+    render: {
+      hasTransparentPixels: false
     },
     save: {
       mode: 'original',
@@ -85,6 +91,40 @@
     statusText.textContent = message;
   }
 
+  function setHintForActiveTool() {
+    const hint =
+      state.activeTool === 'crop'
+        ? 'Drag handles to crop. Pinch to zoom.'
+        : 'Paint to remove. Release to apply. Pinch to zoom.';
+    setStatus(hint);
+  }
+
+  function showToast(message, durationMs) {
+    if (!editorToast) return;
+    editorToast.textContent = message;
+    editorToast.classList.add('show');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(() => {
+      editorToast.classList.remove('show');
+    }, durationMs || 1300);
+  }
+
+  showToast._timer = null;
+
+  function detectTransparency(canvas) {
+    if (!canvas || !canvas.width || !canvas.height) return false;
+    const c = canvas.getContext('2d');
+    const data = c.getImageData(0, 0, canvas.width, canvas.height).data;
+    for (let i = 3; i < data.length; i += 4) {
+      if (data[i] < 255) return true;
+    }
+    return false;
+  }
+
+  function refreshTransparencyState() {
+    state.render.hasTransparentPixels = detectTransparency(state.workingImage);
+  }
+
   function resetSession() {
     if (state.save.previewUrl) {
       URL.revokeObjectURL(state.save.previewUrl);
@@ -100,10 +140,13 @@
     state.ops.removeOp = ToolRemove.createOps();
     state.undoRedo.cropUndo = [];
     state.undoRedo.cropRedo = [];
+    state.undoRedo.removeUndo = [];
+    state.undoRedo.removeRedo = [];
     state.crop.rect = null;
     state.crop.draftRect = null;
     state.remove.processing = false;
     state.remove.currentStroke = null;
+    state.render.hasTransparentPixels = false;
     state.remove.maskCanvas.width = 1;
     state.remove.maskCanvas.height = 1;
     uploadInput.value = '';
@@ -121,6 +164,7 @@
     tabCrop.classList.toggle('active', state.activeTool === 'crop');
     tabRemove.classList.toggle('active', state.activeTool === 'remove');
     topLabel.textContent = state.activeTool === 'crop' ? 'Editor • Crop' : 'Editor • Remove';
+    if (state.workingImage) setHintForActiveTool();
     syncRemoveBusyGlow();
     draw();
   }
@@ -280,7 +324,8 @@
       maskCanvas: state.remove.maskCanvas,
       cropRect: state.crop.draftRect,
       viewport: state.viewport,
-      activeTool: state.activeTool
+      activeTool: state.activeTool,
+      showTransparencyGrid: state.render.hasTransparentPixels
     });
   }
 
@@ -314,8 +359,10 @@
   function refreshUndoButtons() {
     cropUndoBtn.disabled = state.undoRedo.cropUndo.length === 0;
     cropRedoBtn.disabled = state.undoRedo.cropRedo.length === 0;
-    removeUndoBtn.disabled = state.ops.removeOp.strokes.length === 0 || state.remove.processing;
-    removeRedoBtn.disabled = state.ops.removeOp.redoStrokes.length === 0 || state.remove.processing;
+    removeUndoBtn.disabled =
+      (state.ops.removeOp.strokes.length === 0 && state.undoRedo.removeUndo.length === 0) || state.remove.processing;
+    removeRedoBtn.disabled =
+      (state.ops.removeOp.redoStrokes.length === 0 && state.undoRedo.removeRedo.length === 0) || state.remove.processing;
   }
 
   async function loadImage(file) {
@@ -327,13 +374,16 @@
     state.ops.removeOp = ToolRemove.createOps();
     state.undoRedo.cropUndo = [];
     state.undoRedo.cropRedo = [];
+    state.undoRedo.removeUndo = [];
+    state.undoRedo.removeRedo = [];
     state.save.baseBytes = null;
     initCropRect();
     initMaskCanvas();
     fitViewportToImage();
     saveBtn.disabled = false;
     uploadGate.classList.add('hidden');
-    setStatus('Image loaded. You can switch between Crop and Remove.');
+    refreshTransparencyState();
+    setHintForActiveTool();
     refreshUndoButtons();
     draw();
   }
@@ -410,7 +460,9 @@
     refreshUndoButtons();
     if (!state.remove.processing) {
       applyRemove();
+      return;
     }
+    setHintForActiveTool();
   }
 
   function clearMaskAndStrokes() {
@@ -443,7 +495,7 @@
   async function applyRemove() {
     if (!state.workingImage || state.remove.processing) return;
     if (!state.ops.removeOp.strokes.length) {
-      setStatus('Paint at least one stroke, then release to remove.');
+      setStatus('Paint at least one stroke, then release to apply.');
       return;
     }
 
@@ -469,8 +521,10 @@
         if (marked) maskedCount += 1;
       }
       if (maskedCount === 0) {
-        throw new Error('Paint at least one stroke, then release to remove.');
+        throw new Error('Paint at least one stroke, then release to apply.');
       }
+      state.undoRedo.removeUndo.push(ImageCore.cloneCanvas(state.workingImage));
+      state.undoRedo.removeRedo = [];
       const resultImageData = await window.RemoveEngine.inpaintMaskedImage(sourceImageData, maskData, {
         algorithm: state.remove.algorithm,
         brushSize: getRemoveBrushSizePx()
@@ -481,7 +535,9 @@
       initCropRect();
       initMaskCanvas();
       clearMaskAndStrokes();
-      setStatus('Remove applied.');
+      refreshTransparencyState();
+      setHintForActiveTool();
+      showToast('Remove applied.');
     } catch (err) {
       setStatus(err.message || 'Remove failed.');
     } finally {
@@ -496,15 +552,23 @@
   function applyCrop() {
     if (!state.workingImage || !state.crop.draftRect) return;
     const d = state.crop.draftRect;
+    const imgW = state.workingImage.width;
+    const imgH = state.workingImage.height;
+    const startX = TransformCore.clamp(Math.floor(d.x), 0, Math.max(0, imgW - 1));
+    const startY = TransformCore.clamp(Math.floor(d.y), 0, Math.max(0, imgH - 1));
+    const endX = TransformCore.clamp(Math.ceil(d.x + d.w), startX + 1, imgW);
+    const endY = TransformCore.clamp(Math.ceil(d.y + d.h), startY + 1, imgH);
     const rect = {
-      x: Math.round(d.x),
-      y: Math.round(d.y),
-      w: Math.max(1, Math.round(d.w)),
-      h: Math.max(1, Math.round(d.h))
+      x: startX,
+      y: startY,
+      w: Math.max(1, endX - startX),
+      h: Math.max(1, endY - startY)
     };
 
     state.undoRedo.cropUndo.push(ImageCore.cloneCanvas(state.workingImage));
     state.undoRedo.cropRedo = [];
+    state.undoRedo.removeUndo = [];
+    state.undoRedo.removeRedo = [];
     state.workingImage = ImageCore.cropCanvas(state.workingImage, rect);
     state.save.baseBytes = null;
     state.ops.cropOp = {
@@ -519,8 +583,10 @@
     initMaskCanvas();
     clearMaskAndStrokes();
     fitViewportToImage();
+    refreshTransparencyState();
     refreshUndoButtons();
-    setStatus('Crop applied.');
+    setHintForActiveTool();
+    showToast('Crop applied.');
     draw();
   }
 
@@ -528,13 +594,16 @@
     if (!state.undoRedo.cropUndo.length) return;
     state.undoRedo.cropRedo.push(ImageCore.cloneCanvas(state.workingImage));
     state.workingImage = state.undoRedo.cropUndo.pop();
+    state.undoRedo.removeUndo = [];
+    state.undoRedo.removeRedo = [];
     state.save.baseBytes = null;
     initCropRect();
     initMaskCanvas();
     clearMaskAndStrokes();
     fitViewportToImage();
+    refreshTransparencyState();
     refreshUndoButtons();
-    setStatus('Crop undo.');
+    setHintForActiveTool();
     draw();
   }
 
@@ -542,13 +611,16 @@
     if (!state.undoRedo.cropRedo.length) return;
     state.undoRedo.cropUndo.push(ImageCore.cloneCanvas(state.workingImage));
     state.workingImage = state.undoRedo.cropRedo.pop();
+    state.undoRedo.removeUndo = [];
+    state.undoRedo.removeRedo = [];
     state.save.baseBytes = null;
     initCropRect();
     initMaskCanvas();
     clearMaskAndStrokes();
     fitViewportToImage();
+    refreshTransparencyState();
     refreshUndoButtons();
-    setStatus('Crop redo.');
+    setHintForActiveTool();
     draw();
   }
 
@@ -743,7 +815,6 @@
         <p class="save-estimate" id="saveEstimateText"></p>
         <p class="save-ratio" id="saveRatioText"></p>
         <p class="save-notice" id="saveNotice"></p>
-        <button id="saveDownloadBtn" type="button">Download</button>
       </div>
     `;
 
@@ -1042,7 +1113,7 @@
   cropApplyBtn.addEventListener('click', applyCrop);
   cropCancelBtn.addEventListener('click', () => {
     initCropRect();
-    setStatus('Crop draft canceled.');
+    setHintForActiveTool();
     draw();
   });
   cropUndoBtn.addEventListener('click', undoCrop);
@@ -1066,6 +1137,19 @@
       );
       refreshUndoButtons();
       draw();
+      return;
+    }
+    if (state.undoRedo.removeUndo.length > 0) {
+      state.undoRedo.removeRedo.push(ImageCore.cloneCanvas(state.workingImage));
+      state.workingImage = state.undoRedo.removeUndo.pop();
+      state.save.baseBytes = null;
+      initCropRect();
+      initMaskCanvas();
+      clearMaskAndStrokes();
+      refreshTransparencyState();
+      refreshUndoButtons();
+      setHintForActiveTool();
+      draw();
     }
   });
 
@@ -1078,6 +1162,19 @@
         state.remove.maskCanvas.height
       );
       refreshUndoButtons();
+      draw();
+      return;
+    }
+    if (state.undoRedo.removeRedo.length > 0) {
+      state.undoRedo.removeUndo.push(ImageCore.cloneCanvas(state.workingImage));
+      state.workingImage = state.undoRedo.removeRedo.pop();
+      state.save.baseBytes = null;
+      initCropRect();
+      initMaskCanvas();
+      clearMaskAndStrokes();
+      refreshTransparencyState();
+      refreshUndoButtons();
+      setHintForActiveTool();
       draw();
     }
   });

@@ -51,6 +51,20 @@
 - **Multilingual UI + SEO pages**: `en`, `es`, `zh`, `hi`, `ar`, `ja`, `ko`
 - **Open source friendly**: Includes clear route structure and simple deployment model
 
+## Screenshots
+
+Latest UI flow screenshots (mobile + desktop) are documented under `docs/screenshots/`:
+
+1. Crop editor (`Editor • Crop`)
+2. Remove editor (`Editor • Remove`)
+3. Save panel (`Final Output`)
+4. V1 remove page (desktop)
+
+![Image #1](docs/screenshots/image-1.png)
+![Image #2](docs/screenshots/image-2.png)
+![Image #3](docs/screenshots/image-3.png)
+![Image #4](docs/screenshots/image-4.png)
+
 ## Tech Stack
 
 - **Backend**: Node.js + Express
