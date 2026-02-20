@@ -285,7 +285,7 @@
       }
 
       #cropAspectRow {
-        display: inline-flex;
+        display: flex;
         width: 100%;
         padding: 2px;
         border-radius: 10px;
@@ -301,12 +301,13 @@
       }
 
       #cropAspectRow button {
-        flex: 0 0 auto;
-        min-width: 56px;
+        flex: 1 1 0;
+        min-width: 44px;
         min-height: 32px;
         border-radius: 10px;
         color: var(--text-secondary);
         font-size: 13px;
+        padding: 6px 4px;
       }
 
       #cropAspectRow button.active {
@@ -366,6 +367,7 @@
 
 
       #fineRotateValue,
+      #filterStrengthText,
       #reshapeBrushText,
       #reshapeStrengthText {
         display: inline-flex;
@@ -392,6 +394,7 @@
       }
 
       #fineRotateSlider,
+      #filterStrength,
       #reshapeBrush,
       #reshapeStrength {
         flex: 1;
@@ -402,6 +405,7 @@
       }
 
       #fineRotateSlider::-webkit-slider-runnable-track,
+      #filterStrength::-webkit-slider-runnable-track,
       #reshapeBrush::-webkit-slider-runnable-track,
       #reshapeStrength::-webkit-slider-runnable-track {
         height: 4px;
@@ -410,6 +414,7 @@
       }
 
       #fineRotateSlider::-webkit-slider-thumb,
+      #filterStrength::-webkit-slider-thumb,
       #reshapeBrush::-webkit-slider-thumb,
       #reshapeStrength::-webkit-slider-thumb {
         appearance: none;
@@ -423,6 +428,7 @@
       }
 
       #fineRotateSlider::-moz-range-track,
+      #filterStrength::-moz-range-track,
       #reshapeBrush::-moz-range-track,
       #reshapeStrength::-moz-range-track {
         height: 4px;
@@ -916,7 +922,6 @@
             <label for="fineRotateSlider">Fine</label>
             <input id="fineRotateSlider" type="range" min="-45" max="45" step="0.5" value="0" />
             <span id="fineRotateValue">0°</span>
-            <button id="fineRotateApplyBtn" type="button" class="action-btn text">Rotate</button>
           </div>
         </div>
         <div class="tool-card glass">
@@ -924,7 +929,6 @@
             <div class="tool-row">
               <button id="cropUndoBtn" type="button" class="icon-btn" aria-label="Undo crop">↶</button>
               <button id="cropRedoBtn" type="button" class="icon-btn" aria-label="Redo crop">↷</button>
-              <button id="cropCancelBtn" type="button" class="action-btn text">Reset</button>
             </div>
             <button id="cropApplyBtn" type="button" class="action-btn primary">Apply</button>
           </div>
@@ -946,12 +950,12 @@
             </select>
             <button id="filterUndoBtn" type="button" class="icon-btn" aria-label="Undo filter">↶</button>
             <button id="filterRedoBtn" type="button" class="icon-btn" aria-label="Redo filter">↷</button>
-          </div>
-        </div>
-        <div class="tool-card glass">
-          <div class="apply-row">
-            <button id="filterResetBtn" type="button" class="action-btn text">Reset</button>
             <button id="filterApplyBtn" type="button" class="action-btn primary">Apply</button>
+          </div>
+          <div class="tool-row">
+            <label for="filterStrength">Strength</label>
+            <input id="filterStrength" type="range" min="0" max="100" step="1" value="100" />
+            <span id="filterStrengthText">100%</span>
           </div>
         </div>
       </div>

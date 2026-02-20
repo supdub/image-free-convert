@@ -28,15 +28,14 @@
   const flipHorizontalBtn = document.getElementById('flipHorizontalBtn');
   const fineRotateSlider = document.getElementById('fineRotateSlider');
   const fineRotateValue = document.getElementById('fineRotateValue');
-  const fineRotateApplyBtn = document.getElementById('fineRotateApplyBtn');
-  const cropCancelBtn = document.getElementById('cropCancelBtn');
   const cropUndoBtn = document.getElementById('cropUndoBtn');
   const cropRedoBtn = document.getElementById('cropRedoBtn');
   const cropAspectRow = document.getElementById('cropAspectRow');
 
   const filterPreset = document.getElementById('filterPreset');
+  const filterStrength = document.getElementById('filterStrength');
+  const filterStrengthText = document.getElementById('filterStrengthText');
   const filterApplyBtn = document.getElementById('filterApplyBtn');
-  const filterResetBtn = document.getElementById('filterResetBtn');
   const filterUndoBtn = document.getElementById('filterUndoBtn');
   const filterRedoBtn = document.getElementById('filterRedoBtn');
 
@@ -89,7 +88,8 @@
       currentStroke: null
     },
     filter: {
-      preset: 'none'
+      preset: 'none',
+      strength: 100
     },
     reshape: {
       brushPercent: 20,
@@ -119,6 +119,8 @@
     pan: null,
     openSave: false
   };
+  let fineRotateBaseImage = null;
+  let fineRotateDraftDegrees = 0;
 
   function setStatus(message) {
     statusText.textContent = message;
@@ -128,7 +130,7 @@
     const map = {
       crop: 'Drag handles to crop. Pinch to zoom.',
       remove: 'Paint to remove. Release to apply. Pinch to zoom.',
-      filter: 'Choose a popular photo filter and tap Apply.',
+      filter: 'Choose a filter, adjust strength, and tap Apply.',
       reshape: 'Pixel push: drag inward on edges to slim subjects.'
     };
     setStatus(map[state.activeTool] || 'Edit your photo.');
@@ -189,6 +191,10 @@
     state.render.hasTransparentPixels = false;
     state.remove.maskCanvas.width = 1;
     state.remove.maskCanvas.height = 1;
+    fineRotateBaseImage = null;
+    fineRotateDraftDegrees = 0;
+    fineRotateSlider.value = '0';
+    fineRotateValue.textContent = '0°';
     uploadInput.value = '';
     uploadGate.classList.remove('hidden');
     saveBtn.disabled = true;
@@ -716,15 +722,56 @@
     showToast('Mirror flip applied.');
   }
 
-  function applyFineRotation() {
-    if (!state.workingImage) return;
-    const degrees = Number(fineRotateSlider.value) || 0;
-    if (Math.abs(degrees) < 0.1) return;
-    const out = ImageCore.rotateCanvas(state.workingImage, degrees);
-    commitWorkingImage(out, 'crop');
+  function resetFineRotateControl() {
     fineRotateSlider.value = '0';
     fineRotateValue.textContent = '0°';
-    showToast('Fine rotation applied.');
+  }
+
+  function updateFineRotationPreview(degrees) {
+    if (!state.workingImage) return;
+    if (!fineRotateBaseImage) {
+      fineRotateBaseImage = ImageCore.cloneCanvas(state.workingImage);
+    }
+    fineRotateDraftDegrees = degrees;
+    if (Math.abs(degrees) < 0.01) {
+      state.workingImage = fineRotateBaseImage;
+    } else {
+      state.workingImage = ImageCore.rotateCanvas(fineRotateBaseImage, degrees);
+    }
+    state.save.baseBytes = null;
+    initCropRect();
+    initMaskCanvas();
+    clearMaskAndStrokes();
+    refreshTransparencyState();
+    fitViewportToImage();
+    refreshUndoButtons();
+    draw();
+  }
+
+  function finalizeFineRotation() {
+    if (!fineRotateBaseImage) {
+      resetFineRotateControl();
+      return;
+    }
+    if (Math.abs(fineRotateDraftDegrees) >= 0.01) {
+      state.undoRedo.cropUndo.push(fineRotateBaseImage);
+      state.undoRedo.cropRedo = [];
+      state.undoRedo.removeUndo = [];
+      state.undoRedo.removeRedo = [];
+      state.undoRedo.filterUndo = [];
+      state.undoRedo.filterRedo = [];
+      state.undoRedo.reshapeUndo = [];
+      state.undoRedo.reshapeRedo = [];
+      showToast('Fine rotation applied.');
+    } else {
+      state.workingImage = fineRotateBaseImage;
+    }
+    fineRotateBaseImage = null;
+    fineRotateDraftDegrees = 0;
+    resetFineRotateControl();
+    setHintForActiveTool();
+    refreshUndoButtons();
+    draw();
   }
 
   function applyFilter() {
@@ -734,7 +781,7 @@
       setStatus('Select a filter preset first.');
       return;
     }
-    const out = ImageCore.applyFilterPreset(state.workingImage, preset);
+    const out = ImageCore.applyFilterPreset(state.workingImage, preset, state.filter.strength);
     commitWorkingImage(out, 'filter');
     showToast('Filter applied.');
   }
@@ -1251,7 +1298,7 @@
   });
 
   document.getElementById('backBtn').addEventListener('click', () => {
-    if (state.workingImage && !window.confirm('Reset current session?')) return;
+    if (state.workingImage && !window.confirm('Discard current session?')) return;
     closeSave();
     resetSession();
   });
@@ -1316,11 +1363,6 @@
   });
 
   cropApplyBtn.addEventListener('click', applyCrop);
-  cropCancelBtn.addEventListener('click', () => {
-    initCropRect();
-    setHintForActiveTool();
-    draw();
-  });
   cropUndoBtn.addEventListener('click', undoCrop);
   cropRedoBtn.addEventListener('click', redoCrop);
 
@@ -1328,19 +1370,22 @@
   rotateCcwBtn.addEventListener('click', () => rotateImage(-90));
   flipHorizontalBtn.addEventListener('click', mirrorImage);
   fineRotateSlider.addEventListener('input', () => {
-    fineRotateValue.textContent = Number(fineRotateSlider.value).toFixed(1).replace('.0', '') + '°';
+    const nextValue = Number(fineRotateSlider.value) || 0;
+    fineRotateValue.textContent = nextValue.toFixed(1).replace('.0', '') + '°';
+    updateFineRotationPreview(nextValue);
   });
-  fineRotateApplyBtn.addEventListener('click', applyFineRotation);
+  fineRotateSlider.addEventListener('change', () => {
+    finalizeFineRotation();
+  });
 
   filterPreset.addEventListener('change', () => {
     state.filter.preset = filterPreset.value;
   });
-  filterApplyBtn.addEventListener('click', applyFilter);
-  filterResetBtn.addEventListener('click', () => {
-    filterPreset.value = 'none';
-    state.filter.preset = 'none';
-    setStatus('Filter selection reset.');
+  filterStrength.addEventListener('input', () => {
+    state.filter.strength = Number(filterStrength.value) || 0;
+    filterStrengthText.textContent = state.filter.strength + '%';
   });
+  filterApplyBtn.addEventListener('click', applyFilter);
   filterUndoBtn.addEventListener('click', () => undoStack('filter'));
   filterRedoBtn.addEventListener('click', () => redoStack('filter'));
 
@@ -1429,6 +1474,8 @@
   removeBrush.value = String(state.remove.brushPercent);
   removeBrushText.textContent = state.remove.brushPercent + '%';
   filterPreset.value = state.filter.preset;
+  filterStrength.value = String(state.filter.strength);
+  filterStrengthText.textContent = state.filter.strength + '%';
   reshapeBrush.value = String(state.reshape.brushPercent);
   reshapeBrushText.textContent = state.reshape.brushPercent + '%';
   reshapeStrength.value = String(state.reshape.strength);

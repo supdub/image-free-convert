@@ -159,10 +159,9 @@
     return out;
   };
 
-  ImageCore.applyFilterPreset = function applyFilterPreset(sourceCanvas, preset) {
-    const out = ImageCore.cloneCanvas(sourceCanvas);
-    const ctx = out.getContext('2d');
+  ImageCore.applyFilterPreset = function applyFilterPreset(sourceCanvas, preset, strengthPercent) {
     const p = String(preset || 'none').toLowerCase();
+    const strength = clamp(Number(strengthPercent), 0, 100) / 100;
     const filters = {
       none: 'none',
       vivid: 'contrast(1.18) saturate(1.24)',
@@ -172,10 +171,26 @@
       warm: 'sepia(0.24) saturate(1.14) hue-rotate(-8deg)',
       cool: 'saturate(0.9) hue-rotate(10deg) contrast(1.04)'
     };
-    ctx.filter = filters[p] || 'none';
-    const temp = ImageCore.cloneCanvas(sourceCanvas);
-    ctx.clearRect(0, 0, out.width, out.height);
-    ctx.drawImage(temp, 0, 0);
+    if (p === 'none' || strength <= 0) {
+      return ImageCore.cloneCanvas(sourceCanvas);
+    }
+
+    const filtered = ImageCore.cloneCanvas(sourceCanvas);
+    const filteredCtx = filtered.getContext('2d');
+    filteredCtx.filter = filters[p] || 'none';
+    filteredCtx.clearRect(0, 0, filtered.width, filtered.height);
+    filteredCtx.drawImage(sourceCanvas, 0, 0);
+    filteredCtx.filter = 'none';
+
+    if (strength >= 0.999) {
+      return filtered;
+    }
+
+    const out = ImageCore.cloneCanvas(sourceCanvas);
+    const ctx = out.getContext('2d');
+    ctx.globalAlpha = strength;
+    ctx.drawImage(filtered, 0, 0);
+    ctx.globalAlpha = 1;
     ctx.filter = 'none';
     return out;
   };
