@@ -480,10 +480,261 @@
         touch-action: none;
       }
 
+      .remove-shell {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #f8fbff;
+        padding: 12px;
+      }
+
+      .remove-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+        min-width: 0;
+      }
+
+      .remove-toolbar button {
+        width: auto;
+        min-width: 90px;
+        padding: 8px 12px;
+      }
+
+      .remove-algo-group {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+        min-width: 0;
+      }
+
+      .brush-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-width: 0;
+      }
+
+      .brush-control input[type='range'] {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: auto;
+      }
+
+      .brush-step {
+        width: auto;
+        min-width: 44px;
+        padding: 10px 12px;
+        line-height: 1;
+      }
+
+      .brush-value {
+        min-width: 52px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: #1f467a;
+      }
+
+      .remove-algo-option {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 10px 9px;
+        border: 1px solid #cfdced;
+        border-radius: 10px;
+        background: #f8fbff;
+        cursor: pointer;
+        min-width: 0;
+      }
+
+      .remove-algo-option input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        width: 0;
+        height: 0;
+      }
+
+      .remove-algo-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #234773;
+        overflow-wrap: anywhere;
+      }
+
+      .remove-algo-desc {
+        font-size: 12px;
+        color: #547198;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+      }
+
+      .remove-algo-option:has(input:checked) {
+        border-color: #1768ff;
+        background: #eef4ff;
+        box-shadow: 0 0 0 2px rgba(23, 104, 255, 0.15);
+      }
+
+      .zoom-readout {
+        font-size: 12px;
+        color: var(--muted);
+        min-width: 58px;
+      }
+
+      .remove-workspace-frame {
+        position: relative;
+        width: 100%;
+        min-width: 0;
+      }
+
+      .remove-workspace {
+        position: relative;
+        width: 100%;
+        height: 520px;
+        max-height: 74vh;
+        overflow: auto;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #d7e2f5 0%, #e8effd 100%);
+        border: 1px solid #cfdbef;
+        padding: 8px;
+      }
+
+      @media (pointer: coarse) {
+        .remove-workspace {
+          scrollbar-width: none;
+        }
+
+        .remove-workspace::-webkit-scrollbar {
+          width: 0;
+          height: 0;
+          display: none;
+        }
+      }
+
+      .remove-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 100%;
+        min-height: 100%;
+        width: max-content;
+        height: max-content;
+      }
+
+      .remove-busy-overlay {
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+        pointer-events: none;
+        opacity: 0;
+      }
+
+      .remove-empty {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        padding: 18px;
+      }
+
+      .remove-empty.hidden {
+        display: none;
+      }
+
+      .remove-empty-card {
+        max-width: 380px;
+        width: 100%;
+        border: 1px solid #d7e3f6;
+        border-radius: 14px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(239, 246, 255, 0.78) 100%);
+        box-shadow: 0 10px 24px rgba(20, 48, 98, 0.1);
+        padding: 14px 14px 12px;
+        text-align: center;
+      }
+
+      .remove-empty-title {
+        margin: 0;
+        font-size: 21px;
+        line-height: 1;
+      }
+
+      .remove-empty-text {
+        margin: 8px 0 0;
+        font-size: 14px;
+        color: #47648f;
+        font-weight: 700;
+      }
+
+      .remove-empty-sub {
+        margin: 6px 0 0;
+        font-size: 12px;
+        color: #6884ad;
+      }
+
+      .remove-busy-overlay.is-busy {
+        opacity: 1;
+        background:
+          radial-gradient(circle at 25% 30%, rgba(255, 255, 255, 0.24), transparent 45%),
+          linear-gradient(120deg, rgba(23, 104, 255, 0.06), rgba(23, 104, 255, 0.26), rgba(23, 104, 255, 0.06));
+        background-size: 120% 120%, 220% 100%;
+        animation: removeGlowSweep 1.2s linear infinite;
+      }
+
+      @keyframes removeGlowSweep {
+        0% {
+          background-position: 0% 0%, 200% 0%;
+        }
+        100% {
+          background-position: 0% 0%, -80% 0%;
+        }
+      }
+
+      #removeCanvas {
+        display: block;
+        cursor: crosshair;
+        touch-action: none;
+        flex: 0 0 auto;
+      }
+
       .note {
         color: var(--muted);
         font-size: 12px;
         margin-bottom: 0;
+      }
+
+      .file-picker {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid #cfdced;
+        border-radius: 12px;
+        background: #fbfdff;
+      }
+
+      .file-picker button {
+        width: auto;
+        min-width: 96px;
+        padding: 8px 10px;
+      }
+
+      .file-picker-name {
+        font-size: 14px;
+        color: #365885;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .file-picker input[type='file'] {
+        display: none;
       }
 
       .note-highlight {
@@ -742,6 +993,55 @@
           padding: 10px 12px;
         }
 
+        .remove-shell {
+          padding: 10px;
+          overflow-x: hidden;
+        }
+
+        .remove-workspace {
+          height: 420px;
+          max-height: 68vh;
+        }
+
+        .brush-step {
+          min-width: 52px;
+          padding: 12px 14px;
+        }
+
+        .brush-value {
+          min-width: 44px;
+          font-size: 12px;
+        }
+
+        .remove-algo-group {
+          grid-template-columns: 1fr;
+        }
+
+        .remove-toolbar {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
+        }
+
+        .remove-toolbar button {
+          min-width: 0;
+          width: 100%;
+          padding: 10px 10px;
+          font-size: 13px;
+        }
+
+        .zoom-readout {
+          grid-column: 3 / 4;
+          justify-self: end;
+          align-self: center;
+          min-width: 0;
+          font-size: 12px;
+        }
+
+        #removeUndoBtn {
+          grid-column: 1 / 3;
+        }
+
         #cropCanvas {
           touch-action: none;
         }
@@ -800,6 +1100,7 @@
             <span class="flow-pill" data-i18n="flow.adjust">2. Adjust</span>
             <span class="flow-pill" data-i18n="flow.download">3. Download</span>
             <span class="flow-pill" data-i18n="flow.privacy">We never save your images</span>
+            <span class="flow-pill" data-i18n="flow.allInOne">All-in-one image toolkit: convert, crop, compress, upscale, and AI remove.</span>
           </div>
         </div>
 
@@ -808,6 +1109,7 @@
           <button type="button" class="tab-btn __CROP_TAB_ACTIVE__" data-tab="crop" role="tab" data-i18n="tab.crop">Crop</button>
           <button type="button" class="tab-btn __COMPRESS_TAB_ACTIVE__" data-tab="compress" role="tab" data-i18n="tab.compress">Compress</button>
           <button type="button" class="tab-btn __UPSCALE_TAB_ACTIVE__" data-tab="upscale" role="tab" data-i18n="tab.upscale">Upscale</button>
+          <button type="button" class="tab-btn __REMOVE_TAB_ACTIVE__" data-tab="remove" role="tab" data-i18n="tab.remove">AI Remove</button>
         </div>
 
         <section class="panel __CONVERT_PANEL_ACTIVE__" id="panel-convert">
@@ -825,7 +1127,11 @@
           <div class="grid">
             <div class="full">
               <label for="convertImage" data-i18n="field.imageFile">Image File</label>
-              <input id="convertImage" type="file" accept="image/*" />
+              <div class="file-picker">
+                <button type="button" class="alt" data-file-target="convertImage" data-i18n="btn.chooseFile">Choose File</button>
+                <span class="file-picker-name" id="convertImageName" data-i18n="status.noFileChosen">No file chosen</span>
+                <input id="convertImage" type="file" accept="image/*" />
+              </div>
             </div>
             <div>
               <label for="convertFormat" data-i18n="field.outputFormat">Output Format</label>
@@ -891,7 +1197,11 @@
           <div class="grid">
             <div class="full">
               <label for="cropImage" data-i18n="field.imageFile">Image File</label>
-              <input id="cropImage" type="file" accept="image/*" />
+              <div class="file-picker">
+                <button type="button" class="alt" data-file-target="cropImage" data-i18n="btn.chooseFile">Choose File</button>
+                <span class="file-picker-name" id="cropImageName" data-i18n="status.noFileChosen">No file chosen</span>
+                <input id="cropImage" type="file" accept="image/*" />
+              </div>
             </div>
             <div class="full crop-shell">
               <div class="crop-canvas-wrap">
@@ -978,7 +1288,11 @@
           <div class="grid">
             <div class="full">
               <label for="compressImage" data-i18n="field.imageFile">Image File</label>
-              <input id="compressImage" type="file" accept="image/*" />
+              <div class="file-picker">
+                <button type="button" class="alt" data-file-target="compressImage" data-i18n="btn.chooseFile">Choose File</button>
+                <span class="file-picker-name" id="compressImageName" data-i18n="status.noFileChosen">No file chosen</span>
+                <input id="compressImage" type="file" accept="image/*" />
+              </div>
             </div>
             <div>
               <label for="compressFormat" data-i18n="field.outputFormat">Output Format</label>
@@ -1027,7 +1341,11 @@
           <div class="grid">
             <div class="full">
               <label for="upscaleImage" data-i18n="field.imageFile">Image File</label>
-              <input id="upscaleImage" type="file" accept="image/*" />
+              <div class="file-picker">
+                <button type="button" class="alt" data-file-target="upscaleImage" data-i18n="btn.chooseFile">Choose File</button>
+                <span class="file-picker-name" id="upscaleImageName" data-i18n="status.noFileChosen">No file chosen</span>
+                <input id="upscaleImage" type="file" accept="image/*" />
+              </div>
             </div>
             <div>
               <label for="upscaleScale" data-i18n="upscale.scale">Scale</label>
@@ -1104,6 +1422,103 @@
           </div>
           </div>
         </section>
+
+        <section class="panel __REMOVE_PANEL_ACTIVE__" id="panel-remove">
+          <div class="tool-card">
+            <p class="tool-title" data-i18n="remove.title">AI Object Remover</p>
+            <p class="tool-subtitle" data-i18n="remove.subtitle">Paint unwanted parts and lift to remove. Download is enabled only after each removal finishes.</p>
+          <div class="ad-wrap">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4240863320156963"
+                 data-ad-slot="3548309138"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
+          <div class="grid">
+            <div class="full">
+              <label for="removeImage" data-i18n="field.imageFile">Image File</label>
+              <div class="file-picker">
+                <button type="button" class="alt" data-file-target="removeImage" data-i18n="btn.chooseFile">Choose File</button>
+                <span class="file-picker-name" id="removeImageName" data-i18n="status.noFileChosen">No file chosen</span>
+                <input id="removeImage" type="file" accept="image/*" />
+              </div>
+            </div>
+            <div>
+              <label for="removeBrushSize" data-i18n="remove.brushSize">Removal Pen Size</label>
+              <div class="brush-control">
+                <button type="button" class="alt brush-step" id="removeBrushDownBtn" data-i18n-aria-label="remove.brushDownAria" aria-label="Decrease brush size">-</button>
+                <input id="removeBrushSize" type="range" min="4" max="120" step="1" value="28" />
+                <button type="button" class="alt brush-step" id="removeBrushUpBtn" data-i18n-aria-label="remove.brushUpAria" aria-label="Increase brush size">+</button>
+                <span class="brush-value" id="removeBrushSizeValue">28 px</span>
+              </div>
+            </div>
+            <div class="full">
+              <label data-i18n="remove.algorithm">Removal Algorithm</label>
+              <div class="remove-algo-group" id="removeAlgoGroup" role="radiogroup" data-i18n-aria-label="remove.algorithm" aria-label="Removal Algorithm">
+                <label class="remove-algo-option">
+                  <input type="radio" name="removeAlgorithm" value="aggressive" />
+                  <span class="remove-algo-title" data-i18n="remove.algorithm.aggressive">Aggressive (Object Erase)</span>
+                  <span class="remove-algo-desc" data-i18n="remove.algorithm.aggressive.desc">Fastest mode for quick object erase on labels, logos, text, and hard edges.</span>
+                </label>
+                <label class="remove-algo-option">
+                  <input type="radio" name="removeAlgorithm" value="ai" checked />
+                  <span class="remove-algo-title" data-i18n="remove.algorithm.ai">AI Generative (Client-side)</span>
+                  <span class="remove-algo-desc" data-i18n="remove.algorithm.ai.desc">Best quality (slower): stronger object removal with cleaner generated background fill.</span>
+                </label>
+                <label class="remove-algo-option">
+                  <input type="radio" name="removeAlgorithm" value="texture" />
+                  <span class="remove-algo-title" data-i18n="remove.algorithm.texture">Texture Preserve</span>
+                  <span class="remove-algo-desc" data-i18n="remove.algorithm.texture.desc">Best for wood grain, fabric, concrete, and noisy/patterned surfaces to keep natural texture.</span>
+                </label>
+                <label class="remove-algo-option">
+                  <input type="radio" name="removeAlgorithm" value="natural" />
+                  <span class="remove-algo-title" data-i18n="remove.algorithm.natural">Natural (Smooth)</span>
+                  <span class="remove-algo-desc" data-i18n="remove.algorithm.natural.desc">Best for skies, walls, skin, and soft blur backgrounds where you want smooth blending.</span>
+                </label>
+              </div>
+            </div>
+            <div class="full remove-shell">
+              <div class="remove-toolbar">
+                <button type="button" class="alt" id="removeZoomOutBtn" data-i18n="btn.zoomOut">Zoom -</button>
+                <button type="button" class="alt" id="removeZoomResetBtn" data-i18n="btn.zoomReset">Reset Zoom</button>
+                <button type="button" class="alt" id="removeZoomInBtn" data-i18n="btn.zoomIn">Zoom +</button>
+                <span class="zoom-readout" id="removeZoomLabel">100%</span>
+                <button type="button" class="alt" id="removeUndoBtn" data-i18n="btn.back"><- Back</button>
+              </div>
+              <div class="remove-workspace-frame">
+                <div class="remove-workspace" id="removeWorkspace">
+                  <div class="remove-stage" id="removeStage">
+                    <canvas id="removeCanvas" width="860" height="480"></canvas>
+                  </div>
+                </div>
+                <div class="remove-empty" id="removeEmptyState">
+                  <div class="remove-empty-card">
+                    <p class="remove-empty-title">🖌️</p>
+                    <p class="remove-empty-text" data-i18n="remove.empty.title">Upload an image, then paint to remove.</p>
+                    <p class="remove-empty-sub" data-i18n="remove.empty.sub">Lift finger or mouse to auto-apply removal.</p>
+                  </div>
+                </div>
+                <div class="remove-busy-overlay" id="removeBusyOverlay"></div>
+              </div>
+              <p class="note" data-i18n="remove.instructions">Paint over the object to remove. You can zoom in/out for precise edits.</p>
+              <p class="note note-highlight" data-i18n="remove.progressWarning">If you close or refresh this browser tab, removal progress will be lost.</p>
+            </div>
+            <div class="full">
+              <button type="button" class="alt" id="removeDownloadBtn" disabled data-i18n="btn.downloadWhenReady">Download Result</button>
+            </div>
+          </div>
+          <div class="status" id="removeStatus" aria-live="polite"></div>
+          <div class="ad-wrap bottom">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4240863320156963"
+                 data-ad-slot="3548309138"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+          </div>
+          </div>
+        </section>
       </section>
     </main>
 
@@ -1123,10 +1538,12 @@
           'flow.adjust': '2. Adjust',
           'flow.download': '3. Download',
           'flow.privacy': 'We never save your images',
+          'flow.allInOne': 'All-in-one image toolkit: convert, crop, compress, upscale, and AI remove.',
           'tab.convert': 'Convert',
           'tab.crop': 'Crop',
           'tab.compress': 'Compress',
           'tab.upscale': 'Upscale',
+          'tab.remove': 'AI Remove',
           'oss.prefix': 'Open source:',
           'oss.link': 'GitHub repo',
           'oss.suffix': 'Deploy your own version.',
@@ -1138,6 +1555,8 @@
           'compress.subtitle': 'Reduce file size while preserving the same pixel dimensions.',
           'upscale.title': 'Upscale Images',
           'upscale.subtitle': 'AI Enhance upscale that can recover perceived detail, not just stretch pixels.',
+          'remove.title': 'AI Object Remover',
+          'remove.subtitle': 'Paint unwanted parts and lift to remove. Download is enabled only after each removal finishes.',
           'field.imageFile': 'Image File',
           'field.outputFormat': 'Output Format',
           'field.quality': 'Quality (1-100)',
@@ -1153,10 +1572,17 @@
           'upscale.restore.help.aggressive': 'Stronger deblock and sharpening, may add halos/noise.',
           'upscale.restore.help.logo': 'Prioritizes hard edges for logos, icons, and text-like shapes.',
           'btn.convertDownload': 'Convert and Download',
+          'btn.chooseFile': 'Choose File',
           'btn.resetBox': 'Reset Box',
           'btn.confirmCropDownload': 'Confirm Crop and Download',
           'btn.compressDownload': 'Compress and Download',
           'btn.upscaleDownload': 'Upscale and Download',
+          'btn.removeObject': 'Remove Object',
+          'btn.downloadWhenReady': 'Download Result',
+          'btn.zoomIn': 'Zoom +',
+          'btn.zoomOut': 'Zoom -',
+          'btn.zoomReset': 'Reset Zoom',
+          'btn.back': '<- Back',
           'btn.continue': 'Continue',
           'btn.cancel': 'Cancel',
           'crop.instructions': 'Drag inside the box to move. Drag corners to resize. Use Confirm Crop when ready.',
@@ -1172,6 +1598,22 @@
           'upscale.note2': 'Very blurry or tiny sources may still look soft. First run downloads a larger ESRGAN model in your browser.',
           'upscale.note3': 'Expected first-run data: about 31 MB total (model + AI runtime), then cached by browser.',
           'upscale.note4': '4x runs two AI passes, so it is much slower than 2x.',
+          'remove.brushSize': 'Removal Pen Size',
+          'remove.brushDownAria': 'Decrease brush size',
+          'remove.brushUpAria': 'Increase brush size',
+          'remove.algorithm': 'Removal Algorithm',
+          'remove.algorithm.natural': 'Natural (Smooth)',
+          'remove.algorithm.natural.desc': 'Best for skies, walls, skin, and soft blur backgrounds where you want smooth blending.',
+          'remove.algorithm.aggressive': 'Aggressive (Object Erase)',
+          'remove.algorithm.aggressive.desc': 'Fastest mode for quick object erase on labels, logos, text, and hard edges.',
+          'remove.algorithm.ai': 'AI Generative (Client-side)',
+          'remove.algorithm.ai.desc': 'Best quality (slower): stronger object removal with cleaner generated background fill.',
+          'remove.algorithm.texture': 'Texture Preserve',
+          'remove.algorithm.texture.desc': 'Best for wood grain, fabric, concrete, and noisy/patterned surfaces to keep natural texture.',
+          'remove.instructions': 'Paint over the object to remove. You can zoom in/out for precise edits.',
+          'remove.empty.title': 'Upload an image, then paint to remove.',
+          'remove.empty.sub': 'Lift finger or mouse to auto-apply removal.',
+          'remove.progressWarning': 'If you close or refresh this browser tab, removal progress will be lost.',
           'upscale.progressIdle': 'Waiting to start AI enhance.',
           'upscale.confirmUse': 'AI Enhance may download about 31 MB on first run and can take time. Continue?',
           'hero.convert.title': 'Free Image Converter',
@@ -1182,6 +1624,8 @@
           'hero.compress.subtitle': 'Reduce image file size while keeping dimensions.',
           'hero.upscale.title': 'Free Image Upscaler',
           'hero.upscale.subtitle': 'AI Enhance runs on your device to upscale at 2x or 4x with practical quality limits.',
+          'hero.remove.title': 'Free AI Object Remover',
+          'hero.remove.subtitle': 'Paint, remove unwanted areas, then confirm download after processing.',
           'seo.relatedPages': 'Related pages',
           'status.chooseImage': 'Choose an image first.',
           'status.uploadFirst': 'Upload an image first.',
@@ -1195,6 +1639,11 @@
           'status.aiPostprocess': 'Enhancing edges after AI upscale...',
           'status.aiFinalizing': 'Finalizing output and downloading...',
           'status.cropProcessing': 'Processing crop...',
+          'status.removing': 'Removing selected object...',
+          'status.removeReady': 'Removal finished. Review and click Download Result.',
+          'status.removeMaskEmpty': 'Paint at least one area to remove first.',
+          'status.removeUndoDone': 'Undid last removal.',
+          'status.noFileChosen': 'No file chosen',
           'status.doneDownload': 'Done. Download started.',
           'status.cancelled': 'Cancelled.',
           'status.cropDone': 'Crop confirmed. Download started.',
@@ -1202,8 +1651,10 @@
           'status.upscaleDone': 'Upscale done. Download started.',
           'status.previewIos': 'Preview opened. On iPhone tap Share, then Save Image.',
           'status.imageLoaded': 'Image loaded. Adjust crop and confirm.',
+          'status.removeImageLoaded': 'Image loaded. Paint the area to remove and lift to apply removal.',
           'status.loadFailed': 'Failed to load image.',
           'status.cropReset': 'Crop box reset.',
+          'status.removeCanvasPrompt': 'Upload an image, then paint the area to remove',
           'status.cropCanvasPrompt': 'Upload an image to crop',
           'error.notSupported': '{format} export is not supported in this browser.',
           'error.resizeParams': 'Provide resize width and/or height.',
@@ -1211,6 +1662,7 @@
           'error.cropFailed': 'Crop failed.',
           'error.compressFailed': 'Compress failed.',
           'error.upscaleFailed': 'Upscale failed.',
+          'error.removeFailed': 'Object removal failed.',
           'error.upscaleTooLarge': 'Image is too large for AI Enhance in browser. Keep it under about {maxMp} MP for this scale.',
           'ph.resizeWidth': 'e.g. 800',
           'ph.resizeHeight': 'e.g. 600'
@@ -1221,6 +1673,7 @@
           'flow.adjust': '2. Ajustar',
           'flow.download': '3. Descargar',
           'flow.privacy': 'Nunca guardamos tus imagenes',
+          'flow.allInOne': 'Kit todo en uno: convertir, recortar, comprimir, mejorar y eliminar con IA.',
           'tab.convert': 'Convertir',
           'tab.crop': 'Recortar',
           'tab.compress': 'Comprimir',
@@ -1251,10 +1704,14 @@
           'upscale.restore.help.aggressive': 'Deblock y enfoque mas fuertes; puede generar halos/ruido.',
           'upscale.restore.help.logo': 'Prioriza bordes duros para logos, iconos y formas de texto.',
           'btn.convertDownload': 'Convertir y descargar',
+          'btn.chooseFile': 'Elegir archivo',
           'btn.resetBox': 'Restablecer caja',
           'btn.confirmCropDownload': 'Confirmar recorte y descargar',
           'btn.compressDownload': 'Comprimir y descargar',
           'btn.upscaleDownload': 'Mejorar y descargar',
+          'btn.zoomIn': 'Zoom +',
+          'btn.zoomOut': 'Zoom -',
+          'btn.zoomReset': 'Restablecer zoom',
           'btn.continue': 'Continuar',
           'btn.cancel': 'Cancelar',
           'crop.instructions': 'Arrastra dentro para mover. Arrastra esquinas para cambiar tamano.',
@@ -1292,6 +1749,7 @@
           'status.imageLoaded': 'Imagen cargada. Ajusta y confirma el recorte.',
           'status.loadFailed': 'No se pudo cargar la imagen.',
           'status.cropReset': 'Caja de recorte reiniciada.',
+          'status.noFileChosen': 'Ningun archivo seleccionado',
           'status.cropCanvasPrompt': 'Sube una imagen para recortar',
           'error.notSupported': 'La exportacion {format} no es compatible con este navegador.',
           'error.resizeParams': 'Indica ancho y/o alto para redimensionar.',
@@ -1308,6 +1766,7 @@
           'flow.adjust': '2. 调整',
           'flow.download': '3. 下载',
           'flow.privacy': '我们不会保存你的图片',
+          'flow.allInOne': '一站式图片工具：转换、裁剪、压缩、放大、AI消除。',
           'tab.convert': '转换',
           'tab.crop': '裁剪',
           'tab.compress': '压缩',
@@ -1338,10 +1797,14 @@
           'upscale.restore.help.aggressive': '更强去块和锐化，可能出现光晕或噪点。',
           'upscale.restore.help.logo': '优先强化硬边，适合 Logo、图标和文字形状。',
           'btn.convertDownload': '转换并下载',
+          'btn.chooseFile': '选择文件',
           'btn.resetBox': '重置裁剪框',
           'btn.confirmCropDownload': '确认裁剪并下载',
           'btn.compressDownload': '压缩并下载',
           'btn.upscaleDownload': '放大并下载',
+          'btn.zoomIn': '放大 +',
+          'btn.zoomOut': '缩小 -',
+          'btn.zoomReset': '重置缩放',
           'btn.continue': '继续',
           'btn.cancel': '取消',
           'crop.instructions': '在框内拖动可移动，拖动角点可调整大小。',
@@ -1379,6 +1842,7 @@
           'status.imageLoaded': '图片已加载，请调整后确认裁剪。',
           'status.loadFailed': '图片加载失败。',
           'status.cropReset': '裁剪框已重置。',
+          'status.noFileChosen': '未选择文件',
           'status.cropCanvasPrompt': '上传一张图片开始裁剪',
           'error.notSupported': '当前浏览器不支持导出 {format}。',
           'error.resizeParams': '请填写缩放宽度和/或高度。',
@@ -1395,6 +1859,7 @@
           'flow.adjust': '2. एडजस्ट',
           'flow.download': '3. डाउनलोड',
           'flow.privacy': 'हम आपकी इमेज सेव नहीं करते',
+          'flow.allInOne': 'ऑल-इन-वन इमेज टूलकिट: कन्वर्ट, क्रॉप, कंप्रेस, अपस्केल और AI रिमूव।',
           'tab.convert': 'कन्वर्ट',
           'tab.crop': 'क्रॉप',
           'tab.compress': 'कंप्रेस',
@@ -1425,10 +1890,14 @@
           'upscale.restore.help.aggressive': 'ज्यादा डीब्लॉक और शार्पन; हैलो/नॉइज़ आ सकते हैं।',
           'upscale.restore.help.logo': 'लोगो, आइकन और टेक्स्ट जैसी कठोर किनारों को प्राथमिकता देता है।',
           'btn.convertDownload': 'कन्वर्ट और डाउनलोड',
+          'btn.chooseFile': 'फ़ाइल चुनें',
           'btn.resetBox': 'बॉक्स रीसेट करें',
           'btn.confirmCropDownload': 'क्रॉप कन्फर्म और डाउनलोड',
           'btn.compressDownload': 'कंप्रेस और डाउनलोड',
           'btn.upscaleDownload': 'अपस्केल और डाउनलोड',
+          'btn.zoomIn': 'ज़ूम +',
+          'btn.zoomOut': 'ज़ूम -',
+          'btn.zoomReset': 'ज़ूम रीसेट',
           'btn.continue': 'जारी रखें',
           'btn.cancel': 'रद्द करें',
           'crop.instructions': 'बॉक्स के अंदर ड्रैग करके मूव करें। कोनों से साइज़ बदलें।',
@@ -1466,6 +1935,7 @@
           'status.imageLoaded': 'इमेज लोड हो गई। क्रॉप एडजस्ट करके कन्फर्म करें।',
           'status.loadFailed': 'इमेज लोड नहीं हुई।',
           'status.cropReset': 'क्रॉप बॉक्स रीसेट हो गया।',
+          'status.noFileChosen': 'कोई फ़ाइल नहीं चुनी गई',
           'status.cropCanvasPrompt': 'क्रॉप करने के लिए इमेज अपलोड करें',
           'error.notSupported': 'इस ब्राउज़र में {format} एक्सपोर्ट सपोर्ट नहीं है।',
           'error.resizeParams': 'रिसाइज़ के लिए चौड़ाई और/या ऊंचाई दें।',
@@ -1482,6 +1952,7 @@
           'flow.adjust': '2. 調整',
           'flow.download': '3. ダウンロード',
           'flow.privacy': '画像は保存しません',
+          'flow.allInOne': 'オールインワン画像ツール: 変換・切り抜き・圧縮・拡大・AI削除。',
           'tab.convert': '変換',
           'tab.crop': '切り抜き',
           'tab.compress': '圧縮',
@@ -1512,10 +1983,14 @@
           'upscale.restore.help.aggressive': 'ブロック除去とシャープ化を強めます。ハロー/ノイズが出る場合があります。',
           'upscale.restore.help.logo': 'ロゴ・アイコン・文字の硬い輪郭を優先します。',
           'btn.convertDownload': '変換してダウンロード',
+          'btn.chooseFile': 'ファイルを選択',
           'btn.resetBox': '枠をリセット',
           'btn.confirmCropDownload': '切り抜いてダウンロード',
           'btn.compressDownload': '圧縮してダウンロード',
           'btn.upscaleDownload': '拡大してダウンロード',
+          'btn.zoomIn': 'ズーム +',
+          'btn.zoomOut': 'ズーム -',
+          'btn.zoomReset': 'ズームをリセット',
           'btn.continue': '続行',
           'btn.cancel': 'キャンセル',
           'compress.note': '圧縮はピクセル寸法を変えず、容量のみを減らします。',
@@ -1543,6 +2018,8 @@
           'status.compressDone': '圧縮完了。ダウンロードを開始しました。',
           'status.upscaleDone': '拡大完了。ダウンロードを開始しました。',
           'status.cancelled': 'キャンセルしました。',
+          'status.noFileChosen': 'ファイルが選択されていません',
+          'status.cropCanvasPrompt': '切り抜く画像をアップロード',
           'status.previewIos': 'プレビューを開きました。iPhone では Share から Save Image を選んでください。',
           'error.notSupported': 'このブラウザでは {format} の出力に対応していません。',
           'error.convertFailed': '変換に失敗しました。',
@@ -1558,6 +2035,7 @@
           'flow.adjust': '2. 조정',
           'flow.download': '3. 다운로드',
           'flow.privacy': '이미지는 저장하지 않습니다',
+          'flow.allInOne': '올인원 이미지 툴킷: 변환, 자르기, 압축, 업스케일, AI 제거.',
           'tab.convert': '변환',
           'tab.crop': '자르기',
           'tab.compress': '압축',
@@ -1588,10 +2066,14 @@
           'upscale.restore.help.aggressive': '블록 제거와 선명화를 강하게 적용합니다. 할로/노이즈가 생길 수 있습니다.',
           'upscale.restore.help.logo': '로고, 아이콘, 텍스트의 또렷한 경계를 우선합니다.',
           'btn.convertDownload': '변환 후 다운로드',
+          'btn.chooseFile': '파일 선택',
           'btn.resetBox': '박스 초기화',
           'btn.confirmCropDownload': '자르고 다운로드',
           'btn.compressDownload': '압축 후 다운로드',
           'btn.upscaleDownload': '업스케일 후 다운로드',
+          'btn.zoomIn': '확대 +',
+          'btn.zoomOut': '축소 -',
+          'btn.zoomReset': '줌 초기화',
           'btn.continue': '계속',
           'btn.cancel': '취소',
           'compress.note': '압축은 픽셀 크기를 유지하고 용량만 줄입니다.',
@@ -1619,6 +2101,8 @@
           'status.compressDone': '압축 완료. 다운로드를 시작했습니다.',
           'status.upscaleDone': '업스케일 완료. 다운로드를 시작했습니다.',
           'status.cancelled': '취소되었습니다.',
+          'status.noFileChosen': '선택된 파일 없음',
+          'status.cropCanvasPrompt': '자를 이미지를 업로드하세요',
           'status.previewIos': '미리보기가 열렸습니다. iPhone에서는 Share 후 Save Image를 선택하세요.',
           'error.notSupported': '이 브라우저는 {format} 내보내기를 지원하지 않습니다.',
           'error.convertFailed': '변환 실패.',
@@ -1634,6 +2118,7 @@
           'flow.adjust': '2. تعديل',
           'flow.download': '3. تنزيل',
           'flow.privacy': 'نحن لا نحفظ صورك',
+          'flow.allInOne': 'مجموعة صور شاملة: تحويل، قص، ضغط، تكبير، وإزالة بالذكاء الاصطناعي.',
           'tab.convert': 'تحويل',
           'tab.crop': 'قص',
           'tab.compress': 'ضغط',
@@ -1664,10 +2149,14 @@
           'upscale.restore.help.aggressive': 'إزالة ضغط وحدّة أقوى، وقد تظهر هالات/ضجيج.',
           'upscale.restore.help.logo': 'يركّز على الحواف الصلبة للشعارات والأيقونات وأشكال النص.',
           'btn.convertDownload': 'تحويل وتنزيل',
+          'btn.chooseFile': 'اختر ملف',
           'btn.resetBox': 'إعادة ضبط الإطار',
           'btn.confirmCropDownload': 'تأكيد القص والتنزيل',
           'btn.compressDownload': 'ضغط وتنزيل',
           'btn.upscaleDownload': 'تكبير وتنزيل',
+          'btn.zoomIn': 'تكبير +',
+          'btn.zoomOut': 'تصغير -',
+          'btn.zoomReset': 'إعادة ضبط التكبير',
           'btn.continue': 'متابعة',
           'btn.cancel': 'إلغاء',
           'crop.instructions': 'اسحب داخل الإطار للتحريك واسحب الزوايا لتغيير الحجم.',
@@ -1705,6 +2194,7 @@
           'status.imageLoaded': 'تم تحميل الصورة. عدّل القص ثم أكّد.',
           'status.loadFailed': 'فشل تحميل الصورة.',
           'status.cropReset': 'تمت إعادة ضبط إطار القص.',
+          'status.noFileChosen': 'لم يتم اختيار ملف',
           'status.cropCanvasPrompt': 'ارفع صورة للقص',
           'error.notSupported': 'تصدير {format} غير مدعوم في هذا المتصفح.',
           'error.resizeParams': 'أدخل عرضًا و/أو ارتفاعًا لتغيير الحجم.',
@@ -1717,6 +2207,200 @@
         }
       };
 
+      const removeI18nOverrides = {
+        es: {
+          'tab.remove': 'AI Eliminar',
+          'remove.title': 'Eliminar objetos',
+          'remove.subtitle': 'Pinta la zona no deseada y suelta para eliminar. La descarga se habilita al terminar.',
+          'remove.brushSize': 'Tamano del pincel',
+          'remove.brushDownAria': 'Reducir tamano del pincel',
+          'remove.brushUpAria': 'Aumentar tamano del pincel',
+          'remove.algorithm': 'Algoritmo de eliminacion',
+          'remove.algorithm.aggressive': 'Agresivo (Borrado de objeto)',
+          'remove.algorithm.aggressive.desc': 'Modo mas rapido para borrado rapido de etiquetas, logos, texto y bordes duros.',
+          'remove.algorithm.ai': 'IA Generativa (en navegador)',
+          'remove.algorithm.ai.desc': 'Mejor calidad (mas lento): eliminacion mas fuerte con relleno de fondo mas limpio.',
+          'remove.algorithm.texture': 'Preservar textura',
+          'remove.algorithm.texture.desc': 'Ideal para madera, tela, concreto y fondos con ruido/patrones para conservar textura.',
+          'remove.algorithm.natural': 'Natural (Suave)',
+          'remove.algorithm.natural.desc': 'Ideal para cielo, pared, piel y fondos desenfocados con transicion suave.',
+          'remove.instructions': 'Pinta sobre el objeto a eliminar. Puedes acercar/alejar para editar con precision.',
+          'remove.empty.title': 'Sube una imagen y pinta para eliminar.',
+          'remove.empty.sub': 'Suelta el dedo o el mouse para aplicar la eliminacion.',
+          'remove.progressWarning': 'Si cierras o recargas esta pestana, se perdera el progreso.',
+          'hero.remove.title': 'Eliminador de objetos gratis',
+          'hero.remove.subtitle': 'Pinta, elimina zonas no deseadas y descarga al terminar.',
+          'btn.downloadWhenReady': 'Descargar resultado',
+          'btn.back': '<- Atras',
+          'status.removing': 'Eliminando objeto seleccionado...',
+          'status.removeReady': 'Eliminacion terminada. Revisa y pulsa Descargar resultado.',
+          'status.removeMaskEmpty': 'Pinta al menos una zona para eliminar primero.',
+          'status.removeUndoDone': 'Se deshizo la ultima eliminacion.',
+          'status.removeImageLoaded': 'Imagen cargada. Pinta la zona y suelta para aplicar.',
+          'error.removeFailed': 'Fallo al eliminar objeto.'
+        },
+        zh: {
+          'tab.remove': 'AI消除',
+          'remove.title': '消除对象',
+          'remove.subtitle': '涂抹不需要的区域，抬手即自动消除。处理完成后可下载。',
+          'remove.brushSize': '画笔大小',
+          'remove.brushDownAria': '减小画笔大小',
+          'remove.brushUpAria': '增大画笔大小',
+          'remove.algorithm': '消除算法',
+          'remove.algorithm.aggressive': '强力（对象擦除）',
+          'remove.algorithm.aggressive.desc': '最快模式：适合快速去除标签、Logo、文字和硬边对象。',
+          'remove.algorithm.ai': 'AI 生成式（本地）',
+          'remove.algorithm.ai.desc': '最佳质量（更慢）：更强消除，背景生成更干净。',
+          'remove.algorithm.texture': '保留纹理',
+          'remove.algorithm.texture.desc': '适合木纹、织物、混凝土和噪点/图案背景，保留自然纹理。',
+          'remove.algorithm.natural': '自然（平滑）',
+          'remove.algorithm.natural.desc': '适合天空、墙面、皮肤和柔和虚化背景，过渡更平滑。',
+          'remove.instructions': '在要移除的对象上涂抹。可缩放以精细编辑。',
+          'remove.empty.title': '上传图片后开始涂抹消除。',
+          'remove.empty.sub': '抬起手指或鼠标即可自动应用消除。',
+          'remove.progressWarning': '如果关闭或刷新此页面，消除进度将丢失。',
+          'hero.remove.title': '免费对象消除',
+          'hero.remove.subtitle': '涂抹并消除不需要区域，完成后下载。',
+          'btn.downloadWhenReady': '下载结果',
+          'btn.back': '<- 返回',
+          'status.removing': '正在消除选中对象...',
+          'status.removeReady': '消除完成。请检查后点击下载结果。',
+          'status.removeMaskEmpty': '请先涂抹至少一个需要消除的区域。',
+          'status.removeUndoDone': '已撤销上一次消除。',
+          'status.removeImageLoaded': '图片已加载。涂抹后抬手即可应用消除。',
+          'error.removeFailed': '对象消除失败。'
+        },
+        hi: {
+          'tab.remove': 'AI हटाएं',
+          'remove.title': 'ऑब्जेक्ट हटाएं',
+          'remove.subtitle': 'अनचाहा हिस्सा पेंट करें, छोड़ते ही हटेगा। पूरा होने पर डाउनलोड चालू होगा।',
+          'remove.brushSize': 'ब्रश आकार',
+          'remove.brushDownAria': 'ब्रश आकार कम करें',
+          'remove.brushUpAria': 'ब्रश आकार बढ़ाएं',
+          'remove.algorithm': 'रिमूवल एल्गोरिदम',
+          'remove.algorithm.aggressive': 'एग्रेसिव (ऑब्जेक्ट इरेज़)',
+          'remove.algorithm.aggressive.desc': 'सबसे तेज़ मोड: लेबल, लोगो, टेक्स्ट और हार्ड-एज ऑब्जेक्ट को जल्दी हटाने के लिए।',
+          'remove.algorithm.ai': 'AI जेनरेटिव (क्लाइंट-साइड)',
+          'remove.algorithm.ai.desc': 'बेहतर क्वालिटी (धीमा): ज्यादा साफ हटाना और बेहतर बैकग्राउंड फिल।',
+          'remove.algorithm.texture': 'टेक्सचर प्रिज़र्व',
+          'remove.algorithm.texture.desc': 'वुड ग्रेन, कपड़ा, कंक्रीट और पैटर्न/नॉइज़ बैकग्राउंड में टेक्सचर बचाने के लिए।',
+          'remove.algorithm.natural': 'नेचुरल (स्मूद)',
+          'remove.algorithm.natural.desc': 'आसमान, दीवार, त्वचा और सॉफ्ट ब्लर बैकग्राउंड के लिए स्मूद ब्लेंडिंग।',
+          'remove.instructions': 'जिस ऑब्जेक्ट को हटाना है उस पर पेंट करें। सटीक एडिट के लिए ज़ूम करें।',
+          'remove.empty.title': 'इमेज अपलोड करें, फिर हटाने के लिए पेंट करें।',
+          'remove.empty.sub': 'उंगली/माउस छोड़ते ही रिमूवल लागू होगा।',
+          'remove.progressWarning': 'अगर आप यह टैब बंद या रिफ्रेश करेंगे, प्रोग्रेस खो जाएगी।',
+          'hero.remove.title': 'फ्री ऑब्जेक्ट रिमूवर',
+          'hero.remove.subtitle': 'पेंट करें, अनचाहा हिस्सा हटाएं और पूरा होने पर डाउनलोड करें।',
+          'btn.downloadWhenReady': 'रिज़ल्ट डाउनलोड करें',
+          'btn.back': '<- वापस',
+          'status.removing': 'चयनित ऑब्जेक्ट हटाया जा रहा है...',
+          'status.removeReady': 'रिमूवल पूरा। जांचें और रिज़ल्ट डाउनलोड करें।',
+          'status.removeMaskEmpty': 'पहले हटाने के लिए कम से कम एक क्षेत्र पेंट करें।',
+          'status.removeUndoDone': 'आखिरी रिमूवल वापस लिया गया।',
+          'status.removeImageLoaded': 'इमेज लोड हो गई। पेंट करें और छोड़ते ही लागू होगा।',
+          'error.removeFailed': 'ऑब्जेक्ट रिमूवल विफल।'
+        },
+        ja: {
+          'tab.remove': 'AI削除',
+          'remove.title': 'オブジェクト削除',
+          'remove.subtitle': '不要部分を塗ると、指/マウスを離した時点で自動削除されます。',
+          'remove.brushSize': 'ブラシサイズ',
+          'remove.brushDownAria': 'ブラシサイズを小さくする',
+          'remove.brushUpAria': 'ブラシサイズを大きくする',
+          'remove.algorithm': '削除アルゴリズム',
+          'remove.algorithm.aggressive': '強力（オブジェクト消去）',
+          'remove.algorithm.aggressive.desc': '最速モード。ラベル・ロゴ・文字・硬い輪郭を素早く消したい時に最適です。',
+          'remove.algorithm.ai': 'AI生成（クライアント側）',
+          'remove.algorithm.ai.desc': '高品質（遅め）：より強い削除と、より自然な背景再生成。',
+          'remove.algorithm.texture': 'テクスチャ保持',
+          'remove.algorithm.texture.desc': '木目・布・コンクリート・ノイズ/パターン背景で質感を保ちたい場合に最適。',
+          'remove.algorithm.natural': 'ナチュラル（滑らか）',
+          'remove.algorithm.natural.desc': '空・壁・肌・ぼかし背景など、滑らかなつながりを重視する場合に最適。',
+          'remove.instructions': '削除したい対象を塗ってください。拡大/縮小して精密に編集できます。',
+          'remove.empty.title': '画像をアップロードして、削除したい箇所を塗ってください。',
+          'remove.empty.sub': '指/マウスを離すと自動で削除が適用されます。',
+          'remove.progressWarning': 'このタブを閉じる/更新すると、作業中の進捗は失われます。',
+          'hero.remove.title': '無料オブジェクト削除',
+          'hero.remove.subtitle': '塗って不要部分を削除し、完了後にダウンロード。',
+          'btn.downloadWhenReady': '結果をダウンロード',
+          'btn.back': '<- 戻る',
+          'status.removing': '選択したオブジェクトを削除中...',
+          'status.removeReady': '削除完了。確認して「結果をダウンロード」を押してください。',
+          'status.removeMaskEmpty': '先に削除したい領域を少なくとも1か所塗ってください。',
+          'status.removeUndoDone': '直前の削除を元に戻しました。',
+          'status.removeImageLoaded': '画像を読み込みました。塗って離すと自動適用されます。',
+          'error.removeFailed': 'オブジェクト削除に失敗しました。'
+        },
+        ko: {
+          'tab.remove': 'AI 제거',
+          'remove.title': '오브젝트 제거',
+          'remove.subtitle': '원하는 영역을 칠하고 손/마우스를 떼면 자동으로 제거됩니다.',
+          'remove.brushSize': '브러시 크기',
+          'remove.brushDownAria': '브러시 크기 줄이기',
+          'remove.brushUpAria': '브러시 크기 늘리기',
+          'remove.algorithm': '제거 알고리즘',
+          'remove.algorithm.aggressive': '강력 (오브젝트 지우기)',
+          'remove.algorithm.aggressive.desc': '가장 빠른 모드: 라벨, 로고, 텍스트, 뚜렷한 경계를 빠르게 지울 때 적합합니다.',
+          'remove.algorithm.ai': 'AI 생성형 (클라이언트 측)',
+          'remove.algorithm.ai.desc': '최고 품질(느림): 더 강한 제거와 더 깔끔한 배경 생성.',
+          'remove.algorithm.texture': '텍스처 보존',
+          'remove.algorithm.texture.desc': '나무결, 천, 콘크리트, 노이즈/패턴 배경의 질감을 살리고 싶을 때 적합합니다.',
+          'remove.algorithm.natural': '자연스러움 (부드럽게)',
+          'remove.algorithm.natural.desc': '하늘, 벽, 피부, 소프트 블러 배경의 자연스러운 블렌딩에 적합합니다.',
+          'remove.instructions': '제거할 대상 위를 칠하세요. 확대/축소로 정밀 편집할 수 있습니다.',
+          'remove.empty.title': '이미지를 업로드한 뒤, 제거할 부분을 칠하세요.',
+          'remove.empty.sub': '손가락/마우스를 떼면 자동으로 제거가 적용됩니다.',
+          'remove.progressWarning': '이 탭을 닫거나 새로고침하면 진행 내용이 사라집니다.',
+          'hero.remove.title': '무료 오브젝트 제거기',
+          'hero.remove.subtitle': '칠해서 불필요한 부분을 제거하고 완료 후 다운로드하세요.',
+          'btn.downloadWhenReady': '결과 다운로드',
+          'btn.back': '<- 뒤로',
+          'status.removing': '선택한 오브젝트를 제거 중...',
+          'status.removeReady': '제거 완료. 확인 후 결과를 다운로드하세요.',
+          'status.removeMaskEmpty': '먼저 제거할 영역을 최소 한 곳 이상 칠하세요.',
+          'status.removeUndoDone': '마지막 제거를 되돌렸습니다.',
+          'status.removeImageLoaded': '이미지 로드 완료. 칠하고 떼면 자동 적용됩니다.',
+          'error.removeFailed': '오브젝트 제거 실패.'
+        },
+        ar: {
+          'tab.remove': 'إزالة AI',
+          'remove.title': 'إزالة العناصر',
+          'remove.subtitle': 'لوّن الجزء غير المرغوب، وعند رفع الإصبع/الماوس يتم الإزالة تلقائيًا.',
+          'remove.brushSize': 'حجم الفرشاة',
+          'remove.brushDownAria': 'تقليل حجم الفرشاة',
+          'remove.brushUpAria': 'زيادة حجم الفرشاة',
+          'remove.algorithm': 'خوارزمية الإزالة',
+          'remove.algorithm.aggressive': 'قوي (محو العنصر)',
+          'remove.algorithm.aggressive.desc': 'أسرع وضع لإزالة سريعة للملصقات والشعارات والنصوص والحواف القوية.',
+          'remove.algorithm.ai': 'توليدي بالذكاء الاصطناعي (محليًا)',
+          'remove.algorithm.ai.desc': 'أفضل جودة (أبطأ): إزالة أقوى مع توليد خلفية أنظف.',
+          'remove.algorithm.texture': 'الحفاظ على الملمس',
+          'remove.algorithm.texture.desc': 'الأفضل لعروق الخشب والأقمشة والخرسانة والخلفيات ذات الضجيج/النمط للحفاظ على الملمس.',
+          'remove.algorithm.natural': 'طبيعي (ناعم)',
+          'remove.algorithm.natural.desc': 'الأفضل للسماء والجدران والبشرة والخلفيات الضبابية الناعمة.',
+          'remove.instructions': 'لوّن فوق العنصر المراد إزالته. يمكنك التكبير/التصغير للتحرير الدقيق.',
+          'remove.empty.title': 'ارفع صورة ثم لوّن للإزالة.',
+          'remove.empty.sub': 'عند رفع الإصبع أو الماوس يتم تطبيق الإزالة تلقائيًا.',
+          'remove.progressWarning': 'إذا أغلقت أو حدّثت هذه الصفحة فستفقد التقدم.',
+          'hero.remove.title': 'مزيل العناصر المجاني',
+          'hero.remove.subtitle': 'لوّن وأزل المناطق غير المرغوبة ثم نزّل النتيجة بعد الانتهاء.',
+          'btn.downloadWhenReady': 'تنزيل النتيجة',
+          'btn.back': '<- رجوع',
+          'status.removing': 'جارٍ إزالة العنصر المحدد...',
+          'status.removeReady': 'اكتملت الإزالة. راجع النتيجة واضغط تنزيل.',
+          'status.removeMaskEmpty': 'لوّن منطقة واحدة على الأقل قبل البدء بالإزالة.',
+          'status.removeUndoDone': 'تم التراجع عن آخر إزالة.',
+          'status.removeImageLoaded': 'تم تحميل الصورة. لوّن ثم ارفع الإصبع/الماوس للتطبيق.',
+          'error.removeFailed': 'فشلت إزالة العنصر.'
+        }
+      };
+
+      Object.entries(removeI18nOverrides).forEach(([lang, map]) => {
+        if (!i18n[lang]) return;
+        Object.assign(i18n[lang], map);
+      });
+
       function t(key, vars) {
         const dict = i18n[locale] || i18n.en;
         let text = dict[key] || i18n.en[key] || key;
@@ -1728,13 +2412,36 @@
         return text;
       }
 
+      function fileNameLabelId(fileInputId) {
+        return `${fileInputId}Name`;
+      }
+
+      function syncFilePickerLabel(fileInput) {
+        if (!fileInput) return;
+        const nameEl = document.getElementById(fileNameLabelId(fileInput.id));
+        if (!nameEl) return;
+        const file = fileInput.files && fileInput.files[0];
+        nameEl.textContent = file ? file.name : t('status.noFileChosen');
+      }
+
+      function syncAllFilePickerLabels() {
+        document.querySelectorAll('input[type="file"]').forEach((input) => {
+          syncFilePickerLabel(input);
+        });
+      }
+
       function applyTranslations() {
         document.querySelectorAll('[data-i18n]').forEach((el) => {
           const key = el.getAttribute('data-i18n');
           el.textContent = t(key);
         });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach((el) => {
+          const key = el.getAttribute('data-i18n-aria-label');
+          el.setAttribute('aria-label', t(key));
+        });
         document.getElementById('cropResizeWidth').placeholder = t('ph.resizeWidth');
         document.getElementById('cropResizeHeight').placeholder = t('ph.resizeHeight');
+        syncAllFilePickerLabels();
       }
 
       function localePathFor(basePath, targetLocale) {
@@ -1766,13 +2473,15 @@
         convert: document.getElementById('panel-convert'),
         crop: document.getElementById('panel-crop'),
         compress: document.getElementById('panel-compress'),
-        upscale: document.getElementById('panel-upscale')
+        upscale: document.getElementById('panel-upscale'),
+        remove: document.getElementById('panel-remove')
       };
       const tabToPath = {
         convert: localePathFor('/convert', locale),
         crop: localePathFor('/crop', locale),
         compress: localePathFor('/compress', locale),
-        upscale: localePathFor('/upscale', locale)
+        upscale: localePathFor('/upscale', locale),
+        remove: localePathFor('/remove', locale)
       };
 
       function setStatus(el, message, type) {
@@ -2051,14 +2760,24 @@
       }
 
       function setActiveTab(tab, shouldUpdateUrl = false) {
-        tabButtons.forEach((b) => b.classList.toggle('active', b.dataset.tab === tab));
+        const nextTab = panels[tab] ? tab : 'convert';
+        tabButtons.forEach((b) => b.classList.toggle('active', b.dataset.tab === nextTab));
         Object.entries(panels).forEach(([name, panel]) => {
-          panel.classList.toggle('active', name === tab);
+          panel.classList.toggle('active', name === nextTab);
         });
-        updateHeroForTab(tab);
+        updateHeroForTab(nextTab);
+        if (nextTab === 'remove') {
+          setTimeout(() => {
+            refreshRemoveViewportLayout();
+          }, 0);
+        }
 
-        if (shouldUpdateUrl && tabToPath[tab]) {
-          history.replaceState(null, '', tabToPath[tab]);
+        try {
+          localStorage.setItem('imgconvertcrop:lastTab', nextTab);
+        } catch (_e) {}
+
+        if (shouldUpdateUrl && tabToPath[nextTab]) {
+          history.replaceState(null, '', tabToPath[nextTab]);
         }
       }
 
@@ -2068,7 +2787,29 @@
         });
       });
 
-      setActiveTab(pageConfig.activeTab || 'convert', false);
+      let initialTab = pageConfig.activeTab || 'convert';
+      if ((pageConfig.basePath || '/') === '/' && initialTab === 'convert') {
+        try {
+          const rememberedTab = localStorage.getItem('imgconvertcrop:lastTab');
+          if (rememberedTab && panels[rememberedTab]) {
+            initialTab = rememberedTab;
+          }
+        } catch (_e) {}
+      }
+      setActiveTab(initialTab, false);
+
+      document.querySelectorAll('[data-file-target]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-file-target');
+          const input = document.getElementById(targetId);
+          if (input) input.click();
+        });
+      });
+      document.querySelectorAll('input[type="file"]').forEach((input) => {
+        input.addEventListener('change', () => {
+          syncFilePickerLabel(input);
+        });
+      });
 
       if (pageConfig.convertFormat) {
         document.getElementById('convertFormat').value = pageConfig.convertFormat;
@@ -2819,6 +3560,1132 @@
           setUpscaleBusy(false);
         }
       });
+
+      // Remove tab
+      const removeCanvas = document.getElementById('removeCanvas');
+      const removeWorkspace = document.getElementById('removeWorkspace');
+      const removeStage = document.getElementById('removeStage');
+      const removeBusyOverlay = document.getElementById('removeBusyOverlay');
+      const removeEmptyState = document.getElementById('removeEmptyState');
+      const removeCtx = removeCanvas.getContext('2d');
+      const removeStatus = document.getElementById('removeStatus');
+      const removeImageInput = document.getElementById('removeImage');
+      const removeBrushSize = document.getElementById('removeBrushSize');
+      const removeBrushDownBtn = document.getElementById('removeBrushDownBtn');
+      const removeBrushUpBtn = document.getElementById('removeBrushUpBtn');
+      const removeBrushSizeValue = document.getElementById('removeBrushSizeValue');
+      const removeAlgorithmInputs = Array.from(document.querySelectorAll('input[name="removeAlgorithm"]'));
+      const removeDownloadBtn = document.getElementById('removeDownloadBtn');
+      const removeUndoBtn = document.getElementById('removeUndoBtn');
+      const removeZoomInBtn = document.getElementById('removeZoomInBtn');
+      const removeZoomOutBtn = document.getElementById('removeZoomOutBtn');
+      const removeZoomResetBtn = document.getElementById('removeZoomResetBtn');
+      const removeZoomLabel = document.getElementById('removeZoomLabel');
+
+      const removeState = {
+        file: null,
+        sourceCanvas: null,
+        maskCanvas: document.createElement('canvas'),
+        overlayCanvas: document.createElement('canvas'),
+        fitZoom: 1,
+        zoomLevel: 1,
+        drawing: false,
+        lastPoint: null,
+        hasMask: false,
+        running: false,
+        resultBlob: null,
+        historyStack: [],
+        touchGesture: {
+          active: false,
+          startDistance: 0,
+          startZoomLevel: 1,
+          startActualZoom: 1,
+          startScrollLeft: 0,
+          startScrollTop: 0,
+          startMidX: 0,
+          startMidY: 0
+        },
+        hasUnsavedProgress: false
+      };
+      const removeMaskCtx = removeState.maskCanvas.getContext('2d');
+      const removeOverlayCtx = removeState.overlayCanvas.getContext('2d');
+
+      function setRemoveBusy(isBusy) {
+        removeBusyOverlay.classList.toggle('is-busy', Boolean(isBusy));
+      }
+
+      function copyCanvas(canvas) {
+        const c = document.createElement('canvas');
+        c.width = canvas.width;
+        c.height = canvas.height;
+        c.getContext('2d').drawImage(canvas, 0, 0);
+        return c;
+      }
+
+      function refreshRemoveUndoState() {
+        removeUndoBtn.disabled = removeState.historyStack.length === 0 || removeState.running;
+      }
+
+      function syncRemoveBrushInputs(value) {
+        const n = Math.max(4, Math.min(120, Math.round(Number(value) || 28)));
+        removeBrushSize.value = String(n);
+        removeBrushSizeValue.textContent = `${n} px`;
+        return n;
+      }
+
+      function setRemoveUnsavedProgress(value) {
+        removeState.hasUnsavedProgress = Boolean(value);
+      }
+
+      function getSelectedRemoveAlgorithm() {
+        const picked = removeAlgorithmInputs.find((input) => input.checked);
+        return picked ? picked.value : 'ai';
+      }
+
+      function computeRemoveFitZoom() {
+        if (!removeState.sourceCanvas || !removeWorkspace) return 1;
+        const bounds = removeWorkspace.getBoundingClientRect();
+        const maxW = Math.max(140, (bounds.width || removeWorkspace.clientWidth || removeCanvas.width) - 18);
+        const maxH = Math.max(140, (removeWorkspace.clientHeight || 520) - 18);
+        const zoomByWidth = maxW / removeCanvas.width;
+        const zoomByHeight = maxH / removeCanvas.height;
+        return Math.max(0.08, Math.min(1, zoomByWidth, zoomByHeight));
+      }
+
+      function applyRemoveCanvasScale() {
+        const zoom = Math.max(0.08, removeState.fitZoom * removeState.zoomLevel);
+        removeCanvas.style.width = `${Math.max(1, Math.round(removeCanvas.width * zoom))}px`;
+        removeCanvas.style.height = `${Math.max(1, Math.round(removeCanvas.height * zoom))}px`;
+        removeZoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+      }
+
+      function updateRemoveWorkspaceSize() {
+        if (!removeWorkspace) return;
+        const viewportHeight =
+          (window.visualViewport && window.visualViewport.height) ||
+          window.innerHeight ||
+          document.documentElement.clientHeight ||
+          800;
+        const workspaceTop = removeWorkspace.getBoundingClientRect().top || 0;
+        const isMobileViewport = window.matchMedia('(max-width: 760px)').matches;
+        const reservedBottom = isMobileViewport ? 190 : 230;
+        const availableByTop = Math.max(220, Math.floor(viewportHeight - workspaceTop - reservedBottom));
+        const preferredByViewport = Math.floor(viewportHeight * (isMobileViewport ? 0.52 : 0.58));
+        const minHeight = isMobileViewport ? 250 : 320;
+        const maxHeight = Math.floor(viewportHeight * (isMobileViewport ? 0.68 : 0.74));
+        const targetHeight = Math.max(minHeight, Math.min(Math.max(preferredByViewport, availableByTop), maxHeight));
+        removeWorkspace.style.height = `${targetHeight}px`;
+      }
+
+      function refreshRemoveViewportLayout() {
+        updateRemoveWorkspaceSize();
+        if (removeState.sourceCanvas) {
+          removeState.fitZoom = computeRemoveFitZoom();
+          applyRemoveCanvasScale();
+        }
+        if (removeStage) {
+          // Keep small images centered while allowing scroll for large zoom levels.
+          removeStage.style.minHeight = '100%';
+          removeStage.style.minWidth = '100%';
+        }
+      }
+
+      function setRemoveZoomLevel(nextLevel) {
+        const level = Math.max(0.5, Math.min(6, Number(nextLevel) || 1));
+        removeState.zoomLevel = level;
+        applyRemoveCanvasScale();
+      }
+
+      function getTouchDistance(t0, t1) {
+        const dx = t1.clientX - t0.clientX;
+        const dy = t1.clientY - t0.clientY;
+        return Math.hypot(dx, dy);
+      }
+
+      function getTouchMidpoint(t0, t1) {
+        return {
+          x: (t0.clientX + t1.clientX) / 2,
+          y: (t0.clientY + t1.clientY) / 2
+        };
+      }
+
+      function startTouchGesture(e) {
+        if (!removeState.sourceCanvas || removeState.running) return;
+        if (!e.touches || e.touches.length !== 2) return;
+        const t0 = e.touches[0];
+        const t1 = e.touches[1];
+        const distance = getTouchDistance(t0, t1);
+        if (!Number.isFinite(distance) || distance <= 0) return;
+        const mid = getTouchMidpoint(t0, t1);
+        removeState.touchGesture.active = true;
+        removeState.touchGesture.startDistance = distance;
+        removeState.touchGesture.startZoomLevel = removeState.zoomLevel;
+        removeState.touchGesture.startActualZoom = Math.max(0.08, removeState.fitZoom * removeState.zoomLevel);
+        removeState.touchGesture.startScrollLeft = removeWorkspace.scrollLeft;
+        removeState.touchGesture.startScrollTop = removeWorkspace.scrollTop;
+        removeState.touchGesture.startMidX = mid.x;
+        removeState.touchGesture.startMidY = mid.y;
+      }
+
+      function updateTouchGesture(e) {
+        if (!removeState.touchGesture.active) return;
+        if (!e.touches || e.touches.length !== 2) return;
+        const t0 = e.touches[0];
+        const t1 = e.touches[1];
+        const currentDistance = getTouchDistance(t0, t1);
+        if (!Number.isFinite(currentDistance) || currentDistance <= 0) return;
+        const currentMid = getTouchMidpoint(t0, t1);
+        const rect = removeWorkspace.getBoundingClientRect();
+        const startActualZoom = removeState.touchGesture.startActualZoom;
+        if (!Number.isFinite(startActualZoom) || startActualZoom <= 0) return;
+
+        const scaleFactor = currentDistance / removeState.touchGesture.startDistance;
+        const nextZoomLevel = removeState.touchGesture.startZoomLevel * scaleFactor;
+        setRemoveZoomLevel(nextZoomLevel);
+        const nextActualZoom = Math.max(0.08, removeState.fitZoom * removeState.zoomLevel);
+
+        const startLocalX = removeState.touchGesture.startMidX - rect.left;
+        const startLocalY = removeState.touchGesture.startMidY - rect.top;
+        const currentLocalX = currentMid.x - rect.left;
+        const currentLocalY = currentMid.y - rect.top;
+
+        const worldX = (removeState.touchGesture.startScrollLeft + startLocalX) / startActualZoom;
+        const worldY = (removeState.touchGesture.startScrollTop + startLocalY) / startActualZoom;
+        removeWorkspace.scrollLeft = Math.max(0, worldX * nextActualZoom - currentLocalX);
+        removeWorkspace.scrollTop = Math.max(0, worldY * nextActualZoom - currentLocalY);
+      }
+
+      function endTouchGesture() {
+        removeState.touchGesture.active = false;
+      }
+
+      function resetRemoveOutputState() {
+        removeState.resultBlob = null;
+        removeDownloadBtn.disabled = true;
+      }
+
+      function drawRemoveCanvas() {
+        removeCtx.clearRect(0, 0, removeCanvas.width, removeCanvas.height);
+        removeCtx.fillStyle = '#dfe9f8';
+        removeCtx.fillRect(0, 0, removeCanvas.width, removeCanvas.height);
+
+        if (!removeState.sourceCanvas) {
+          removeEmptyState.classList.remove('hidden');
+          return;
+        }
+        removeEmptyState.classList.add('hidden');
+
+        removeCtx.drawImage(removeState.sourceCanvas, 0, 0);
+
+        // Build tinted overlay in an offscreen canvas, then draw it on top of image.
+        removeOverlayCtx.clearRect(0, 0, removeState.overlayCanvas.width, removeState.overlayCanvas.height);
+        removeOverlayCtx.globalAlpha = 1;
+        removeOverlayCtx.globalCompositeOperation = 'source-over';
+        removeOverlayCtx.fillStyle = '#ff2f55';
+        removeOverlayCtx.fillRect(0, 0, removeState.overlayCanvas.width, removeState.overlayCanvas.height);
+        removeOverlayCtx.globalCompositeOperation = 'destination-in';
+        removeOverlayCtx.drawImage(removeState.maskCanvas, 0, 0);
+        removeOverlayCtx.globalCompositeOperation = 'source-over';
+
+        removeCtx.save();
+        removeCtx.globalAlpha = 0.34;
+        removeCtx.drawImage(removeState.overlayCanvas, 0, 0);
+        removeCtx.restore();
+      }
+
+      function getRemovePointer(e) {
+        const rect = removeCanvas.getBoundingClientRect();
+        const touch = e.touches && e.touches[0];
+        const clientX = touch ? touch.clientX : e.clientX;
+        const clientY = touch ? touch.clientY : e.clientY;
+        const cssX = clientX - rect.left;
+        const cssY = clientY - rect.top;
+        const scaleX = rect.width > 0 ? removeCanvas.width / rect.width : 1;
+        const scaleY = rect.height > 0 ? removeCanvas.height / rect.height : 1;
+        return {
+          x: Math.max(0, Math.min(removeCanvas.width - 1, cssX * scaleX)),
+          y: Math.max(0, Math.min(removeCanvas.height - 1, cssY * scaleY))
+        };
+      }
+
+      function paintMaskDot(point, radius) {
+        removeMaskCtx.fillStyle = '#ffffff';
+        removeMaskCtx.beginPath();
+        removeMaskCtx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+        removeMaskCtx.fill();
+      }
+
+      function paintMaskSegment(a, b, radius) {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.hypot(dx, dy);
+        const step = Math.max(1, radius * 0.45);
+        const count = Math.max(1, Math.ceil(dist / step));
+        for (let i = 0; i <= count; i += 1) {
+          const tVal = i / count;
+          paintMaskDot(
+            { x: a.x + dx * tVal, y: a.y + dy * tVal },
+            radius
+          );
+        }
+      }
+
+      function dilateMaskData(maskData, width, height, radius) {
+        if (!radius || radius <= 0) return maskData;
+        const out = new Uint8Array(maskData.length);
+        const r = Math.max(1, Math.round(radius));
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const idx = y * width + x;
+            if (!maskData[idx]) continue;
+            for (let ny = Math.max(0, y - r); ny <= Math.min(height - 1, y + r); ny += 1) {
+              for (let nx = Math.max(0, x - r); nx <= Math.min(width - 1, x + r); nx += 1) {
+                const dx = nx - x;
+                const dy = ny - y;
+                if (dx * dx + dy * dy > r * r) continue;
+                out[ny * width + nx] = 1;
+              }
+            }
+          }
+        }
+        return out;
+      }
+
+      function blurRegionFromSource(src, width, height, minX, minY, maxX, maxY) {
+        const regionW = maxX - minX + 1;
+        const regionH = maxY - minY + 1;
+        const size = regionW * regionH;
+        const blurR = new Float32Array(size);
+        const blurG = new Float32Array(size);
+        const blurB = new Float32Array(size);
+        const kernel = [1, 2, 1, 2, 4, 2, 1, 2, 1];
+
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            let rs = 0;
+            let gs = 0;
+            let bs = 0;
+            let ws = 0;
+            let k = 0;
+            for (let ny = Math.max(0, y - 1); ny <= Math.min(height - 1, y + 1); ny += 1) {
+              for (let nx = Math.max(0, x - 1); nx <= Math.min(width - 1, x + 1); nx += 1) {
+                const w = kernel[k++];
+                const base = (ny * width + nx) * 4;
+                rs += src[base] * w;
+                gs += src[base + 1] * w;
+                bs += src[base + 2] * w;
+                ws += w;
+              }
+            }
+            const li = (y - minY) * regionW + (x - minX);
+            blurR[li] = rs / ws;
+            blurG[li] = gs / ws;
+            blurB[li] = bs / ws;
+          }
+        }
+        return { blurR, blurG, blurB, regionW, regionH };
+      }
+
+      function buildNearestBoundaryMap(workMask, width, height, minX, minY, maxX, maxY) {
+        const regionW = maxX - minX + 1;
+        const regionH = maxY - minY + 1;
+        const regionSize = regionW * regionH;
+        const nearest = new Int32Array(regionSize);
+        nearest.fill(-1);
+        const dist = new Int16Array(regionSize);
+        dist.fill(-1);
+        const qX = new Int32Array(regionSize);
+        const qY = new Int32Array(regionSize);
+        let head = 0;
+        let tail = 0;
+
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (workMask[idx]) continue;
+            const li = (y - minY) * regionW + (x - minX);
+            nearest[li] = li;
+            dist[li] = 0;
+            qX[tail] = x;
+            qY[tail] = y;
+            tail += 1;
+          }
+        }
+
+        while (head < tail) {
+          const x = qX[head];
+          const y = qY[head];
+          head += 1;
+          const li = (y - minY) * regionW + (x - minX);
+          const sourceLi = nearest[li];
+          const neighbors = [
+            [x - 1, y],
+            [x + 1, y],
+            [x, y - 1],
+            [x, y + 1]
+          ];
+          for (const [nx, ny] of neighbors) {
+            if (nx < minX || nx > maxX || ny < minY || ny > maxY) continue;
+            const nLi = (ny - minY) * regionW + (nx - minX);
+            if (nearest[nLi] !== -1) continue;
+            nearest[nLi] = sourceLi;
+            dist[nLi] = dist[li] + 1;
+            qX[tail] = nx;
+            qY[tail] = ny;
+            tail += 1;
+          }
+        }
+
+        return { nearest, dist, regionW, regionH };
+      }
+
+      function buildSeamMask(workMask, maskData, width, height, minX, minY, maxX, maxY) {
+        const seam = new Uint8Array(workMask.length);
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (!workMask[idx]) continue;
+            if (!maskData[idx]) {
+              seam[idx] = 1;
+              continue;
+            }
+            const neighbors = [
+              [x - 1, y],
+              [x + 1, y],
+              [x, y - 1],
+              [x, y + 1]
+            ];
+            for (const [nx, ny] of neighbors) {
+              if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+              const nIdx = ny * width + nx;
+              if (!workMask[nIdx]) {
+                seam[idx] = 1;
+                break;
+              }
+            }
+          }
+        }
+        return seam;
+      }
+
+      async function applyTextureTransfer(out, src, workMask, width, height, minX, minY, maxX, maxY, detailGain = 0.8) {
+        const { blurR, blurG, blurB, regionW, regionH } = blurRegionFromSource(src, width, height, minX, minY, maxX, maxY);
+        const { nearest, dist } = buildNearestBoundaryMap(workMask, width, height, minX, minY, maxX, maxY);
+
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (!workMask[idx]) continue;
+            const li = (y - minY) * regionW + (x - minX);
+            const nearestLi = nearest[li];
+            if (nearestLi < 0) continue;
+            const nearestX = (nearestLi % regionW) + minX;
+            const nearestY = Math.floor(nearestLi / regionW) + minY;
+            const nearestBase = (nearestY * width + nearestX) * 4;
+            const detailR = src[nearestBase] - blurR[nearestLi];
+            const detailG = src[nearestBase + 1] - blurG[nearestLi];
+            const detailB = src[nearestBase + 2] - blurB[nearestLi];
+
+            const d = Math.max(0, dist[li]);
+            const adaptiveGain = detailGain * (0.95 - Math.min(0.35, d * 0.025));
+            const base = idx * 4;
+            out[base] = Math.max(0, Math.min(255, Math.round(out[base] + detailR * adaptiveGain)));
+            out[base + 1] = Math.max(0, Math.min(255, Math.round(out[base + 1] + detailG * adaptiveGain)));
+            out[base + 2] = Math.max(0, Math.min(255, Math.round(out[base + 2] + detailB * adaptiveGain)));
+          }
+          if (y % 24 === 0) await yieldToBrowser();
+        }
+      }
+
+      async function applyAIGenerativeFill(out, src, maskData, workMask, width, height, minX, minY, maxX, maxY, strength = 0.88) {
+        const { nearest, dist, regionW } = buildNearestBoundaryMap(workMask, width, height, minX, minY, maxX, maxY);
+
+        const boundaryPool = [];
+        let lumSum = 0;
+        let lumSqSum = 0;
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (workMask[idx]) continue;
+            const neighbors = [
+              [x - 1, y],
+              [x + 1, y],
+              [x, y - 1],
+              [x, y + 1]
+            ];
+            let touchesMask = false;
+            for (const [nx, ny] of neighbors) {
+              if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+              if (workMask[ny * width + nx]) {
+                touchesMask = true;
+                break;
+              }
+            }
+            if (!touchesMask) continue;
+            boundaryPool.push([x, y]);
+            const b = idx * 4;
+            const lum = src[b] * 0.299 + src[b + 1] * 0.587 + src[b + 2] * 0.114;
+            lumSum += lum;
+            lumSqSum += lum * lum;
+          }
+        }
+
+        const count = Math.max(1, boundaryPool.length);
+        const lumMean = lumSum / count;
+        const lumVar = Math.max(0, lumSqSum / count - lumMean * lumMean);
+        const noiseScale = Math.min(10, Math.sqrt(lumVar) * 0.18);
+
+        let centerX = 0;
+        let centerY = 0;
+        let centerCount = 0;
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (!maskData[idx]) continue;
+            centerX += x;
+            centerY += y;
+            centerCount += 1;
+          }
+        }
+        centerX = centerCount ? centerX / centerCount : (minX + maxX) * 0.5;
+        centerY = centerCount ? centerY / centerCount : (minY + maxY) * 0.5;
+
+        const passes = Math.max(6, Math.min(9, Math.round(3 + strength * 7)));
+        for (let pass = 0; pass < passes; pass += 1) {
+          for (let y = minY; y <= maxY; y += 1) {
+            for (let x = minX; x <= maxX; x += 1) {
+              const idx = y * width + x;
+              if (!workMask[idx]) continue;
+              const li = (y - minY) * regionW + (x - minX);
+              const nearestLi = nearest[li];
+              if (nearestLi < 0) continue;
+
+              const nearestX = (nearestLi % regionW) + minX;
+              const nearestY = Math.floor(nearestLi / regionW) + minY;
+              const nBase = (nearestY * width + nearestX) * 4;
+
+              const mirrorX = Math.max(0, Math.min(width - 1, Math.round(centerX - (x - centerX))));
+              const mirrorY = Math.max(0, Math.min(height - 1, Math.round(centerY - (y - centerY))));
+              const mIdx = mirrorY * width + mirrorX;
+              const mBase = (!workMask[mIdx] ? mIdx : nearestY * width + nearestX) * 4;
+
+              const [rx, ry] = boundaryPool.length
+                ? boundaryPool[(x * 73 + y * 151 + pass * 977) % boundaryPool.length]
+                : [nearestX, nearestY];
+              const rBase = (ry * width + rx) * 4;
+
+              const d = Math.max(0, dist[li]);
+              const depthBoost = Math.min(0.38, d * 0.024);
+              const alpha = Math.min(0.97, strength + depthBoost);
+
+              const targetR = src[nBase] * 0.6 + src[mBase] * 0.15 + src[rBase] * 0.25;
+              const targetG = src[nBase + 1] * 0.6 + src[mBase + 1] * 0.15 + src[rBase + 1] * 0.25;
+              const targetB = src[nBase + 2] * 0.6 + src[mBase + 2] * 0.15 + src[rBase + 2] * 0.25;
+
+              const jitter = noiseScale * (0.42 / (pass + 1));
+              const j = () => (Math.random() * 2 - 1) * jitter;
+              const base = idx * 4;
+              out[base] = Math.max(0, Math.min(255, Math.round(out[base] * (1 - alpha) + (targetR + j()) * alpha)));
+              out[base + 1] = Math.max(0, Math.min(255, Math.round(out[base + 1] * (1 - alpha) + (targetG + j()) * alpha)));
+              out[base + 2] = Math.max(0, Math.min(255, Math.round(out[base + 2] * (1 - alpha) + (targetB + j()) * alpha)));
+            }
+            if (y % 24 === 0) await yieldToBrowser();
+          }
+        }
+      }
+
+      async function applyAggressiveCrispFill(out, src, maskData, workMask, width, height, minX, minY, maxX, maxY) {
+        const { nearest, regionW } = buildNearestBoundaryMap(workMask, width, height, minX, minY, maxX, maxY);
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (!workMask[idx]) continue;
+            const li = (y - minY) * regionW + (x - minX);
+            const nearestLi = nearest[li];
+            if (nearestLi < 0) continue;
+            const nearestX = (nearestLi % regionW) + minX;
+            const nearestY = Math.floor(nearestLi / regionW) + minY;
+            const srcBase = (nearestY * width + nearestX) * 4;
+            const base = idx * 4;
+            const alpha = maskData[idx] ? 0.96 : 0.72;
+            out[base] = Math.round(out[base] * (1 - alpha) + src[srcBase] * alpha);
+            out[base + 1] = Math.round(out[base + 1] * (1 - alpha) + src[srcBase + 1] * alpha);
+            out[base + 2] = Math.round(out[base + 2] * (1 - alpha) + src[srcBase + 2] * alpha);
+          }
+          if (y % 24 === 0) await yieldToBrowser();
+        }
+      }
+
+      async function smoothMaskedRegion(out, maskData, width, height, minX, minY, maxX, maxY, passes) {
+        const kernel = [1, 2, 1, 2, 4, 2, 1, 2, 1];
+        for (let pass = 0; pass < passes; pass += 1) {
+          const src = new Uint8ClampedArray(out);
+          for (let y = minY; y <= maxY; y += 1) {
+            for (let x = minX; x <= maxX; x += 1) {
+              const idx = y * width + x;
+              if (!maskData[idx]) continue;
+              let rs = 0;
+              let gs = 0;
+              let bs = 0;
+              let ws = 0;
+              let k = 0;
+              for (let ny = Math.max(0, y - 1); ny <= Math.min(height - 1, y + 1); ny += 1) {
+                for (let nx = Math.max(0, x - 1); nx <= Math.min(width - 1, x + 1); nx += 1) {
+                  const w = kernel[k++];
+                  const b = (ny * width + nx) * 4;
+                  rs += src[b] * w;
+                  gs += src[b + 1] * w;
+                  bs += src[b + 2] * w;
+                  ws += w;
+                }
+              }
+              const base = idx * 4;
+              out[base] = Math.round(rs / ws);
+              out[base + 1] = Math.round(gs / ws);
+              out[base + 2] = Math.round(bs / ws);
+            }
+            if (y % 24 === 0) await yieldToBrowser();
+          }
+        }
+      }
+
+      async function featherSeamTowardBoundary(out, src, workMask, width, height, minX, minY, maxX, maxY) {
+        const seam = buildSeamMask(workMask, workMask, width, height, minX, minY, maxX, maxY);
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (!seam[idx]) continue;
+            let rs = 0;
+            let gs = 0;
+            let bs = 0;
+            let count = 0;
+            const neighbors = [
+              [x - 1, y],
+              [x + 1, y],
+              [x, y - 1],
+              [x, y + 1]
+            ];
+            for (const [nx, ny] of neighbors) {
+              if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+              const nIdx = ny * width + nx;
+              if (workMask[nIdx]) continue;
+              const nBase = nIdx * 4;
+              rs += src[nBase];
+              gs += src[nBase + 1];
+              bs += src[nBase + 2];
+              count += 1;
+            }
+            if (!count) continue;
+            const base = idx * 4;
+            const alpha = 0.38;
+            const br = rs / count;
+            const bg = gs / count;
+            const bb = bs / count;
+            out[base] = Math.round(out[base] * (1 - alpha) + br * alpha);
+            out[base + 1] = Math.round(out[base + 1] * (1 - alpha) + bg * alpha);
+            out[base + 2] = Math.round(out[base + 2] * (1 - alpha) + bb * alpha);
+          }
+          if (y % 24 === 0) await yieldToBrowser();
+        }
+      }
+
+      function estimateBoundaryVariance(src, workMask, width, height, minX, minY, maxX, maxY) {
+        let sum = 0;
+        let sumSq = 0;
+        let count = 0;
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (workMask[idx]) continue;
+            const neighbors = [
+              [x - 1, y],
+              [x + 1, y],
+              [x, y - 1],
+              [x, y + 1]
+            ];
+            let touchesMask = false;
+            for (const [nx, ny] of neighbors) {
+              if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
+              if (workMask[ny * width + nx]) {
+                touchesMask = true;
+                break;
+              }
+            }
+            if (!touchesMask) continue;
+            const base = idx * 4;
+            const lum = src[base] * 0.299 + src[base + 1] * 0.587 + src[base + 2] * 0.114;
+            sum += lum;
+            sumSq += lum * lum;
+            count += 1;
+          }
+        }
+        if (!count) return 0;
+        const mean = sum / count;
+        return Math.max(0, sumSq / count - mean * mean);
+      }
+
+      async function inpaintMaskedImage(sourceImageData, maskData, options = {}) {
+        const width = sourceImageData.width;
+        const height = sourceImageData.height;
+        const src = sourceImageData.data;
+        const algorithm =
+          options.algorithm === 'aggressive'
+            ? 'aggressive'
+            : options.algorithm === 'ai'
+              ? 'ai'
+            : options.algorithm === 'texture'
+              ? 'texture'
+              : 'natural';
+        const brushSize = Number(options.brushSize) || 28;
+        const onProgress = typeof options.onProgress === 'function' ? options.onProgress : null;
+        const dilateRadius =
+          algorithm === 'aggressive'
+            ? Math.max(4, Math.min(14, Math.round(brushSize / 9)))
+            : algorithm === 'ai'
+              ? Math.max(4, Math.min(12, Math.round(brushSize / 10)))
+            : algorithm === 'texture'
+              ? Math.max(2, Math.min(8, Math.round(brushSize / 14)))
+            : 0;
+        const workMask = dilateRadius > 0 ? dilateMaskData(maskData, width, height, dilateRadius) : maskData;
+        const out = new Uint8ClampedArray(src);
+        const total = width * height;
+        const known = new Uint8Array(total);
+
+        let unknownCount = 0;
+        let minX = width;
+        let minY = height;
+        let maxX = -1;
+        let maxY = -1;
+
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const idx = y * width + x;
+            if (workMask[idx] > 0) {
+              unknownCount += 1;
+              if (x < minX) minX = x;
+              if (y < minY) minY = y;
+              if (x > maxX) maxX = x;
+              if (y > maxY) maxY = y;
+            } else {
+              known[idx] = 1;
+            }
+          }
+        }
+
+        if (unknownCount === 0) return new ImageData(out, width, height);
+
+        const pad = 2;
+        minX = Math.max(0, minX - pad);
+        minY = Math.max(0, minY - pad);
+        maxX = Math.min(width - 1, maxX + pad);
+        maxY = Math.min(height - 1, maxY + pad);
+        const regionW = maxX - minX + 1;
+        const regionH = maxY - minY + 1;
+
+        const rA = new Float32Array(total);
+        const gA = new Float32Array(total);
+        const bA = new Float32Array(total);
+        const rB = new Float32Array(total);
+        const gB = new Float32Array(total);
+        const bB = new Float32Array(total);
+
+        for (let i = 0; i < total; i += 1) {
+          const base = i * 4;
+          rA[i] = src[base];
+          gA[i] = src[base + 1];
+          bA[i] = src[base + 2];
+        }
+
+        // Seed unknown pixels with local boundary averages to avoid hard directional artifacts.
+        const seedPasses =
+          algorithm === 'aggressive' ? 16 : algorithm === 'ai' ? 18 : algorithm === 'texture' ? 12 : 10;
+        for (let pass = 0; pass < seedPasses; pass += 1) {
+          for (let y = minY; y <= maxY; y += 1) {
+            for (let x = minX; x <= maxX; x += 1) {
+              const idx = y * width + x;
+              if (known[idx]) continue;
+              let rs = 0;
+              let gs = 0;
+              let bs = 0;
+              let count = 0;
+              for (let ny = Math.max(0, y - 1); ny <= Math.min(height - 1, y + 1); ny += 1) {
+                for (let nx = Math.max(0, x - 1); nx <= Math.min(width - 1, x + 1); nx += 1) {
+                  const nIdx = ny * width + nx;
+                  if (!known[nIdx]) continue;
+                  rs += rA[nIdx];
+                  gs += gA[nIdx];
+                  bs += bA[nIdx];
+                  count += 1;
+                }
+              }
+              if (count > 0) {
+                rB[idx] = rs / count;
+                gB[idx] = gs / count;
+                bB[idx] = bs / count;
+              } else {
+                rB[idx] = rA[idx];
+                gB[idx] = gA[idx];
+                bB[idx] = bA[idx];
+              }
+            }
+          }
+          for (let y = minY; y <= maxY; y += 1) {
+            for (let x = minX; x <= maxX; x += 1) {
+              const idx = y * width + x;
+              if (known[idx]) continue;
+              rA[idx] = rB[idx];
+              gA[idx] = gB[idx];
+              bA[idx] = bB[idx];
+            }
+          }
+          await yieldToBrowser();
+        }
+
+        // Harmonic inpainting (Jacobi) gives isotropic fills and avoids diagonal/star streak artifacts.
+        const iterations =
+          algorithm === 'aggressive'
+            ? Math.max(80, Math.min(420, Math.round(Math.max(regionW, regionH) * 1.1)))
+            : algorithm === 'ai'
+              ? Math.max(120, Math.min(560, Math.round(Math.max(regionW, regionH) * 1.25)))
+            : algorithm === 'texture'
+              ? Math.max(70, Math.min(320, Math.round(Math.max(regionW, regionH) * 0.9)))
+            : Math.max(50, Math.min(260, Math.round(Math.max(regionW, regionH) * 0.75)));
+        for (let iter = 0; iter < iterations; iter += 1) {
+          for (let y = minY; y <= maxY; y += 1) {
+            for (let x = minX; x <= maxX; x += 1) {
+              const idx = y * width + x;
+              if (known[idx]) {
+                rB[idx] = rA[idx];
+                gB[idx] = gA[idx];
+                bB[idx] = bA[idx];
+                continue;
+              }
+
+              const l = y * width + Math.max(0, x - 1);
+              const r = y * width + Math.min(width - 1, x + 1);
+              const u = Math.max(0, y - 1) * width + x;
+              const d = Math.min(height - 1, y + 1) * width + x;
+
+              rB[idx] = (rA[l] + rA[r] + rA[u] + rA[d]) * 0.25;
+              gB[idx] = (gA[l] + gA[r] + gA[u] + gA[d]) * 0.25;
+              bB[idx] = (bA[l] + bA[r] + bA[u] + bA[d]) * 0.25;
+            }
+          }
+
+          for (let y = minY; y <= maxY; y += 1) {
+            for (let x = minX; x <= maxX; x += 1) {
+              const idx = y * width + x;
+              if (known[idx]) continue;
+              rA[idx] = rB[idx];
+              gA[idx] = gB[idx];
+              bA[idx] = bB[idx];
+            }
+          }
+
+          if (typeof onProgress === 'function') {
+            onProgress((iter + 1) / iterations);
+          }
+          if (iter % 6 === 0) {
+            await yieldToBrowser();
+          }
+        }
+
+        for (let y = minY; y <= maxY; y += 1) {
+          for (let x = minX; x <= maxX; x += 1) {
+            const idx = y * width + x;
+            if (known[idx]) continue;
+            const base = idx * 4;
+            out[base] = Math.max(0, Math.min(255, Math.round(rA[idx])));
+            out[base + 1] = Math.max(0, Math.min(255, Math.round(gA[idx])));
+            out[base + 2] = Math.max(0, Math.min(255, Math.round(bA[idx])));
+          }
+        }
+
+        if (algorithm === 'aggressive') {
+          await applyAggressiveCrispFill(out, src, maskData, workMask, width, height, minX, minY, maxX, maxY);
+          const seamMask = buildSeamMask(workMask, maskData, width, height, minX, minY, maxX, maxY);
+          await smoothMaskedRegion(out, seamMask, width, height, minX, minY, maxX, maxY, 1);
+        } else if (algorithm === 'ai') {
+          await applyAIGenerativeFill(out, src, maskData, workMask, width, height, minX, minY, maxX, maxY, 0.88);
+          await applyAIGenerativeFill(out, src, maskData, workMask, width, height, minX, minY, maxX, maxY, 0.58);
+          const boundaryVar = estimateBoundaryVariance(src, workMask, width, height, minX, minY, maxX, maxY);
+          if (boundaryVar < 260) {
+            // Smooth backgrounds (dark walls, skies, gradients): avoid synthetic streak/noise artifacts.
+            await smoothMaskedRegion(out, maskData, width, height, minX, minY, maxX, maxY, 3);
+            const seamMaskSoft = buildSeamMask(workMask, maskData, width, height, minX, minY, maxX, maxY);
+            await smoothMaskedRegion(out, seamMaskSoft, width, height, minX, minY, maxX, maxY, 2);
+          } else {
+            await applyTextureTransfer(out, src, workMask, width, height, minX, minY, maxX, maxY, 0.68);
+            await applyTextureTransfer(out, src, workMask, width, height, minX, minY, maxX, maxY, 0.44);
+            await applyTextureTransfer(out, src, workMask, width, height, minX, minY, maxX, maxY, 0.24);
+          }
+          const seamMask = buildSeamMask(workMask, maskData, width, height, minX, minY, maxX, maxY);
+          await smoothMaskedRegion(out, seamMask, width, height, minX, minY, maxX, maxY, 2);
+          await featherSeamTowardBoundary(out, src, workMask, width, height, minX, minY, maxX, maxY);
+          await featherSeamTowardBoundary(out, src, workMask, width, height, minX, minY, maxX, maxY);
+        } else if (algorithm === 'texture') {
+          await applyTextureTransfer(out, src, workMask, width, height, minX, minY, maxX, maxY, 0.72);
+          await applyTextureTransfer(out, src, workMask, width, height, minX, minY, maxX, maxY, 0.42);
+          const seamMask = buildSeamMask(workMask, maskData, width, height, minX, minY, maxX, maxY);
+          await smoothMaskedRegion(out, seamMask, width, height, minX, minY, maxX, maxY, 1);
+        } else {
+          // Natural mode: smooth masked interior and softly feather boundaries into surrounding gradients.
+          await smoothMaskedRegion(out, maskData, width, height, minX, minY, maxX, maxY, 2);
+          await featherSeamTowardBoundary(out, src, workMask, width, height, minX, minY, maxX, maxY);
+        }
+
+        if (typeof onProgress === 'function') onProgress(1);
+        return new ImageData(out, width, height);
+      }
+
+      async function loadRemoveImage(file) {
+        const img = await fileToImage(file);
+        const maxDimension = 1700;
+        const fit = Math.min(1, maxDimension / Math.max(img.width, img.height));
+        const targetW = Math.max(1, Math.round(img.width * fit));
+        const targetH = Math.max(1, Math.round(img.height * fit));
+
+        const baseCanvas = document.createElement('canvas');
+        baseCanvas.width = targetW;
+        baseCanvas.height = targetH;
+        const baseCtx = baseCanvas.getContext('2d');
+        baseCtx.imageSmoothingEnabled = true;
+        baseCtx.imageSmoothingQuality = 'high';
+        baseCtx.drawImage(img, 0, 0, targetW, targetH);
+
+        removeState.sourceCanvas = baseCanvas;
+        removeCanvas.width = targetW;
+        removeCanvas.height = targetH;
+        removeState.maskCanvas.width = targetW;
+        removeState.maskCanvas.height = targetH;
+        removeState.overlayCanvas.width = targetW;
+        removeState.overlayCanvas.height = targetH;
+        removeMaskCtx.clearRect(0, 0, targetW, targetH);
+        removeOverlayCtx.clearRect(0, 0, targetW, targetH);
+        removeState.hasMask = false;
+        removeState.file = file;
+        removeState.historyStack = [];
+        refreshRemoveUndoState();
+        refreshRemoveViewportLayout();
+        setRemoveZoomLevel(1);
+        resetRemoveOutputState();
+        setRemoveUnsavedProgress(false);
+        drawRemoveCanvas();
+      }
+
+      removeImageInput.addEventListener('change', async () => {
+        if (!removeImageInput.files || removeImageInput.files.length === 0) return;
+        try {
+          await loadRemoveImage(removeImageInput.files[0]);
+          setStatus(removeStatus, t('status.removeImageLoaded'), 'ok');
+        } catch {
+          setStatus(removeStatus, t('status.loadFailed'), 'error');
+        }
+      });
+
+      function onRemoveDrawStart(e) {
+        if (!removeState.sourceCanvas || removeState.running) return;
+        if (e.touches && e.touches.length !== 1) return;
+        e.preventDefault();
+        removeState.drawing = true;
+        const p = getRemovePointer(e);
+        removeState.lastPoint = p;
+        const radius = syncRemoveBrushInputs(removeBrushSize.value) / 2;
+        paintMaskDot(p, radius);
+        removeState.hasMask = true;
+        setRemoveUnsavedProgress(true);
+        resetRemoveOutputState();
+        drawRemoveCanvas();
+      }
+
+      function onRemoveDrawMove(e) {
+        if (!removeState.drawing || removeState.running) return;
+        if (e.touches && e.touches.length !== 1) return;
+        e.preventDefault();
+        const p = getRemovePointer(e);
+        const radius = syncRemoveBrushInputs(removeBrushSize.value) / 2;
+        paintMaskSegment(removeState.lastPoint, p, radius);
+        removeState.lastPoint = p;
+        removeState.hasMask = true;
+        setRemoveUnsavedProgress(true);
+        resetRemoveOutputState();
+        drawRemoveCanvas();
+      }
+
+      function onRemoveDrawEnd() {
+        const shouldRun = removeState.drawing && removeState.hasMask && !removeState.running;
+        removeState.drawing = false;
+        removeState.lastPoint = null;
+        if (shouldRun) {
+          runRemoveFromMask();
+        }
+      }
+
+      removeCanvas.addEventListener('mousedown', onRemoveDrawStart);
+      window.addEventListener('mousemove', onRemoveDrawMove);
+      window.addEventListener('mouseup', onRemoveDrawEnd);
+      removeCanvas.addEventListener('touchstart', onRemoveDrawStart, { passive: false });
+      window.addEventListener('touchmove', onRemoveDrawMove, { passive: false });
+      window.addEventListener('touchend', onRemoveDrawEnd, { passive: false });
+      removeWorkspace.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length === 2) {
+          removeState.drawing = false;
+          removeState.lastPoint = null;
+          startTouchGesture(e);
+          e.preventDefault();
+        }
+      }, { passive: false });
+      removeWorkspace.addEventListener('touchmove', (e) => {
+        if (!removeState.touchGesture.active) return;
+        updateTouchGesture(e);
+        e.preventDefault();
+      }, { passive: false });
+      removeWorkspace.addEventListener('touchend', (e) => {
+        if (!e.touches || e.touches.length < 2) {
+          endTouchGesture();
+        }
+      }, { passive: false });
+      removeWorkspace.addEventListener('touchcancel', () => {
+        endTouchGesture();
+      }, { passive: false });
+
+      removeBrushSize.addEventListener('input', () => {
+        syncRemoveBrushInputs(removeBrushSize.value);
+      });
+      removeBrushDownBtn.addEventListener('click', () => {
+        const current = syncRemoveBrushInputs(removeBrushSize.value);
+        syncRemoveBrushInputs(current - 4);
+      });
+      removeBrushUpBtn.addEventListener('click', () => {
+        const current = syncRemoveBrushInputs(removeBrushSize.value);
+        syncRemoveBrushInputs(current + 4);
+      });
+      syncRemoveBrushInputs(removeBrushSize.value);
+      refreshRemoveUndoState();
+
+      removeZoomInBtn.addEventListener('click', () => setRemoveZoomLevel(removeState.zoomLevel + 0.25));
+      removeZoomOutBtn.addEventListener('click', () => setRemoveZoomLevel(removeState.zoomLevel - 0.25));
+      removeZoomResetBtn.addEventListener('click', () => setRemoveZoomLevel(1));
+      setRemoveZoomLevel(1);
+      refreshRemoveViewportLayout();
+
+      window.addEventListener('resize', () => {
+        refreshRemoveViewportLayout();
+      });
+      window.addEventListener('orientationchange', () => {
+        refreshRemoveViewportLayout();
+      });
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+          refreshRemoveViewportLayout();
+        });
+      }
+
+      removeUndoBtn.addEventListener('click', () => {
+        if (!removeState.sourceCanvas || removeState.historyStack.length === 0 || removeState.running) return;
+        const previousCanvas = removeState.historyStack.pop();
+        const sourceCtx = removeState.sourceCanvas.getContext('2d');
+        sourceCtx.clearRect(0, 0, removeState.sourceCanvas.width, removeState.sourceCanvas.height);
+        sourceCtx.drawImage(previousCanvas, 0, 0);
+        refreshRemoveUndoState();
+        removeMaskCtx.clearRect(0, 0, removeState.maskCanvas.width, removeState.maskCanvas.height);
+        removeState.hasMask = false;
+        resetRemoveOutputState();
+        setRemoveUnsavedProgress(true);
+        drawRemoveCanvas();
+        setStatus(removeStatus, t('status.removeUndoDone'), 'ok');
+      });
+
+      async function runRemoveFromMask() {
+        if (!removeState.sourceCanvas) {
+          setStatus(removeStatus, t('status.uploadFirst'), 'error');
+          return;
+        }
+        if (!removeState.hasMask) {
+          setStatus(removeStatus, t('status.removeMaskEmpty'), 'error');
+          return;
+        }
+        if (removeState.running) return;
+
+        removeState.running = true;
+        setRemoveBusy(true);
+        removeDownloadBtn.disabled = true;
+        refreshRemoveUndoState();
+        setStatus(removeStatus, '');
+
+        const historyLimit = 20;
+        let stagedSnapshot = null;
+        try {
+          const width = removeState.sourceCanvas.width;
+          const height = removeState.sourceCanvas.height;
+          stagedSnapshot = copyCanvas(removeState.sourceCanvas);
+          const sourceCtx = removeState.sourceCanvas.getContext('2d');
+          const sourceImageData = sourceCtx.getImageData(0, 0, width, height);
+          const maskPixels = removeMaskCtx.getImageData(0, 0, width, height).data;
+          const maskData = new Uint8Array(width * height);
+          let maskedCount = 0;
+          for (let i = 0; i < maskData.length; i += 1) {
+            const marked = maskPixels[i * 4 + 3] > 20;
+            maskData[i] = marked ? 1 : 0;
+            if (marked) maskedCount += 1;
+          }
+          if (maskedCount === 0) {
+            throw new Error(t('status.removeMaskEmpty'));
+          }
+
+          const resultImageData = await inpaintMaskedImage(sourceImageData, maskData, {
+            algorithm: getSelectedRemoveAlgorithm(),
+            brushSize: syncRemoveBrushInputs(removeBrushSize.value)
+          });
+
+          sourceCtx.putImageData(resultImageData, 0, 0);
+          removeMaskCtx.clearRect(0, 0, width, height);
+          removeState.hasMask = false;
+          drawRemoveCanvas();
+
+          removeState.resultBlob = await new Promise((resolve) =>
+            removeState.sourceCanvas.toBlob(resolve, 'image/png')
+          );
+          if (!removeState.resultBlob) {
+            throw new Error('Remove failed.');
+          }
+          removeState.historyStack.push(stagedSnapshot);
+          if (removeState.historyStack.length > historyLimit) {
+            removeState.historyStack.shift();
+          }
+          removeDownloadBtn.disabled = false;
+          refreshRemoveUndoState();
+          setRemoveUnsavedProgress(true);
+          setStatus(removeStatus, '', 'ok');
+        } catch (err) {
+          refreshRemoveUndoState();
+          setStatus(removeStatus, err.message || t('error.removeFailed'), 'error');
+        } finally {
+          removeState.running = false;
+          refreshRemoveUndoState();
+          setRemoveBusy(false);
+        }
+      }
+
+      removeDownloadBtn.addEventListener('click', async () => {
+        if (!removeState.resultBlob || !removeState.file) return;
+        const base = removeState.file.name.replace(/\.[^.]+$/, '') || 'image';
+        const mode = await downloadBlob(removeState.resultBlob, `${base}-removed.png`);
+        setRemoveUnsavedProgress(false);
+        setStatus(
+          removeStatus,
+          mode === 'ios-preview' ? t('status.previewIos') : t('status.doneDownload'),
+          'ok'
+        );
+      });
+
+      window.addEventListener('beforeunload', (e) => {
+        if (!removeState.hasUnsavedProgress) return;
+        e.preventDefault();
+        e.returnValue = '';
+      });
+
+      drawRemoveCanvas();
     </script>
   </body>
 </html>

@@ -281,6 +281,9 @@ const toolInternalLinks = {
   ],
   upscale: [
     { href: '/upscale', label: 'Image Upscaler Online' }
+  ],
+  remove: [
+    { href: '/remove', label: 'Object Remover Online' }
   ]
 };
 
@@ -292,7 +295,9 @@ const toolKeywordCopy = {
   compress:
     'US-focused intent terms: "compress image online free", "jpeg compressor online", "compress webp", "compress avif image".',
   upscale:
-    'US-focused intent terms: "ai image upscaler online free", "increase image resolution ai", "photo enhancer ai", "2x ai upscaler".'
+    'US-focused intent terms: "ai image upscaler online free", "increase image resolution ai", "photo enhancer ai", "2x ai upscaler".',
+  remove:
+    'US-focused intent terms: "remove object from photo online", "ai object remover free", "erase unwanted object from image", "inpaint image online".'
 };
 
 const pages = {
@@ -504,6 +509,22 @@ const pages = {
     upscaleFormat: 'png',
     upscaleQuality: 100,
     upscaleScale: 2
+  },
+  '/remove': {
+    title: 'Remove Object from Image Online Free | Brush + Inpaint',
+    description: 'Paint over unwanted objects and remove them with in-browser inpainting. Zoom, adjust brush size, and download after preview.',
+    canonicalPath: '/remove',
+    ogTitle: 'Remove Object from Image Online Free | ImgConvertCrop',
+    twitterTitle: 'Remove Object from Image Online Free | ImgConvertCrop',
+    heroTitle: 'Free Object Remover',
+    heroSubtitle: 'Paint the area to remove, run inpaint, preview the result, then confirm download.',
+    seoH2: 'Remove Unwanted Objects with Brush Selection',
+    seoP1: 'Upload an image, paint over the area you want to erase, and run object removal directly in your browser.',
+    seoP2: 'This tool supports zoom for precise edits and keeps your file local for privacy.',
+    seoLi1: 'Brush size control and zoom workspace',
+    seoLi2: 'In-browser object removal algorithm',
+    seoLi3: 'Download only after removal is finished',
+    activeTab: 'remove'
   }
 };
 
@@ -652,10 +673,12 @@ function renderPage(pathname, locale) {
     cropBtn: config.activeTab === 'crop' ? 'active' : '',
     compressBtn: config.activeTab === 'compress' ? 'active' : '',
     upscaleBtn: config.activeTab === 'upscale' ? 'active' : '',
+    removeBtn: config.activeTab === 'remove' ? 'active' : '',
     convertPanel: config.activeTab === 'convert' ? 'active' : '',
     cropPanel: config.activeTab === 'crop' ? 'active' : '',
     compressPanel: config.activeTab === 'compress' ? 'active' : '',
-    upscalePanel: config.activeTab === 'upscale' ? 'active' : ''
+    upscalePanel: config.activeTab === 'upscale' ? 'active' : '',
+    removePanel: config.activeTab === 'remove' ? 'active' : ''
   };
 
   const pageConfigJson = JSON.stringify({
@@ -700,10 +723,12 @@ function renderPage(pathname, locale) {
     __CROP_TAB_ACTIVE__: tabClasses.cropBtn,
     __COMPRESS_TAB_ACTIVE__: tabClasses.compressBtn,
     __UPSCALE_TAB_ACTIVE__: tabClasses.upscaleBtn,
+    __REMOVE_TAB_ACTIVE__: tabClasses.removeBtn,
     __CONVERT_PANEL_ACTIVE__: tabClasses.convertPanel,
     __CROP_PANEL_ACTIVE__: tabClasses.cropPanel,
     __COMPRESS_PANEL_ACTIVE__: tabClasses.compressPanel,
     __UPSCALE_PANEL_ACTIVE__: tabClasses.upscalePanel,
+    __REMOVE_PANEL_ACTIVE__: tabClasses.removePanel,
     __PAGE_CONFIG_JSON__: pageConfigJson
   };
 
