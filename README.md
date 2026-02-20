@@ -2,7 +2,7 @@
 
 <p align="center">
   <b>Free, privacy-first image tools in the browser.</b><br/>
-  Convert, crop, compress, and AI-upscale images with no server-side image storage.
+  Convert, crop, compress, upscale, and remove objects with no server-side image storage.
 </p>
 
 <p align="center">
@@ -31,6 +31,11 @@
   - `2x` / `4x` upscale
   - Restore modes: `Balanced`, `Aggressive`, `Text/Logo`
   - First run may download model/runtime assets (~31 MB) and then cache in browser
+- **AI Object Remove (browser-only)**:
+  - Brush-based painting workflow with zoom and multi-step undo
+  - Algorithms: `AI Generative`, `Aggressive`, `Texture Preserve`, `Natural`
+  - AI mode is quality-first (slower), optimized for cleaner generated fill
+  - Download is enabled after removal finishes
 - **Privacy-first**: Processing happens in-browser, images are not uploaded for processing
 - **Multilingual UI + SEO pages**: `en`, `es`, `zh`, `hi`, `ar`, `ja`, `ko`
 - **Open source friendly**: Includes clear route structure and simple deployment model
@@ -79,10 +84,17 @@ PORT=3555 npm start
 
 ## Usage
 
-1. Pick a tool tab: **Convert**, **Crop**, **Compress**, or **Upscale**
+1. Pick a tool tab: **Convert**, **Crop**, **Compress**, **Upscale**, or **AI Remove**
 2. Upload an image
 3. Configure options
 4. Download result
+
+For object removal:
+
+1. Open **AI Remove**
+2. Upload image and paint over unwanted area
+3. Lift pointer/finger to auto-apply removal
+4. Download result after processing
 
 ## API
 
@@ -117,6 +129,7 @@ Core tools:
 - `/crop`
 - `/compress`
 - `/upscale`
+- `/remove`
 
 Intent pages:
 
@@ -124,6 +137,7 @@ Intent pages:
 - Crop: `/crop/resize-image`, `/crop/crop-to-square`, `/crop/crop-to-16-9`
 - Compress: `/compress/jpeg`, `/compress/webp`, `/compress/avif`
 - Upscale: `/upscale`
+- Remove: `/remove`
 
 All of the above are also available under locale prefixes, e.g. `/es/convert`, `/ar/crop`.
 
@@ -149,6 +163,11 @@ Expected:
 ## Deployment Notes
 
 This repo is currently deployed on a Node service and can also be containerized with the included `Dockerfile`.
+
+Production runbook and reusable deployment skill:
+
+- `DEPLOYMENT.md`
+- `.cursor/skills/imgconvertcrop-deploy/SKILL.md`
 
 ### Docker (optional)
 
