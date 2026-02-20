@@ -19,14 +19,37 @@
 
   const tabCrop = document.getElementById('tabCrop');
   const tabRemove = document.getElementById('tabRemove');
+  const tabFilter = document.getElementById('tabFilter');
+  const tabPush = document.getElementById('tabPush');
 
   const cropApplyBtn = document.getElementById('cropApplyBtn');
   const cropCancelBtn = document.getElementById('cropCancelBtn');
   const cropUndoBtn = document.getElementById('cropUndoBtn');
   const cropRedoBtn = document.getElementById('cropRedoBtn');
+  const cropRotateLeftBtn = document.getElementById('cropRotateLeftBtn');
+  const cropRotateRightBtn = document.getElementById('cropRotateRightBtn');
+  const cropFlipBtn = document.getElementById('cropFlipBtn');
+  const cropFineRotate = document.getElementById('cropFineRotate');
+  const cropFineRotateText = document.getElementById('cropFineRotateText');
+  const cropFineRotateApplyBtn = document.getElementById('cropFineRotateApplyBtn');
   const cropAspectRow = document.getElementById('cropAspectRow');
 
   const removeBrush = document.getElementById('removeBrush');
+
+  const filterPresetRow = document.getElementById('filterPresetRow');
+  const filterStrength = document.getElementById('filterStrength');
+  const filterStrengthText = document.getElementById('filterStrengthText');
+  const filterApplyBtn = document.getElementById('filterApplyBtn');
+  const filterUndoBtn = document.getElementById('filterUndoBtn');
+  const filterRedoBtn = document.getElementById('filterRedoBtn');
+
+  const pushBrush = document.getElementById('pushBrush');
+  const pushBrushText = document.getElementById('pushBrushText');
+  const pushStrength = document.getElementById('pushStrength');
+  const pushStrengthText = document.getElementById('pushStrengthText');
+  const pushUndoBtn = document.getElementById('pushUndoBtn');
+  const pushRedoBtn = document.getElementById('pushRedoBtn');
+  const pushResetBtn = document.getElementById('pushResetBtn');
   const removeBrushText = document.getElementById('removeBrushText');
   const removeAlgorithm = document.getElementById('removeAlgorithm');
   const removeUndoBtn = document.getElementById('removeUndoBtn');
@@ -46,7 +69,11 @@
       cropUndo: [],
       cropRedo: [],
       removeUndo: [],
-      removeRedo: []
+      removeRedo: [],
+      filterUndo: [],
+      filterRedo: [],
+      pushUndo: [],
+      pushRedo: []
     },
     crop: {
       aspect: 'free',
@@ -54,6 +81,17 @@
       rotatedAspect: false,
       rect: null,
       draftRect: null,
+      interaction: null,
+      fineAngle: 0
+    },
+    filter: {
+      preset: 'none',
+      strength: 75
+    },
+    push: {
+      brushSize: 72,
+      strength: 36,
+      mode: 'slim',
       interaction: null
     },
     remove: {
@@ -92,11 +130,13 @@
   }
 
   function setHintForActiveTool() {
-    const hint =
-      state.activeTool === 'crop'
-        ? 'Drag handles to crop. Pinch to zoom.'
-        : 'Paint to remove. Release to apply. Pinch to zoom.';
-    setStatus(hint);
+    const hints = {
+      crop: 'Drag handles to crop. Pinch to zoom.',
+      remove: 'Paint to remove. Release to apply. Pinch to zoom.',
+      filter: 'Choose a photographic filter and set strength, then apply.',
+      push: 'Drag on image to push pixels inward for a slimmer look.'
+    };
+    setStatus(hints[state.activeTool] || hints.crop);
   }
 
   function showToast(message, durationMs) {
@@ -142,8 +182,16 @@
     state.undoRedo.cropRedo = [];
     state.undoRedo.removeUndo = [];
     state.undoRedo.removeRedo = [];
+    state.undoRedo.filterUndo = [];
+    state.undoRedo.filterRedo = [];
+    state.undoRedo.pushUndo = [];
+    state.undoRedo.pushRedo = [];
     state.crop.rect = null;
     state.crop.draftRect = null;
+    state.crop.fineAngle = 0;
+    state.filter.preset = 'none';
+    state.filter.strength = 75;
+    state.push.interaction = null;
     state.remove.processing = false;
     state.remove.currentStroke = null;
     state.render.hasTransparentPixels = false;
@@ -163,7 +211,10 @@
     });
     tabCrop.classList.toggle('active', state.activeTool === 'crop');
     tabRemove.classList.toggle('active', state.activeTool === 'remove');
-    topLabel.textContent = state.activeTool === 'crop' ? 'Editor • Crop' : 'Editor • Remove';
+    tabFilter.classList.toggle('active', state.activeTool === 'filter');
+    tabPush.classList.toggle('active', state.activeTool === 'push');
+    const titleMap = { crop: 'Editor • Crop', remove: 'Editor • Remove', filter: 'Editor • Filter', push: 'Editor • Push' };
+    topLabel.textContent = titleMap[state.activeTool] || 'Editor • Crop';
     if (state.workingImage) setHintForActiveTool();
     syncRemoveBusyGlow();
     draw();
@@ -363,6 +414,10 @@
       (state.ops.removeOp.strokes.length === 0 && state.undoRedo.removeUndo.length === 0) || state.remove.processing;
     removeRedoBtn.disabled =
       (state.ops.removeOp.redoStrokes.length === 0 && state.undoRedo.removeRedo.length === 0) || state.remove.processing;
+    filterUndoBtn.disabled = state.undoRedo.filterUndo.length === 0;
+    filterRedoBtn.disabled = state.undoRedo.filterRedo.length === 0;
+    pushUndoBtn.disabled = state.undoRedo.pushUndo.length === 0;
+    pushRedoBtn.disabled = state.undoRedo.pushRedo.length === 0;
   }
 
   async function loadImage(file) {
@@ -376,6 +431,10 @@
     state.undoRedo.cropRedo = [];
     state.undoRedo.removeUndo = [];
     state.undoRedo.removeRedo = [];
+    state.undoRedo.filterUndo = [];
+    state.undoRedo.filterRedo = [];
+    state.undoRedo.pushUndo = [];
+    state.undoRedo.pushRedo = [];
     state.save.baseBytes = null;
     initCropRect();
     initMaskCanvas();
@@ -549,6 +608,174 @@
     }
   }
 
+  function commitGenericEdit(kind, nextCanvas) {
+    if (!state.workingImage || !nextCanvas) return;
+    const undoKey = kind + 'Undo';
+    const redoKey = kind + 'Redo';
+    if (state.undoRedo[undoKey]) {
+      state.undoRedo[undoKey].push(ImageCore.cloneCanvas(state.workingImage));
+      state.undoRedo[redoKey] = [];
+    }
+    state.workingImage = nextCanvas;
+    state.save.baseBytes = null;
+    initCropRect();
+    initMaskCanvas();
+    clearMaskAndStrokes();
+    fitViewportToImage();
+    refreshTransparencyState();
+    refreshUndoButtons();
+    setHintForActiveTool();
+    draw();
+  }
+
+  function rotateWorking(angleDeg) {
+    if (!state.workingImage) return;
+    const src = state.workingImage;
+    const radians = (angleDeg * Math.PI) / 180;
+    const sin = Math.abs(Math.sin(radians));
+    const cos = Math.abs(Math.cos(radians));
+    const outW = Math.max(1, Math.round(src.width * cos + src.height * sin));
+    const outH = Math.max(1, Math.round(src.width * sin + src.height * cos));
+    const out = ImageCore.createCanvas(outW, outH);
+    const octx = out.getContext('2d');
+    octx.translate(outW / 2, outH / 2);
+    octx.rotate(radians);
+    octx.drawImage(src, -src.width / 2, -src.height / 2);
+    commitGenericEdit('crop', out);
+  }
+
+  function flipWorkingHorizontal() {
+    if (!state.workingImage) return;
+    const src = state.workingImage;
+    const out = ImageCore.createCanvas(src.width, src.height);
+    const octx = out.getContext('2d');
+    octx.translate(src.width, 0);
+    octx.scale(-1, 1);
+    octx.drawImage(src, 0, 0);
+    commitGenericEdit('crop', out);
+  }
+
+  function applyFilterEffect(source, preset, strengthPct) {
+    const out = ImageCore.cloneCanvas(source);
+    const c = out.getContext('2d');
+    const img = c.getImageData(0, 0, out.width, out.height);
+    const d = img.data;
+    const s = Math.max(0, Math.min(1, (Number(strengthPct) || 0) / 100));
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i];
+      const g = d[i + 1];
+      const b = d[i + 2];
+      let nr = r;
+      let ng = g;
+      let nb = b;
+      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      if (preset === 'vivid') {
+        nr = r * 1.1 + (r - luma) * 0.25;
+        ng = g * 1.06 + (g - luma) * 0.2;
+        nb = b * 1.12 + (b - luma) * 0.35;
+      } else if (preset === 'warm') {
+        nr = r * 1.15 + 12;
+        ng = g * 1.04 + 4;
+        nb = b * 0.9;
+      } else if (preset === 'cool') {
+        nr = r * 0.92;
+        ng = g * 1.03;
+        nb = b * 1.16 + 8;
+      } else if (preset === 'bw') {
+        nr = luma;
+        ng = luma;
+        nb = luma;
+      } else if (preset === 'vintage') {
+        nr = r * 1.08 + 18;
+        ng = g * 0.98 + 8;
+        nb = b * 0.82;
+      }
+      d[i] = TransformCore.clamp(Math.round(r + (nr - r) * s), 0, 255);
+      d[i + 1] = TransformCore.clamp(Math.round(g + (ng - g) * s), 0, 255);
+      d[i + 2] = TransformCore.clamp(Math.round(b + (nb - b) * s), 0, 255);
+    }
+    c.putImageData(img, 0, 0);
+    return out;
+  }
+
+  function applyFilter() {
+    if (!state.workingImage || state.filter.preset === 'none') return;
+    const out = applyFilterEffect(state.workingImage, state.filter.preset, state.filter.strength);
+    commitGenericEdit('filter', out);
+    showToast('Filter applied.');
+  }
+
+  function applyPushWarp(fromPt, toPt) {
+    if (!state.workingImage) return;
+    const src = state.workingImage;
+    const out = ImageCore.createCanvas(src.width, src.height);
+    const sctx = src.getContext('2d');
+    const srcData = sctx.getImageData(0, 0, src.width, src.height);
+    const dstData = out.getContext('2d').createImageData(src.width, src.height);
+    const radius = Math.max(10, Number(state.push.brushSize) || 72);
+    const strength = Math.max(0.01, Math.min(1, (Number(state.push.strength) || 36) / 100));
+    const centerX = toPt.x;
+    const centerY = toPt.y;
+    const dir = fromPt.x < toPt.x ? 1 : -1;
+    for (let y = 0; y < src.height; y += 1) {
+      for (let x = 0; x < src.width; x += 1) {
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const dist = Math.hypot(dx, dy);
+        const idx = (y * src.width + x) * 4;
+        if (dist > radius) {
+          dstData.data[idx] = srcData.data[idx];
+          dstData.data[idx + 1] = srcData.data[idx + 1];
+          dstData.data[idx + 2] = srcData.data[idx + 2];
+          dstData.data[idx + 3] = srcData.data[idx + 3];
+          continue;
+        }
+        const falloff = (1 - dist / radius) ** 2;
+        const shift = dir * strength * radius * 0.22 * falloff;
+        const sampleX = TransformCore.clamp(Math.round(x + shift), 0, src.width - 1);
+        const sidx = (y * src.width + sampleX) * 4;
+        dstData.data[idx] = srcData.data[sidx];
+        dstData.data[idx + 1] = srcData.data[sidx + 1];
+        dstData.data[idx + 2] = srcData.data[sidx + 2];
+        dstData.data[idx + 3] = srcData.data[sidx + 3];
+      }
+    }
+    out.getContext('2d').putImageData(dstData, 0, 0);
+    return out;
+  }
+
+  function undoGeneric(kind) {
+    const undoKey = kind + 'Undo';
+    const redoKey = kind + 'Redo';
+    if (!state.undoRedo[undoKey].length) return;
+    state.undoRedo[redoKey].push(ImageCore.cloneCanvas(state.workingImage));
+    state.workingImage = state.undoRedo[undoKey].pop();
+    state.save.baseBytes = null;
+    initCropRect();
+    initMaskCanvas();
+    clearMaskAndStrokes();
+    fitViewportToImage();
+    refreshTransparencyState();
+    refreshUndoButtons();
+    draw();
+  }
+
+  function redoGeneric(kind) {
+    const undoKey = kind + 'Undo';
+    const redoKey = kind + 'Redo';
+    if (!state.undoRedo[redoKey].length) return;
+    state.undoRedo[undoKey].push(ImageCore.cloneCanvas(state.workingImage));
+    state.workingImage = state.undoRedo[redoKey].pop();
+    state.save.baseBytes = null;
+    initCropRect();
+    initMaskCanvas();
+    clearMaskAndStrokes();
+    fitViewportToImage();
+    refreshTransparencyState();
+    refreshUndoButtons();
+    draw();
+  }
+
   function applyCrop() {
     if (!state.workingImage || !state.crop.draftRect) return;
     const d = state.crop.draftRect;
@@ -569,6 +796,10 @@
     state.undoRedo.cropRedo = [];
     state.undoRedo.removeUndo = [];
     state.undoRedo.removeRedo = [];
+    state.undoRedo.filterUndo = [];
+    state.undoRedo.filterRedo = [];
+    state.undoRedo.pushUndo = [];
+    state.undoRedo.pushRedo = [];
     state.workingImage = ImageCore.cropCanvas(state.workingImage, rect);
     state.save.baseBytes = null;
     state.ops.cropOp = {
@@ -596,6 +827,10 @@
     state.workingImage = state.undoRedo.cropUndo.pop();
     state.undoRedo.removeUndo = [];
     state.undoRedo.removeRedo = [];
+    state.undoRedo.filterUndo = [];
+    state.undoRedo.filterRedo = [];
+    state.undoRedo.pushUndo = [];
+    state.undoRedo.pushRedo = [];
     state.save.baseBytes = null;
     initCropRect();
     initMaskCanvas();
@@ -613,6 +848,10 @@
     state.workingImage = state.undoRedo.cropRedo.pop();
     state.undoRedo.removeUndo = [];
     state.undoRedo.removeRedo = [];
+    state.undoRedo.filterUndo = [];
+    state.undoRedo.filterRedo = [];
+    state.undoRedo.pushUndo = [];
+    state.undoRedo.pushRedo = [];
     state.save.baseBytes = null;
     initCropRect();
     initMaskCanvas();
@@ -954,8 +1193,10 @@
           startOffsetY: state.viewport.offsetY
         };
       }
-    } else if (!state.remove.processing) {
+    } else if (state.activeTool === 'remove' && !state.remove.processing) {
       beginRemoveStroke(imagePoint);
+    } else if (state.activeTool === 'push') {
+      state.push.interaction = { startPoint: imagePoint };
     }
   }
 
@@ -996,7 +1237,7 @@
         clampViewport({ hard: false });
         draw();
       }
-    } else if (state.remove.currentStroke && !state.remove.processing) {
+    } else if (state.activeTool === 'remove' && state.remove.currentStroke && !state.remove.processing) {
       updateRemoveStroke(getImagePointFromCanvas(point));
     }
   }
@@ -1018,8 +1259,18 @@
       }
       clampViewport({ hard: true });
       draw();
-    } else {
+    } else if (state.activeTool === 'remove') {
       endRemoveStroke();
+      clampViewport({ hard: true });
+      draw();
+    } else if (state.activeTool === 'push') {
+      if (state.push.interaction && state.workingImage) {
+        const point = getCanvasPoint(e);
+        const imagePoint = getImagePointFromCanvas(point);
+        const warped = applyPushWarp(state.push.interaction.startPoint, imagePoint);
+        if (warped) commitGenericEdit('push', warped);
+      }
+      state.push.interaction = null;
       clampViewport({ hard: true });
       draw();
     }
@@ -1070,6 +1321,14 @@
     state.activeTool = 'remove';
     updateToolPanes();
   });
+  tabFilter.addEventListener('click', () => {
+    state.activeTool = 'filter';
+    updateToolPanes();
+  });
+  tabPush.addEventListener('click', () => {
+    state.activeTool = 'push';
+    updateToolPanes();
+  });
 
   function setCropAspectFromButton(btn, rotate) {
     if (!state.workingImage) return;
@@ -1118,6 +1377,74 @@
   });
   cropUndoBtn.addEventListener('click', undoCrop);
   cropRedoBtn.addEventListener('click', redoCrop);
+
+
+  cropRotateLeftBtn.addEventListener('click', () => {
+    rotateWorking(-90);
+    showToast('Rotated 90° left.');
+  });
+  cropRotateRightBtn.addEventListener('click', () => {
+    rotateWorking(90);
+    showToast('Rotated 90° right.');
+  });
+  cropFlipBtn.addEventListener('click', () => {
+    flipWorkingHorizontal();
+    showToast('Mirror flipped.');
+  });
+  cropFineRotate.addEventListener('input', () => {
+    state.crop.fineAngle = Number(cropFineRotate.value);
+    cropFineRotateText.textContent = state.crop.fineAngle.toFixed(1).replace(/\.0$/, '') + '°';
+  });
+  cropFineRotateApplyBtn.addEventListener('click', () => {
+    if (Math.abs(state.crop.fineAngle) < 0.01) return;
+    rotateWorking(state.crop.fineAngle);
+    cropFineRotate.value = '0';
+    state.crop.fineAngle = 0;
+    cropFineRotateText.textContent = '0°';
+    showToast('Fine rotation applied.');
+  });
+
+  filterPresetRow.querySelectorAll('button[data-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.filter.preset = btn.dataset.filter || 'none';
+      filterPresetRow.querySelectorAll('button[data-filter]').forEach((node) => {
+        node.classList.toggle('active', node === btn);
+      });
+    });
+  });
+  filterStrength.addEventListener('input', () => {
+    state.filter.strength = Number(filterStrength.value);
+    filterStrengthText.textContent = state.filter.strength + '%';
+  });
+  filterApplyBtn.addEventListener('click', applyFilter);
+  filterUndoBtn.addEventListener('click', () => undoGeneric('filter'));
+  filterRedoBtn.addEventListener('click', () => redoGeneric('filter'));
+
+  pushBrush.addEventListener('input', () => {
+    state.push.brushSize = Number(pushBrush.value);
+    pushBrushText.textContent = String(state.push.brushSize);
+  });
+  pushStrength.addEventListener('input', () => {
+    state.push.strength = Number(pushStrength.value);
+    pushStrengthText.textContent = state.push.strength + '%';
+  });
+  pushUndoBtn.addEventListener('click', () => undoGeneric('push'));
+  pushRedoBtn.addEventListener('click', () => redoGeneric('push'));
+  pushResetBtn.addEventListener('click', () => {
+    if (!state.undoRedo.pushUndo.length) return;
+    state.workingImage = ImageCore.cloneCanvas(state.undoRedo.pushUndo[0]);
+    state.undoRedo.pushUndo = [];
+    state.undoRedo.pushRedo = [];
+    state.save.baseBytes = null;
+    initCropRect();
+    initMaskCanvas();
+    clearMaskAndStrokes();
+    fitViewportToImage();
+    refreshTransparencyState();
+    refreshUndoButtons();
+    draw();
+    showToast('Push reset.');
+  });
 
   removeBrush.addEventListener('input', () => {
     state.remove.brushPercent = Number(removeBrush.value);
@@ -1192,5 +1519,13 @@
   removeAlgorithm.value = state.remove.algorithm;
   removeBrush.value = String(state.remove.brushPercent);
   removeBrushText.textContent = state.remove.brushPercent + '%';
+  cropFineRotate.value = '0';
+  cropFineRotateText.textContent = '0°';
+  filterStrength.value = String(state.filter.strength);
+  filterStrengthText.textContent = state.filter.strength + '%';
+  pushBrush.value = String(state.push.brushSize);
+  pushBrushText.textContent = String(state.push.brushSize);
+  pushStrength.value = String(state.push.strength);
+  pushStrengthText.textContent = state.push.strength + '%';
   refreshUndoButtons();
 })();

@@ -388,6 +388,56 @@
         padding: 0 8px;
       }
 
+
+
+      #filterPresetRow,
+      #pushModeRow {
+        display: inline-flex;
+        width: 100%;
+        padding: 2px;
+        border-radius: 10px;
+        background: rgba(17, 24, 39, 0.05);
+        gap: 2px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+      }
+
+      #filterPresetRow::-webkit-scrollbar,
+      #pushModeRow::-webkit-scrollbar {
+        display: none;
+      }
+
+      #filterPresetRow button,
+      #pushModeRow button {
+        flex: 0 0 auto;
+        min-width: 66px;
+        min-height: 32px;
+        border-radius: 10px;
+        color: var(--text-secondary);
+        font-size: 13px;
+      }
+
+      #filterPresetRow button.active,
+      #pushModeRow button.active {
+        background: rgba(10, 132, 255, 0.12);
+        color: var(--accent);
+      }
+
+      .strength-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 52px;
+        min-height: 24px;
+        padding: 0 8px;
+        border-radius: 10px;
+        background: #eceff4;
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
       .status {
         margin: 0 2px;
         font-size: 12px;
@@ -406,7 +456,7 @@
         height: calc(var(--tabs-h) + env(safe-area-inset-bottom));
         border-top: 1px solid var(--separator);
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         padding: 4px 8px env(safe-area-inset-bottom);
         z-index: 50;
       }
@@ -846,9 +896,18 @@
             <div class="tool-row">
               <button id="cropUndoBtn" type="button" class="icon-btn" aria-label="Undo crop">↶</button>
               <button id="cropRedoBtn" type="button" class="icon-btn" aria-label="Redo crop">↷</button>
+              <button id="cropRotateLeftBtn" type="button" class="icon-btn" aria-label="Rotate counterclockwise">↺</button>
+              <button id="cropRotateRightBtn" type="button" class="icon-btn" aria-label="Rotate clockwise">↻</button>
+              <button id="cropFlipBtn" type="button" class="icon-btn" aria-label="Mirror flip">⇋</button>
               <button id="cropCancelBtn" type="button" class="action-btn text">Reset</button>
             </div>
             <button id="cropApplyBtn" type="button" class="action-btn primary">Apply</button>
+          </div>
+          <div class="tool-row">
+            <label for="cropFineRotate">Fine</label>
+            <input id="cropFineRotate" type="range" min="-45" max="45" step="0.5" value="0" />
+            <span id="cropFineRotateText" class="strength-chip">0°</span>
+            <button id="cropFineRotateApplyBtn" type="button" class="action-btn text">Apply</button>
           </div>
         </div>
       </div>
@@ -876,6 +935,53 @@
         </div>
       </div>
 
+
+      <div class="tool-pane" data-tool="filter">
+        <div class="tool-card glass">
+          <div class="tool-row" id="filterPresetRow">
+            <button type="button" data-filter="none" class="active">Original</button>
+            <button type="button" data-filter="vivid">Vivid</button>
+            <button type="button" data-filter="warm">Warm</button>
+            <button type="button" data-filter="cool">Cool</button>
+            <button type="button" data-filter="bw">B&W</button>
+            <button type="button" data-filter="vintage">Vintage</button>
+          </div>
+        </div>
+        <div class="tool-card glass">
+          <div class="tool-row">
+            <label for="filterStrength">Strength</label>
+            <input id="filterStrength" type="range" min="0" max="100" step="1" value="75" />
+            <span id="filterStrengthText" class="strength-chip">75%</span>
+            <button id="filterUndoBtn" type="button" class="icon-btn" aria-label="Undo filter">↶</button>
+            <button id="filterRedoBtn" type="button" class="icon-btn" aria-label="Redo filter">↷</button>
+            <button id="filterApplyBtn" type="button" class="action-btn primary">Apply</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-pane" data-tool="push">
+        <div class="tool-card glass">
+          <div class="tool-row" id="pushModeRow">
+            <button type="button" data-push-mode="slim" class="active">Slim</button>
+          </div>
+        </div>
+        <div class="tool-card glass">
+          <div class="tool-row">
+            <label for="pushBrush">Brush</label>
+            <input id="pushBrush" type="range" min="10" max="180" step="1" value="72" />
+            <span id="pushBrushText" class="strength-chip">72</span>
+            <label for="pushStrength">Power</label>
+            <input id="pushStrength" type="range" min="1" max="100" step="1" value="36" />
+            <span id="pushStrengthText" class="strength-chip">36%</span>
+          </div>
+          <div class="tool-row">
+            <button id="pushUndoBtn" type="button" class="icon-btn" aria-label="Undo pixel push">↶</button>
+            <button id="pushRedoBtn" type="button" class="icon-btn" aria-label="Redo pixel push">↷</button>
+            <button id="pushResetBtn" type="button" class="action-btn text">Reset warp</button>
+          </div>
+        </div>
+      </div>
+
       <p class="status" id="statusText">Drag handles to crop. Pinch to zoom.</p>
     </section>
 
@@ -887,6 +993,14 @@
       <button type="button" id="tabRemove" data-tool="remove">
         <span class="tab-icon">✎</span>
         <span>Remove</span>
+      </button>
+      <button type="button" id="tabFilter" data-tool="filter">
+        <span class="tab-icon">◉</span>
+        <span>Filter</span>
+      </button>
+      <button type="button" id="tabPush" data-tool="push">
+        <span class="tab-icon">↔</span>
+        <span>Push</span>
       </button>
     </nav>
 
