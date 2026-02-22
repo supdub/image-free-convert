@@ -195,6 +195,181 @@
     return out;
   };
 
+  ImageCore.applyColorAdjustments = function applyColorAdjustments(sourceCanvas, adjustments) {
+    const opts = adjustments || {};
+    const highlight = clamp(Number(opts.highlight) || 0, -100, 100) / 100;
+    const contrast = clamp(Number(opts.contrast) || 0, -100, 100) / 100;
+    const warmth = clamp(Number(opts.warmth) || 0, -100, 100) / 100;
+    const saturation = clamp(Number(opts.saturation) || 0, -100, 100) / 100;
+
+    const out = ImageCore.cloneCanvas(sourceCanvas);
+    const ctx = out.getContext('2d');
+    const brightness = 1 + highlight * 0.38;
+    const contrastValue = 1 + contrast * 0.55;
+    const saturationValue = 1 + saturation * 0.9;
+    const sepiaValue = Math.max(0, warmth * 0.35);
+    const hueRotate = -warmth * 10;
+    ctx.filter = `brightness(${brightness}) contrast(${contrastValue}) saturate(${saturationValue}) sepia(${sepiaValue}) hue-rotate(${hueRotate}deg)`;
+    ctx.clearRect(0, 0, out.width, out.height);
+    ctx.drawImage(sourceCanvas, 0, 0);
+    ctx.filter = 'none';
+    return out;
+  };
+
+  ImageCore.addSolidFrame = function addSolidFrame(sourceCanvas, colorHex, thicknessPercent) {
+    const pct = clamp(Number(thicknessPercent) || 0, 0, 30) / 100;
+    if (pct <= 0) return ImageCore.cloneCanvas(sourceCanvas);
+    const color = String(colorHex || '#ffffff');
+    const border = Math.max(1, Math.round(Math.min(sourceCanvas.width, sourceCanvas.height) * pct));
+    const out = ImageCore.createCanvas(sourceCanvas.width + border * 2, sourceCanvas.height + border * 2);
+    const ctx = out.getContext('2d');
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, out.width, out.height);
+    ctx.drawImage(sourceCanvas, border, border);
+    return out;
+  };
+
+  ImageCore.applyMosaicStroke = function applyMosaicStroke(sourceCanvas, centerX, centerY, radius, blockSize, type) {
+    const out = ImageCore.cloneCanvas(sourceCanvas);
+    const ctx = out.getContext('2d');
+    const r = Math.max(6, Number(radius) || 18);
+    const b = Math.max(4, Number(blockSize) || 10);
+    const regionSize = Math.max(1, Math.ceil(r * 2));
+    const sx = clamp(Math.round(centerX - r), 0, out.width - 1);
+    const sy = clamp(Math.round(centerY - r), 0, out.height - 1);
+    const sw = Math.min(regionSize, out.width - sx);
+    const sh = Math.min(regionSize, out.height - sy);
+    if (sw < 2 || sh < 2) return out;
+
+    const temp = ImageCore.createCanvas(sw, sh);
+    const tctx = temp.getContext('2d');
+    tctx.drawImage(sourceCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+
+    const paintMosaic = (mode) => {
+      const tinyW = Math.max(1, Math.round(sw / b));
+      const tinyH = Math.max(1, Math.round(sh / b));
+      const tiny = ImageCore.createCanvas(tinyW, tinyH);
+      const tinyCtx = tiny.getContext('2d');
+      tinyCtx.imageSmoothingEnabled = mode === 'soft';
+      tinyCtx.drawImage(temp, 0, 0, tinyW, tinyH);
+      if (mode === 'crystal') {
+        const data = tinyCtx.getImageData(0, 0, tinyW, tinyH);
+        for (let i = 0; i < data.data.length; i += 4) {
+          data.data[i] = Math.round(data.data[i] / 64) * 64;
+          data.data[i + 1] = Math.round(data.data[i + 1] / 64) * 64;
+          data.data[i + 2] = Math.round(data.data[i + 2] / 64) * 64;
+        }
+        tinyCtx.putImageData(data, 0, 0);
+      }
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.imageSmoothingEnabled = mode === 'soft';
+      ctx.drawImage(tiny, 0, 0, tinyW, tinyH, sx, sy, sw, sh);
+      ctx.restore();
+    };
+
+    if (type === 'blur') {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.filter = `blur(${Math.max(1, b * 0.32)}px)`;
+      ctx.drawImage(sourceCanvas, sx, sy, sw, sh, sx, sy, sw, sh);
+      ctx.filter = 'none';
+      ctx.restore();
+    } else if (type === 'crystal') {
+      paintMosaic('crystal');
+    } else {
+      paintMosaic('pixel');
+    }
+
+    return out;
+  };
+
+
+  ImageCore.applyMosaicWithMask = function applyMosaicWithMask(sourceCanvas, maskCanvas, blockSize, type) {
+    const out = ImageCore.cloneCanvas(sourceCanvas);
+    if (!maskCanvas || maskCanvas.width !== out.width || maskCanvas.height !== out.height) {
+      return out;
+    }
+    const b = Math.max(4, Number(blockSize) || 12);
+    const w = out.width;
+    const h = out.height;
+    const sctx = sourceCanvas.getContext('2d');
+    const src = sctx.getImageData(0, 0, w, h);
+    const mctx = maskCanvas.getContext('2d');
+    const mask = mctx.getImageData(0, 0, w, h).data;
+    const outCtx = out.getContext('2d');
+    const dst = outCtx.getImageData(0, 0, w, h);
+
+    for (let by = 0; by < h; by += b) {
+      for (let bx = 0; bx < w; bx += b) {
+        const bw = Math.min(b, w - bx);
+        const bh = Math.min(b, h - by);
+        let hasMask = false;
+        for (let y = 0; y < bh && !hasMask; y += 1) {
+          for (let x = 0; x < bw; x += 1) {
+            const i = ((by + y) * w + (bx + x)) * 4 + 3;
+            if (mask[i] > 0) {
+              hasMask = true;
+              break;
+            }
+          }
+        }
+        if (!hasMask) continue;
+
+        const cx = bx + Math.floor(bw / 2);
+        const cy = by + Math.floor(bh / 2);
+        const ci = (cy * w + cx) * 4;
+        let r = src.data[ci];
+        let g = src.data[ci + 1];
+        let bl = src.data[ci + 2];
+        let a = src.data[ci + 3];
+
+        if (type === 'blur') {
+          let rr = 0; let gg = 0; let bb = 0; let aa = 0; let n = 0;
+          for (let y = 0; y < bh; y += 1) {
+            for (let x = 0; x < bw; x += 1) {
+              const i = ((by + y) * w + (bx + x)) * 4;
+              rr += src.data[i];
+              gg += src.data[i + 1];
+              bb += src.data[i + 2];
+              aa += src.data[i + 3];
+              n += 1;
+            }
+          }
+          r = Math.round(rr / Math.max(1, n));
+          g = Math.round(gg / Math.max(1, n));
+          bl = Math.round(bb / Math.max(1, n));
+          a = Math.round(aa / Math.max(1, n));
+        }
+
+        if (type === 'crystal') {
+          r = Math.round(r / 64) * 64;
+          g = Math.round(g / 64) * 64;
+          bl = Math.round(bl / 64) * 64;
+        }
+
+        for (let y = 0; y < bh; y += 1) {
+          for (let x = 0; x < bw; x += 1) {
+            const mi = ((by + y) * w + (bx + x)) * 4 + 3;
+            if (mask[mi] === 0) continue;
+            const i = ((by + y) * w + (bx + x)) * 4;
+            dst.data[i] = r;
+            dst.data[i + 1] = g;
+            dst.data[i + 2] = bl;
+            dst.data[i + 3] = a;
+          }
+        }
+      }
+    }
+
+    outCtx.putImageData(dst, 0, 0);
+    return out;
+  };
+
   ImageCore.pushPixels = function pushPixels(sourceCanvas, centerX, centerY, deltaX, deltaY, radius, strength) {
     const out = ImageCore.cloneCanvas(sourceCanvas);
     const w = out.width;

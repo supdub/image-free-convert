@@ -38,7 +38,7 @@
     ctx.scale(vp.scale, vp.scale);
     ctx.drawImage(opts.imageCanvas, 0, 0);
 
-    if (opts.maskCanvas && opts.activeTool === 'remove') {
+    if (opts.maskCanvas && (opts.activeTool === 'remove' || opts.activeTool === 'mosaic')) {
       ctx.globalAlpha = 0.35;
       ctx.drawImage(opts.maskCanvas, 0, 0);
       ctx.globalAlpha = 1;
