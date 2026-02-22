@@ -288,6 +288,88 @@
     return out;
   };
 
+
+  ImageCore.applyMosaicWithMask = function applyMosaicWithMask(sourceCanvas, maskCanvas, blockSize, type) {
+    const out = ImageCore.cloneCanvas(sourceCanvas);
+    if (!maskCanvas || maskCanvas.width !== out.width || maskCanvas.height !== out.height) {
+      return out;
+    }
+    const b = Math.max(4, Number(blockSize) || 12);
+    const w = out.width;
+    const h = out.height;
+    const sctx = sourceCanvas.getContext('2d');
+    const src = sctx.getImageData(0, 0, w, h);
+    const mctx = maskCanvas.getContext('2d');
+    const mask = mctx.getImageData(0, 0, w, h).data;
+    const outCtx = out.getContext('2d');
+    const dst = outCtx.getImageData(0, 0, w, h);
+
+    for (let by = 0; by < h; by += b) {
+      for (let bx = 0; bx < w; bx += b) {
+        const bw = Math.min(b, w - bx);
+        const bh = Math.min(b, h - by);
+        let hasMask = false;
+        for (let y = 0; y < bh && !hasMask; y += 1) {
+          for (let x = 0; x < bw; x += 1) {
+            const i = ((by + y) * w + (bx + x)) * 4 + 3;
+            if (mask[i] > 0) {
+              hasMask = true;
+              break;
+            }
+          }
+        }
+        if (!hasMask) continue;
+
+        const cx = bx + Math.floor(bw / 2);
+        const cy = by + Math.floor(bh / 2);
+        const ci = (cy * w + cx) * 4;
+        let r = src.data[ci];
+        let g = src.data[ci + 1];
+        let bl = src.data[ci + 2];
+        let a = src.data[ci + 3];
+
+        if (type === 'blur') {
+          let rr = 0; let gg = 0; let bb = 0; let aa = 0; let n = 0;
+          for (let y = 0; y < bh; y += 1) {
+            for (let x = 0; x < bw; x += 1) {
+              const i = ((by + y) * w + (bx + x)) * 4;
+              rr += src.data[i];
+              gg += src.data[i + 1];
+              bb += src.data[i + 2];
+              aa += src.data[i + 3];
+              n += 1;
+            }
+          }
+          r = Math.round(rr / Math.max(1, n));
+          g = Math.round(gg / Math.max(1, n));
+          bl = Math.round(bb / Math.max(1, n));
+          a = Math.round(aa / Math.max(1, n));
+        }
+
+        if (type === 'crystal') {
+          r = Math.round(r / 64) * 64;
+          g = Math.round(g / 64) * 64;
+          bl = Math.round(bl / 64) * 64;
+        }
+
+        for (let y = 0; y < bh; y += 1) {
+          for (let x = 0; x < bw; x += 1) {
+            const mi = ((by + y) * w + (bx + x)) * 4 + 3;
+            if (mask[mi] === 0) continue;
+            const i = ((by + y) * w + (bx + x)) * 4;
+            dst.data[i] = r;
+            dst.data[i + 1] = g;
+            dst.data[i + 2] = bl;
+            dst.data[i + 3] = a;
+          }
+        }
+      }
+    }
+
+    outCtx.putImageData(dst, 0, 0);
+    return out;
+  };
+
   ImageCore.pushPixels = function pushPixels(sourceCanvas, centerX, centerY, deltaX, deltaY, radius, strength) {
     const out = ImageCore.cloneCanvas(sourceCanvas);
     const w = out.width;
